@@ -51,7 +51,7 @@ export class ToastService {
       close: true,
       gravity: "top",
       position: "right",
-      className: "rounded",
+      className: "rounded", // Add any Tailwind css class here
       style: style, // Custom style as calculated above
       stopOnFocus: true, // Prevents dismissing of toast on hover
     }).showToast();
