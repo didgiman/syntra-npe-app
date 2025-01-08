@@ -16,7 +16,7 @@ export class TaskFormComponent {
     id: 0,
     created_at: '',
     user_id: 1,
-    title: '',
+    title: 'New task',
     feeling: 3,
     estimate: 1,
     deadline: '',

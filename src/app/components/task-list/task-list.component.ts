@@ -15,7 +15,7 @@ export class TaskListComponent {
   
   toast = inject(ToastService);
 
-  createNewTask:boolean = false;
+  createNewTask:boolean = true;
 
   constructor() {
     this.taskService.loadTasks();
