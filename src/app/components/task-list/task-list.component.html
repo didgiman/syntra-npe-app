@@ -1,1 +1,28 @@
-<p>task-list works!</p>
+<div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
+  <div class="w-10 h-10 absolute -top-5 -right-5 bg-slate-200 rounded-full cursor-pointer" (click)="newTask()">
+    <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+    </svg>
+  </div>
+
+  @if (createNewTask) {
+    <app-task-form (save)="onSaveTask($event)" />
+  }
+
+  @if (tasks().length === 0) {
+  <p class="text-3xl font-bold mb-2">No tasks found</p>
+  } @else {
+
+  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
+
+  <ul class="list-none">
+    @for (task of tasks(); track task.id) {
+    <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white">
+      <!-- <input type="checkbox" class="form-checkbox" /> -->
+      <p class="flex-grow">{{ task.title }}</p>
+      <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
+    </li>
+    }
+  </ul>
+  }
+</div>
