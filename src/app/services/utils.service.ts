@@ -8,36 +8,17 @@ export class UtilsService {
 
   constructor() { }
 
-  readableHours(hours: number): string {
+  formatHoursToReadableTime(hours: number): string {
+    // Extract the integer part as hours
+    const wholeHours = Math.floor(hours);
 
-    if (typeof hours !== 'number' || isNaN(hours) || hours < 0) {
-      return 'Invalid input';
-    }
+    // Extract the decimal part and convert it to minutes
+    const decimalPart = hours - wholeHours;
+    const minutes = Math.round(decimalPart * 60);
 
-    const totalMinutes = Math.round(hours * 60);
-    const fullHours = Math.floor(totalMinutes / 60);
-    const remainingMinutes = totalMinutes % 60;
-
-    let readableText = "";
-
-    if (fullHours > 0) {
-        readableText += `${fullHours} hour${fullHours > 1 ? "s" : ""}`;
-    }
-
-    if (remainingMinutes > 0) {
-        if (remainingMinutes === 30) {
-            readableText += fullHours > 0 ? " and a half" : "Half an hour";
-        } else {
-            readableText += ` ${remainingMinutes} minute${remainingMinutes > 1 ? "s" : ""}`;
-        }
-    }
-
-    if (readableText === "") {
-        readableText = "0 hours";
-    }
-
-    return readableText;
-  }
+    // Format the result as "H:MM"
+    return `${wholeHours}:${minutes.toString().padStart(2, '0')}`;
+}
 
   // Show a toast message
   toast(message: string, type: string = 'default') {
@@ -83,7 +64,7 @@ export class UtilsService {
         close: true,
         gravity: "top",
         position: "right",
-        className: "rounded", // Add any Tailwind css class here (hmmmm, doesn't seem to be working. Why?)
+        className: "rounded shadow-xl !text-blue", // Add any Tailwind css class here (hmmmm, doesn't seem to be working. Why?)
         style: style, // Custom style as calculated above
         stopOnFocus: true, // Prevents dismissing of toast on hover
       }).showToast();

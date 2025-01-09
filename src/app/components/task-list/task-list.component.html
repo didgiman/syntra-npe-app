@@ -13,7 +13,7 @@
   <p class="text-3xl font-bold mb-2">No tasks found</p>
   } @else {
 
-  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found ({{ editTaskId }})</h1>
+  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
 
   <ul class="list-none">
     @for (task of tasks(); track task.id) {
@@ -22,11 +22,11 @@
       <!-- <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p> -->
       <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
     <!-- </li> -->
-     <li class="grid grid-cols-5 gap-4 cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
-      <div class="col-span-2 p-4">{{ task.title }}</div>
+     <li class="grid grid-cols-5 gap-4 items-center cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
+      <div class="col-span-2 p-4 font-semibold">{{ task.title }}</div>
       <div class="col-span-1 p-4">{{ task.deadline }}</div>
-      <div class="col-span-1 p-4">{{ utils.readableHours(task.estimate) }}</div>
-      <div class="col-span-1 p-4">
+      <div class="col-span-1 p-4">{{ utils.formatHoursToReadableTime(task.estimate) }}</div>
+      <div class="col-span-1 p-4 text-3xl">
         @switch (+task.feeling) {
           @case (1) {
             😭

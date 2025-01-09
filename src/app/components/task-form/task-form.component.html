@@ -23,7 +23,7 @@
             From: "opacity-100 translate-y-0 sm:scale-100"
             To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         -->
-      <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl">
         <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
           <div class="sm:flex sm:items-start">
             <!-- Icon -->
@@ -46,49 +46,49 @@
                 }
               </h3>
               <div class="mt-2 flex items-center">
-                <div class="text-sm text-gray-500 w-1/3">Task title</div>
+                <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Task title</div>
                 <div class="w-2/3">
                   <input [(ngModel)]="task.title" type="text" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
                 </div>
               </div>
               <div class="mt-2 flex items-center">
-                <div class="text-sm text-gray-500 w-1/3">Task deadline</div>
+                <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">When should this task be finished (optional)</div>
                 <div class="w-2/3">
                   <input [(ngModel)]="task.deadline" type="datetime-local" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
                 </div>
               </div>
               <div class="mt-2 flex items-center">
-                <div class="text-sm text-gray-500 w-1/3">Task estimate {{ typeof task.estimate }}</div>
+                <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How long will this task take you to finish?</div>
                 <div class="w-2/3 flex items-center">
-                  <input type="range" min="0" max="10" [step]="estimateStepSize" [(ngModel)]="task.estimate" (input)="onEstimateChange()">
+                  <input class="flex-grow" type="range" min="0" max="10" [step]="estimateStepSize" [(ngModel)]="task.estimate" (input)="onEstimateChange()">
                   <div class="ml-1">{{ estimateDisplay() }}</div>
                 </div>
               </div>
 
               <div class="mt-2 flex items-center">
-                <div class="text-sm text-gray-500 w-1/3">Task feeling {{ typeof task.feeling }}</div>
-                <div class="w-2/3 flex justify-between">
+                <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How do you feel about doing this task?</div>
+                <div class="w-2/3 flex justify-between text-2xl">
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="1"> 😭</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="1">😭</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="2"> 😞</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="2">😞</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="3"> 😐</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="3">😐</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="4"> 😊</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="4">😊</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="5"> 🤩</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="5">🤩</label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 sm:flex sm:justify-end gap-2 sm:px-6">
+        <div class="bg-gray-50 px-4 pt-1 pb-3 sm:flex sm:justify-between gap-2 sm:px-6">
           <button (click)="onCancel()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
           @if (this.task_id() != 0) {
             <button (click)="onTaskDelete()" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">Delete task</button>  

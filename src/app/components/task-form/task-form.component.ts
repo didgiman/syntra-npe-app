@@ -45,27 +45,39 @@ export class TaskFormComponent {
     this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
   }
 
-  onTaskSave() {
+  async onTaskSave() {
     console.log('Save task', this.task);
-    this.taskService.saveTask(this.task);
+    const saveResponse = await this.taskService.saveTask(this.task);
 
-    this.utils.toast("Task saved successfully", "success");
+    console.log(saveResponse);
 
-    this.close.emit('save');
+    if (saveResponse) {
+      this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
+      if (saveResponse.success) {
+        this.close.emit('save');
+      }
+    } else {
+      this.utils.toast("Task could not be saved. Please try again.", "error");
+    }
   }
-  onCancel() {
-    this.close.emit('cancel');
-  }
-  onTaskDelete() {
+  async onTaskDelete() {
     console.log('Delete task', this.task.id);
 
     if (confirm('Are you sure you want to delete this task?')) {
-      this.taskService.deleteTask(this.task.id);
+      const deleteResponse = await this.taskService.deleteTask(this.task.id);
 
-      this.utils.toast("Task deleted successfully", "success");
-
-      this.close.emit('delete');
+      if (deleteResponse) {
+        this.utils.toast(deleteResponse.message, deleteResponse.success ? 'success' : 'error');
+        if (deleteResponse.success) {
+          this.close.emit('delete');
+        }
+      } else {
+        this.utils.toast("Task could not be deleted. Please try again.", "error");
+      }
     }
+  }
+  onCancel() {
+    this.close.emit('cancel');
   }
 
   // non-linear steps for estimate
@@ -87,37 +99,7 @@ export class TaskFormComponent {
       this.task.estimate = 0.25;
     }
 
-    // Calculate a readable text for the estimate
-    const hours = this.task.estimate;
-
-    if (typeof hours !== 'number' || isNaN(hours) || hours < 0) {
-      this.estimateDisplay.set("Invalid input");
-    }
-
-    const totalMinutes = Math.round(hours * 60);
-    const fullHours = Math.floor(totalMinutes / 60);
-    const remainingMinutes = totalMinutes % 60;
-
-    let readableText = "";
-
-    if (fullHours > 0) {
-        readableText += `${fullHours} hour${fullHours > 1 ? "s" : ""}`;
-    }
-
-    if (remainingMinutes > 0) {
-        if (remainingMinutes === 30) {
-            readableText += fullHours > 0 ? " and a half" : "Half an hour";
-        } else {
-            readableText += ` ${remainingMinutes} minute${remainingMinutes > 1 ? "s" : ""}`;
-        }
-    }
-
-    if (readableText === "") {
-        readableText = "0 hours";
-    }
-
-    this.estimateDisplay.set(readableText);
-    // END: Calculate a readable text for the estimate
+     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
   }
 
 }
