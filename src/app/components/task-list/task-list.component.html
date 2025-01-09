@@ -5,21 +5,21 @@
     </svg>
   </div>
 
-  @if (createNewTask) {
-    <app-task-form (save)="onSaveTask($event)" />
+  @if (showTaskForm) {
+    <app-task-form (save)="onSaveTask($event)" [task_id]="editTaskId" />
   }
 
   @if (tasks().length === 0) {
   <p class="text-3xl font-bold mb-2">No tasks found</p>
   } @else {
 
-  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
+  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found ({{ editTaskId }})</h1>
 
   <ul class="list-none">
     @for (task of tasks(); track task.id) {
     <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white">
       <!-- <input type="checkbox" class="form-checkbox" /> -->
-      <p class="flex-grow">{{ task.title }}</p>
+      <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p>
       <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
     </li>
     }

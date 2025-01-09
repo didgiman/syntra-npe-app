@@ -15,7 +15,8 @@ export class TaskListComponent {
   
   toast = inject(ToastService);
 
-  createNewTask:boolean = true;
+  showTaskForm:boolean = false;
+  editTaskId:number = 0;
 
   constructor() {
     this.taskService.loadTasks();
@@ -24,14 +25,21 @@ export class TaskListComponent {
     });
   }
 
+  onEditTask(taskId:number) {
+    console.log('Edit task', taskId);
+    this.editTaskId = taskId;
+    this.showTaskForm = true;
+  }
+
   newTask() {
     console.log('New task');
-    this.createNewTask = true;
+    this.editTaskId = 0;
+    this.showTaskForm = true;
   }
 
   onSaveTask(success:boolean) {
     console.log('Task saved', success);
-    this.createNewTask = false;
+    this.showTaskForm = false;
 
     if (success) {
       this.toast.show("Task saved successfully", "success");

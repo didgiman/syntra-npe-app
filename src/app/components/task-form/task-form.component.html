@@ -34,7 +34,17 @@
             </div>
             <!-- Content -->
             <div class="mt-3 sm:flex-grow text-center sm:ml-4 sm:mt-0 sm:text-left">
-              <h3 class="text-base font-semibold text-gray-900" id="modal-title">Create a new task</h3>
+              <h3 class="text-base font-semibold text-gray-900" id="modal-title">
+                @if (this.task_id() === 0) {
+                  @if (task.title.trim() === '') {
+                    Create a new task
+                  } @else {
+                    {{ task.title }}
+                  }
+                } @else {
+                  {{ task.title}}
+                }
+              </h3>
               <div class="mt-2 flex items-center">
                 <div class="text-sm text-gray-500 w-1/3">Task title</div>
                 <div class="w-2/3">
@@ -49,27 +59,30 @@
               </div>
               <div class="mt-2 flex items-center">
                 <div class="text-sm text-gray-500 w-1/3">Task estimate</div>
-                <div class="w-2/3">
-                  <input [(ngModel)]="task.estimate" type="range" min="0.25" max="12" value="1" step="0.25"> <b>{{ task.estimate}}</b> hour(s)
+                <div class="w-2/3 flex items-center">
+                  <input type="range" min="0" max="10" [step]="estimateStepSize" [(ngModel)]="task.estimate" (input)="onEstimateChange()">
+                  <!-- <div class="ml-1"><b>{{ task.estimate }}</b> hour(s)</div> -->
+                  <div class="ml-1">{{ estimateDisplay() }}</div>
                 </div>
               </div>
+
               <div class="mt-2 flex items-center">
                 <div class="text-sm text-gray-500 w-1/3">Task feeling {{ task.feeling }}</div>
                 <div class="w-2/3 flex justify-between">
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="1" [checked]="task.feeling === 1"> 😭</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="1"> 😭</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="2" [checked]="task.feeling === 2"> 😞</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="2"> 😞</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="3" [checked]="task.feeling === 3"> 😐</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="3"> 😐</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="4" [checked]="task.feeling === 4"> 😊</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="4"> 😊</label>
                   </div>
                   <div>
-                    <label><input [(ngModel)]="task.feeling" type="radio" value="5" [checked]="task.feeling === 5"> 🤩</label>
+                    <label><input [(ngModel)]="task.feeling" type="radio" value="5"> 🤩</label>
                   </div>
                 </div>
               </div>
@@ -77,7 +90,7 @@
           </div>
         </div>
         <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-          <button (click)="onTaskSaved()" type="button" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto">Save task</button>
+          <button (click)="onTaskSave()" type="button" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto">Save task</button>
           <button (click)="onCancel()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
         </div>
       </div>
