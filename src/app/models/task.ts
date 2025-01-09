@@ -3,7 +3,7 @@ export interface Task {
     "created_at": string;
     "user_id": number;
     "title": string;
-    "feeling": number;
+    "feeling": number | string;
     "estimate": number;
     "deadline": string;
     "started_at": string;

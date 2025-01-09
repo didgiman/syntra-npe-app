@@ -37,8 +37,8 @@ export class TaskService {
     });
     const data = await response.json();
     if (data) {
-      //this.loadTasks(); // Improved by adding the new task to the list instead of reloading all tasks
-      this.tasks.update(tasks => [...tasks, data]); // TO DO: this should be set to the task as it is returned from the API
+      this.loadTasks(); // Improved by adding the new task to the list instead of reloading all tasks
+      //this.tasks.update(tasks => [...tasks, data]); // TO DO: this should be set to the task as it is returned from the API
       return true;
     }
     return false;
@@ -56,6 +56,19 @@ export class TaskService {
     if (data) {
       //this.loadTasks(); // Improved by updating the task in the list instead of reloading all tasks
       this.tasks.update(tasks => tasks.map(t => t.id === task.id ? task : t));
+      return true;
+    }
+    return false;
+  }
+
+  async deleteTask(taskId: number) {
+    const response = await fetch(this.apiUrl + '/tasks/' + taskId, {
+      method: 'DELETE'
+    });
+    const data = await response.json();
+    if (data) {
+      //this.loadTasks(); // Improved by removing the task from the list instead of reloading all tasks
+      this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
       return true;
     }
     return false;

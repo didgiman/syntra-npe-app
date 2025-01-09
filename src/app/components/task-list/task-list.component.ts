@@ -1,7 +1,7 @@
 import { Component, effect, inject } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
-import { ToastService } from '../../services/toast.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-task-list',
@@ -13,15 +13,16 @@ export class TaskListComponent {
   private taskService = inject(TaskService);
   tasks = this.taskService.tasks;
   
-  toast = inject(ToastService);
+  utils = inject(UtilsService);
 
-  showTaskForm:boolean = false;
   editTaskId:number = 0;
+  showTaskForm:boolean = false;
 
   constructor() {
     this.taskService.loadTasks();
     effect(() => {
-      console.log('Tasks updated', this.tasks());
+      console.log('Tasks updated effect', this.tasks());
+      this.utils.toast("Tasks list updated", "info");
     });
   }
 
@@ -42,10 +43,15 @@ export class TaskListComponent {
     this.showTaskForm = false;
 
     if (success) {
-      this.toast.show("Task saved successfully", "success");
+      this.utils.toast("Task saved successfully", "success");
     } else {
-      this.toast.show("Task not saved", "error");
+      this.utils.toast("Task not saved", "error");
     }
+  }
+
+  onEditClose(action:string) {
+    console.log('Edit window close', action);
+    this.showTaskForm = false;
   }
 
 }

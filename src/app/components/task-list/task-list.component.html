@@ -6,7 +6,7 @@
   </div>
 
   @if (showTaskForm) {
-    <app-task-form (save)="onSaveTask($event)" [task_id]="editTaskId" />
+    <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
   }
 
   @if (tasks().length === 0) {
@@ -17,11 +17,35 @@
 
   <ul class="list-none">
     @for (task of tasks(); track task.id) {
-    <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white">
+    <!-- <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white"> -->
       <!-- <input type="checkbox" class="form-checkbox" /> -->
-      <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p>
+      <!-- <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p> -->
       <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
-    </li>
+    <!-- </li> -->
+     <li class="grid grid-cols-5 gap-4 cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
+      <div class="col-span-2 p-4">{{ task.title }}</div>
+      <div class="col-span-1 p-4">{{ task.deadline }}</div>
+      <div class="col-span-1 p-4">{{ utils.readableHours(task.estimate) }}</div>
+      <div class="col-span-1 p-4">
+        @switch (+task.feeling) {
+          @case (1) {
+            😭
+          }
+          @case (2) {
+            😞
+          }
+          @case (3) {
+            😐
+          }
+          @case (4) {
+            😊
+          }
+          @case (5) {
+            🤩
+          }
+        }
+      </div>
+     </li>
     }
   </ul>
   }

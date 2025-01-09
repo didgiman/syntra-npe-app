@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ToastService } from './services/toast.service';
 import { TaskListComponent } from './components/task-list/task-list.component';
+import { UtilsService } from './services/utils.service';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,11 @@ import { TaskListComponent } from './components/task-list/task-list.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  toast = inject(ToastService);
+  utils = inject(UtilsService);
   title = `What's Next`;
 
   constructor() {
-    this.toast.show("Welcome to Syntra NPE App", "text-white text-3xl !bg-red-500");
+    this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
   }
   
 }

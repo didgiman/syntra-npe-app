@@ -1,6 +1,6 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { Task } from '../../models/task';
-import { ToastService } from '../../services/toast.service';
+import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 
@@ -13,9 +13,10 @@ import { TaskService } from '../../services/task.service';
 export class TaskFormComponent {
   task_id = input<number>(0);
   
-  save = output<boolean>();
+  close = output<string>()
 
-  toast = inject(ToastService);
+  utils = inject(UtilsService);
+
   taskService = inject(TaskService);
 
   estimateDisplay = signal<string>('1 hour');
@@ -40,15 +41,31 @@ export class TaskFormComponent {
         this.onEstimateChange();
       }
     }
+
+    this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
   }
 
   onTaskSave() {
     console.log('Save task', this.task);
     this.taskService.saveTask(this.task);
-    this.save.emit(true);
+
+    this.utils.toast("Task saved successfully", "success");
+
+    this.close.emit('save');
   }
   onCancel() {
-    this.save.emit(false);
+    this.close.emit('cancel');
+  }
+  onTaskDelete() {
+    console.log('Delete task', this.task.id);
+
+    if (confirm('Are you sure you want to delete this task?')) {
+      this.taskService.deleteTask(this.task.id);
+
+      this.utils.toast("Task deleted successfully", "success");
+
+      this.close.emit('delete');
+    }
   }
 
   // non-linear steps for estimate
