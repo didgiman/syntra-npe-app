@@ -1,118 +1,129 @@
-<div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
+<!-- <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
   <div class="w-10 h-10 absolute -top-5 -right-5 bg-slate-200 rounded-full cursor-pointer" (click)="newTask()">
     <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
     </svg>
   </div>
 
-  @if (showTaskForm) {
-    <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
-  }
-
   @if (tasks().length === 0) {
-  <p class="text-3xl font-bold mb-2">No tasks found</p>
+    <p class="text-3xl font-bold mb-2">No tasks found</p>
   } @else {
 
-  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
+    <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
 
-  <ul class="list-none">
-    @for (task of tasks(); track task.id) {
-    <!-- <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white"> -->
-      <!-- <input type="checkbox" class="form-checkbox" /> -->
-      <!-- <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p> -->
-      <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
-    <!-- </li> -->
-     <li class="grid grid-cols-5 gap-4 items-center cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
-      <div class="col-span-2 p-4 font-semibold">{{ task.title }}</div>
-      <div class="col-span-1 p-4">{{ task.deadline }}</div>
-      <div class="col-span-1 p-4">{{ utils.formatHoursToReadableTime(task.estimate) }}</div>
-      <div class="col-span-1 p-4 text-3xl">
-        @switch (+task.feeling) {
-          @case (1) {
-            😭
+    <ul class="list-none">
+      @for (task of tasks(); track task.id) {
+      <li class="grid grid-cols-5 gap-4 items-center cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
+        <div class="col-span-2 p-4 font-semibold">{{ task.title }}</div>
+        <div class="col-span-1 p-4">{{ task.deadline }}</div>
+        <div class="col-span-1 p-4">{{ utils.formatHoursToReadableTime(task.estimate) }}</div>
+        <div class="col-span-1 p-4 text-3xl">
+          @switch (+task.feeling) {
+            @case (1) {
+              😭
+            }
+            @case (2) {
+              😞
+            }
+            @case (3) {
+              😐
+            }
+            @case (4) {
+              😊
+            }
+            @case (5) {
+              🤩
+            }
           }
-          @case (2) {
-            😞
-          }
-          @case (3) {
-            😐
-          }
-          @case (4) {
-            😊
-          }
-          @case (5) {
-            🤩
-          }
-        }
-      </div>
-     </li>
-    }
-  </ul>
-  }
-</div>
-
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-</mat-form-field>
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
-
-  <!-- Position Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">ID</th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-  </ng-container>
-
-  <!-- Name Column -->
-  <ng-container matColumnDef="title">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by title">Title</th>
-    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-  </ng-container>
-
-  <!-- Weight Column -->
-  <ng-container matColumnDef="deadline">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by deadline"> Deadline </th>
-    <td mat-cell *matCellDef="let element"> {{element.deadline}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="estimate">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by estimate"> Estimate </th>
-    <td mat-cell *matCellDef="let element"> {{utils.formatHoursToReadableTime(element.estimate)}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="feeling">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by feeling"> Feeling </th>
-    <td mat-cell *matCellDef="let element" class="text-3xl">
-      @switch (+element.feeling) {
-        @case (1) {
-          😭
-        }
-        @case (2) {
-          😞
-        }
-        @case (3) {
-          😐
-        }
-        @case (4) {
-          😊
-        }
-        @case (5) {
-          🤩
-        }
+        </div>
+      </li>
       }
-    </td>
-  </ng-container>
+    </ul>
+  }
+</div> -->
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onEditTask2(row)" class="cursor-pointer"></tr>
 
-  <!-- Row shown when there is no matching data. -->
-  <tr class="mat-row" *matNoDataRow>
-    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-  </tr>
-</table>
+@if (showTaskForm) {
+  <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
+}
 
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+<div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
+  <!-- New task button -->
+  <div class="w-10 h-10 absolute -top-5 -right-5 bg-slate-200 rounded-full cursor-pointer" (click)="newTask()">
+    <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+    </svg>
+  </div>
+
+  <div class="flex items-center">
+    <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
+    <mat-form-field class="ml-5">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">ID</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by title">Title</th>
+      <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <!-- Deadline Column -->
+    <ng-container matColumnDef="deadline">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by deadline"> Deadline </th>
+      <td mat-cell *matCellDef="let element"> {{element.deadline}} </td>
+    </ng-container>
+
+    <!-- Estimate Column -->
+    <ng-container matColumnDef="estimate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by estimate"> Estimate </th>
+      <td mat-cell *matCellDef="let element"> {{utils.formatHoursToReadableTime(element.estimate)}} </td>
+    </ng-container>
+
+    <!-- Feeling Column -->
+    <ng-container matColumnDef="feeling">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by feeling"> Feeling </th>
+      <!-- <td mat-cell *matCellDef="let element">
+        @switch (element.feeling) {
+          @case (1) { <div class="text-3xl material-icons overflow-visible">sentiment_sad</div> }
+          @case (2) { <div class="text-3xl material-icons overflow-visible">sentiment_dissatisfied</div> }
+          @case (3) { <div class="text-3xl material-icons overflow-visible">sentiment_neutral</div> }
+          @case (4) { <div class="text-3xl material-icons overflow-visible">sentiment_satisfied</div> }
+          @case (5) { <div class="text-3xl material-icons overflow-visible">sentiment_very_satisfied</div> }
+        }
+      </td> -->
+      <td mat-cell *matCellDef="let element" class="text-3xl">
+        @switch (+element.feeling) {
+          @case (1) { 😭 }
+          @case (2) { 😞 }
+          @case (3) { 😐 }
+          @case (4) { 😊 }
+          @case (5) { 🤩 }
+        }
+      </td> 
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let task; columns: displayedColumns;" (click)="onEditTaskByTask(task)" class="cursor-pointer even:bg-slate-100 odd:bg-white"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      @if (tasks().length === 0) {
+        <td class="mat-cell" colspan="5">No tasks available</td>
+      } @else {
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      }
+    </tr>
+  </table>
+  
+  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" aria-label="Select page of users" panelClass="bg-red-500"></mat-paginator>
+</div>

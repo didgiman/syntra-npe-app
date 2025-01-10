@@ -3,7 +3,6 @@ import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
 
-// import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
@@ -21,6 +20,7 @@ export class TaskListComponent {
   private taskService = inject(TaskService);
   tasks = this.taskService.tasks;
   
+  
   utils = inject(UtilsService);
 
 
@@ -31,7 +31,6 @@ export class TaskListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   applyFilter(event: Event) {
-    console.log(event)
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -41,17 +40,16 @@ export class TaskListComponent {
   }
   // END Material table features
 
-
-
   editTaskId:number = 0;
-  showTaskForm:boolean = false;
+  showTaskForm:boolean = false; // When set to true, the new/edit task form is displayed
 
   constructor() {
     this.taskService.loadTasks();
     effect(() => {
-      console.log('Tasks updated effect', this.tasks());
-      this.utils.toast("Tasks list updated", "info");
+      // console.log('Tasks updated effect', this.tasks());
+      // this.utils.toast("Tasks list updated", "info");
 
+      // Reload the datasource for the Material table and re-initialise the sort and the pagination
       this.dataSource = new MatTableDataSource(this.tasks());
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -64,7 +62,7 @@ export class TaskListComponent {
     this.showTaskForm = true;
   }
 
-  onEditTask2(task: Task) {
+  onEditTaskByTask(task: Task) {
     console.log('Edit task 2', task.id);
     this.editTaskId = task.id;
     this.showTaskForm = true;
