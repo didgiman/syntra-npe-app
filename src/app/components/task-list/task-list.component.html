@@ -1,39 +1,6 @@
-<div class="card">
-  <p-table
-    #dt2
-    [value]="tasks()"
-    stripedRows
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[10, 20, 50, 100]"
-    sortField="id"
-    [sortOrder]="-1"
-  >
-      <ng-template #header>
-          <tr>
-              <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
-              <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-              <th pSortableColumn="deadline">Deadline <p-sortIcon field="deadline" /></th>
-              <th pSortableColumn="estimate">Estimate <p-sortIcon field="estimate" /></th>
-              <th pSortableColumn="feeling">Feeling <p-sortIcon field="feeling" /></th>
-          </tr>
-      </ng-template>
-      <ng-template #body let-task>
-          <tr>
-              <td>{{ task.id }}</td>
-              <td>{{ task.title }}</td>
-              <td>{{ task.deadline }}</td>
-              <td>{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-              <td>{{ task.feeling }}</td>
-          </tr>
-      </ng-template>
-  </p-table>
-</div>
-
-
-
-
+@if (showTaskForm) {
+  <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
+}
 
 <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
   <div class="w-10 h-10 absolute -top-5 -right-5 bg-slate-200 rounded-full cursor-pointer" (click)="newTask()">
@@ -42,48 +9,52 @@
     </svg>
   </div>
 
-  @if (showTaskForm) {
-    <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
-  }
-
   @if (tasks().length === 0) {
-  <p class="text-3xl font-bold mb-2">No tasks found</p>
-  } @else {
-
-  <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
-
-  <ul class="list-none">
-    @for (task of tasks(); track task.id) {
-    <!-- <li class="flex flex-row items-center gap-4 p-4 even:bg-slate-100 odd:bg-white"> -->
-      <!-- <input type="checkbox" class="form-checkbox" /> -->
-      <!-- <p class="flex-grow cursor-pointer" (click)="onEditTask(task.id)">{{ task.title }}</p> -->
-      <!-- <button class="border border-red-500 p-2 rounded">Delete</button> -->
-    <!-- </li> -->
-     <li class="grid grid-cols-5 gap-4 items-center cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
-      <div class="col-span-2 p-4 font-semibold">{{ task.title }}</div>
-      <div class="col-span-1 p-4">{{ task.deadline }}</div>
-      <div class="col-span-1 p-4">{{ utils.formatHoursToReadableTime(task.estimate) }}</div>
-      <div class="col-span-1 p-4 text-3xl">
-        @switch (+task.feeling) {
-          @case (1) {
-            😭
-          }
-          @case (2) {
-            😞
-          }
-          @case (3) {
-            😐
-          }
-          @case (4) {
-            😊
-          }
-          @case (5) {
-            🤩
-          }
-        }
+      <p class="text-3xl font-bold mb-2">No tasks found</p>
+    } @else {
+  
+      <div class="flex items-center mb-3">
+        <h1 class="text-3xl font-bold mr-4">{{ tasks().length }} tasks</h1>
+        <input
+            #searchInput
+            type="text"
+            (input)="dt2.filterGlobal(searchInput.value, 'contains')"
+            placeholder="Search tasks"
+            class="p-2 border border-slate-300 rounded"
+        />
       </div>
-     </li>
-    }
-  </ul>
+
+      <p-table
+        #dt2
+        [value]="tasks()"
+        stripedRows
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 50, 100]"
+        sortField="id"
+        [sortOrder]="-1"
+        [globalFilterFields]="['title']"
+        [loading]="loading"
+      >
+
+      <ng-template #header>
+          <tr>
+              <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+              <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+              <th pSortableColumn="deadline" class="hidden sm:table-cell">Deadline <p-sortIcon field="deadline" /></th>
+              <th pSortableColumn="estimate" class="hidden sm:table-cell">Estimate <p-sortIcon field="estimate" /></th>
+              <th pSortableColumn="feeling">Feeling <p-sortIcon field="feeling" /></th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-task>
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer">
+              <td>{{ task.id }}</td>
+              <td>{{ task.title }}</td>
+              <td class="hidden sm:table-cell">{{ task.deadline }}</td>
+              <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+              <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+          </tr>
+      </ng-template>
+    </p-table>
   }
 </div>

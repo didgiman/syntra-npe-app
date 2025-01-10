@@ -12,6 +12,9 @@ import { TableModule } from 'primeng/table';
   styleUrl: './task-list.component.css'
 })
 export class TaskListComponent {
+  
+  loading: boolean = true;
+
   private taskService = inject(TaskService);
   tasks = this.taskService.tasks;
   
@@ -24,7 +27,8 @@ export class TaskListComponent {
     this.taskService.loadTasks();
     effect(() => {
       console.log('Tasks updated effect', this.tasks());
-      this.utils.toast("Tasks list updated", "info");
+      // this.utils.toast("Tasks list updated", "info");
+      this.loading = false;
     });
   }
 

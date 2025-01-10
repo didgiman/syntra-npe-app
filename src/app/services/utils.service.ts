@@ -69,4 +69,22 @@ export class UtilsService {
         stopOnFocus: true, // Prevents dismissing of toast on hover
       }).showToast();
     }
+
+    // get the emoji to show for a specific feeling
+    getFeelingEmoji(feeling: number) {
+      switch (feeling) {
+        case (1):
+          return '😭';
+        case (2):
+          return '😞';
+        case (3):
+          return '😐';
+        case (4):
+          return '😊';
+        case (5):
+          return '🤩';
+        default:
+          return '';
+      }
+    }
 }
