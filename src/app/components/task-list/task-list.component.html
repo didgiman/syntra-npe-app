@@ -1,48 +1,3 @@
-<!-- <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
-  <div class="w-10 h-10 absolute -top-5 -right-5 bg-slate-200 rounded-full cursor-pointer" (click)="newTask()">
-    <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
-    </svg>
-  </div>
-
-  @if (tasks().length === 0) {
-    <p class="text-3xl font-bold mb-2">No tasks found</p>
-  } @else {
-
-    <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
-
-    <ul class="list-none">
-      @for (task of tasks(); track task.id) {
-      <li class="grid grid-cols-5 gap-4 items-center cursor-pointer even:bg-slate-100 odd:bg-white" (click)="onEditTask(task.id)">
-        <div class="col-span-2 p-4 font-semibold">{{ task.title }}</div>
-        <div class="col-span-1 p-4">{{ task.deadline }}</div>
-        <div class="col-span-1 p-4">{{ utils.formatHoursToReadableTime(task.estimate) }}</div>
-        <div class="col-span-1 p-4 text-3xl">
-          @switch (+task.feeling) {
-            @case (1) {
-              😭
-            }
-            @case (2) {
-              😞
-            }
-            @case (3) {
-              😐
-            }
-            @case (4) {
-              😊
-            }
-            @case (5) {
-              🤩
-            }
-          }
-        </div>
-      </li>
-      }
-    </ul>
-  }
-</div> -->
-
-
 @if (showTaskForm) {
   <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
 }
@@ -55,6 +10,7 @@
     </svg>
   </div>
 
+  <!-- Header + filter -->
   <div class="flex items-center">
     <h1 class="text-3xl font-bold mb-2">{{ tasks().length }} tasks found</h1>
     <mat-form-field class="ml-5">
@@ -63,12 +19,13 @@
     </mat-form-field>
   </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  <!-- Tasks table - Material style... -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort matSortActive="id" matSortDirection="desc" matSortDisableClear>
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by id">ID</th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      <td mat-cell *matCellDef="let element" class="w-16"> {{element.id}} </td>
     </ng-container>
 
     <!-- Title Column -->
@@ -79,19 +36,20 @@
 
     <!-- Deadline Column -->
     <ng-container matColumnDef="deadline">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by deadline"> Deadline </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by deadline">Deadline</th>
       <td mat-cell *matCellDef="let element"> {{element.deadline}} </td>
     </ng-container>
 
     <!-- Estimate Column -->
     <ng-container matColumnDef="estimate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by estimate"> Estimate </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by estimate">Estimate</th>
       <td mat-cell *matCellDef="let element"> {{utils.formatHoursToReadableTime(element.estimate)}} </td>
     </ng-container>
 
     <!-- Feeling Column -->
     <ng-container matColumnDef="feeling">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by feeling"> Feeling </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by feeling">Feeling</th>
+      <!-- Below icons are nice, but I can't get them to load properly. I'll leave this piece of code in here for now, in case I want to revisit -->
       <!-- <td mat-cell *matCellDef="let element">
         @switch (element.feeling) {
           @case (1) { <div class="text-3xl material-icons overflow-visible">sentiment_sad</div> }
