@@ -1,9 +1,10 @@
-import { Component, effect, inject, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
 
 // import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
@@ -12,7 +13,7 @@ import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule],
+  imports: [TaskFormComponent, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -27,11 +28,16 @@ export class TaskListComponent {
   displayedColumns: string[] = ['id', 'title', 'deadline', 'estimate', 'feeling'];
   dataSource = new MatTableDataSource(this.tasks());
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   applyFilter(event: Event) {
     console.log(event)
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
   // END Material table features
 
@@ -48,6 +54,7 @@ export class TaskListComponent {
 
       this.dataSource = new MatTableDataSource(this.tasks());
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 
