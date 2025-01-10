@@ -3,9 +3,11 @@ import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
 
+import { TableModule } from 'primeng/table';
+
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent],
+  imports: [TaskFormComponent, TableModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
