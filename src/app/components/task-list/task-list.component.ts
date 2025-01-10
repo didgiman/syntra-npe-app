@@ -8,6 +8,7 @@ import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { Task } from '../../models/task';
 
 @Component({
   selector: 'app-task-list',
@@ -53,6 +54,12 @@ export class TaskListComponent {
   onEditTask(taskId:number) {
     console.log('Edit task', taskId);
     this.editTaskId = taskId;
+    this.showTaskForm = true;
+  }
+
+  onEditTask2(task: Task) {
+    console.log('Edit task 2', task.id);
+    this.editTaskId = task.id;
     this.showTaskForm = true;
   }
 
