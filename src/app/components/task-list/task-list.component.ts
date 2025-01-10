@@ -1,15 +1,17 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, AfterViewInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
 
+// import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, MatFormFieldModule, MatInputModule, MatTableModule],
+  imports: [TaskFormComponent, MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -23,6 +25,8 @@ export class TaskListComponent {
   // Material table features
   displayedColumns: string[] = ['id', 'title', 'deadline', 'estimate', 'feeling'];
   dataSource = new MatTableDataSource(this.tasks());
+  @ViewChild(MatSort) sort!: MatSort;
+
   applyFilter(event: Event) {
     console.log(event)
     const filterValue = (event.target as HTMLInputElement).value;
@@ -42,6 +46,7 @@ export class TaskListComponent {
       this.utils.toast("Tasks list updated", "info");
 
       this.dataSource = new MatTableDataSource(this.tasks());
+      this.dataSource.sort = this.sort;
     });
   }
 
