@@ -30,7 +30,7 @@
         stripedRows
         [paginator]="true"
         [rows]="10"
-        [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [rowsPerPageOptions]="[10, 25, 50, 100]"
         sortField="id"
         [sortOrder]="-1"
         [globalFilterFields]="['title']"
@@ -50,7 +50,7 @@
           <tr (click)="onEditTask(task.id)" class="cursor-pointer">
               <td>{{ task.id }}</td>
               <td>{{ task.title }}</td>
-              <td class="hidden sm:table-cell">{{ task.deadline }}</td>
+              <td class="hidden sm:table-cell">{{ utils.formatDateForScreen(task.deadline) }}</td>
               <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
               <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
           </tr>

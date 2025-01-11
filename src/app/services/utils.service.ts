@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import Toastify from 'toastify-js';
+import { Task } from '../models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -86,5 +87,21 @@ export class UtilsService {
         default:
           return '';
       }
+    }
+
+    formatDateForScreen(date: Date) {
+      if (!date) {
+        return '';
+      }
+      return date.toLocaleString('nl-BE', {dateStyle: 'medium', timeStyle: 'short'});
+    }
+    formatDateForInput(date: Date): string {
+      if (!date) return '';
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 }

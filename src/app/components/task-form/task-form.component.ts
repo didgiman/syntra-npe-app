@@ -20,17 +20,18 @@ export class TaskFormComponent {
   taskService = inject(TaskService);
 
   estimateDisplay = signal<string>('1 hour');
+  formattedDeadline = '';
 
   task: Task = {
     id: 0,
-    created_at: '',
+    created_at: null,
     user_id: 1,
     title: '',
     feeling: 3,
     estimate: 1,
-    deadline: '',
-    started_at: '',
-    ended_at: ''
+    deadline: null,
+    started_at: null,
+    ended_at: null
   }
 
   ngOnInit() {
@@ -39,10 +40,18 @@ export class TaskFormComponent {
       if (foundTask) {
         this.task = { ...foundTask };
         this.onEstimateChange();
+
+        this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
       }
     }
 
     this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
+  }
+
+  updateTaskDeadline(newValue: string): void {
+    // Update the task.deadline with the new value
+    this.task.deadline = new Date(newValue);
+    this.formattedDeadline = newValue; // Ensure synchronization
   }
 
   async onTaskSave() {
