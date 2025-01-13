@@ -2,6 +2,7 @@ import { Component, inject, input, output, signal } from '@angular/core';
 import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
+import { NgClass } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 
 import { ConfirmationService } from 'primeng/api';
@@ -9,7 +10,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule],
+  imports: [FormsModule, ConfirmPopupModule, NgClass],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
