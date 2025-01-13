@@ -2,35 +2,37 @@
 
 <div class="flex flex-row items-center gap-4 p-4">
   <button
-    (click)="toast.show('Basic error message!', 'error')"
+    (click)="utils.toast('Basic error message!', 'error')"
     class="border border-red-500 p-2 rounded"
   >
     Show error alert
   </button>
   <button
-    (click)="toast.show('Basic success message!', 'success')"
+    (click)="utils.toast('Basic success message!', 'success')"
     class="border border-green-500 p-2 rounded"
   >
     Show success alert
   </button>
   <button
-    (click)="toast.show('Basic info message!', 'info')"
+    (click)="utils.toast('Basic info message!', 'info')"
     class="border border-blue-500 p-2 rounded"
   >
     Show info alert
   </button>
   <button
-    (click)="toast.show('Basic warning message!', 'warning')"
+    (click)="utils.toast('Basic warning message!', 'warning')"
     class="border border-orange-500 p-2 rounded"
   >
     Show warning alert
   </button>
   <button
-    (click)="toast.show('Basic message!', 'default')"
+    (click)="utils.toast('Basic message!', 'default')"
     class="border border-yellow-500 p-2 rounded"
   >
     Show default alert
   </button>
 </div>
+
+<app-task-list />
 
 <router-outlet />
