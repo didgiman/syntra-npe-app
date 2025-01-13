@@ -44,17 +44,6 @@ export class TaskListComponent {
     this.showTaskForm = true;
   }
 
-  onSaveTask(success:boolean) {
-    console.log('Task saved', success);
-    this.showTaskForm = false;
-
-    if (success) {
-      this.utils.toast("Task saved successfully", "success");
-    } else {
-      this.utils.toast("Task not saved", "error");
-    }
-  }
-
   onEditClose(action:string) {
     console.log('Edit window close', action);
     this.showTaskForm = false;

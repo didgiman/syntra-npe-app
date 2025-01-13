@@ -21,6 +21,7 @@
     "@primeng/themes": "^19.0.5",
     "primeng": "^19.0.5",
     "rxjs": "~7.8.0",
+    "tailwindcss-primeui": "^0.3.4",
     "toastify-js": "^1.12.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

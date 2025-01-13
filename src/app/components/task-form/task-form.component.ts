@@ -4,18 +4,59 @@ import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule],
+  imports: [FormsModule, ConfirmPopupModule],
   templateUrl: './task-form.component.html',
-  styleUrl: './task-form.component.css'
+  styleUrl: './task-form.component.css',
+  providers: [ConfirmationService]
 })
 export class TaskFormComponent {
   task_id = input<number>(0);
   
-  close = output<string>()
+  close = output<string>();
 
   utils = inject(UtilsService);
+  
+  
+  
+  
+  confirmationService = inject(ConfirmationService);
+
+  confirmDelete(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: 'Do you want to delete this task?',
+        icon: 'pi pi-info-circle',
+        rejectButtonProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptButtonProps: {
+            label: 'Delete',
+            severity: 'danger'
+        },
+        accept: () => {
+          this.onTaskDelete();
+        },
+        reject: () => {
+            // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
+  }
+
+
+
+
+
+
+
+
+
 
   taskService = inject(TaskService);
 
@@ -72,17 +113,15 @@ export class TaskFormComponent {
   async onTaskDelete() {
     console.log('Delete task', this.task.id);
 
-    if (confirm('Are you sure you want to delete this task?')) {
-      const deleteResponse = await this.taskService.deleteTask(this.task.id);
+    const deleteResponse = await this.taskService.deleteTask(this.task.id);
 
-      if (deleteResponse) {
-        this.utils.toast(deleteResponse.message, deleteResponse.success ? 'success' : 'error');
-        if (deleteResponse.success) {
-          this.close.emit('delete');
-        }
-      } else {
-        this.utils.toast("Task could not be deleted. Please try again.", "error");
+    if (deleteResponse) {
+      this.utils.toast(deleteResponse.message, deleteResponse.success ? 'success' : 'error');
+      if (deleteResponse.success) {
+        this.close.emit('delete');
       }
+    } else {
+      this.utils.toast("Task could not be deleted. Please try again.", "error");
     }
   }
   onCancel() {
