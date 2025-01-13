@@ -2,12 +2,13 @@ import { Component, effect, inject } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
+import { TaskSuggestionComponent } from '../task-suggestion/task-suggestion.component';
 
 import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, TableModule],
+  imports: [TaskFormComponent, TaskSuggestionComponent, TableModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -22,6 +23,7 @@ export class TaskListComponent {
 
   editTaskId:number = 0;
   showTaskForm:boolean = false;
+  showTaskSuggestion:boolean = false;
 
   constructor() {
     this.taskService.loadTasks();
@@ -49,4 +51,13 @@ export class TaskListComponent {
     this.showTaskForm = false;
   }
 
+  taskSuggestion() {
+    console.log('What\'s next?');
+    this.showTaskSuggestion = true;
+  }
+
+  onTaskSuggestionClose(action:string) {
+    console.log('What\'s next close', action);
+    this.showTaskSuggestion = false;
+  }
 }

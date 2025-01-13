@@ -16,47 +16,35 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 })
 export class TaskFormComponent {
   task_id = input<number>(0);
-  
+
   close = output<string>();
 
   utils = inject(UtilsService);
-  
-  
-  
-  
+
   confirmationService = inject(ConfirmationService);
 
   confirmDelete(event: Event) {
     this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Do you want to delete this task?',
-        icon: 'pi pi-info-circle',
-        rejectButtonProps: {
-            label: 'Cancel',
-            severity: 'secondary',
-            outlined: true
-        },
-        acceptButtonProps: {
-            label: 'Delete',
-            severity: 'danger'
-        },
-        accept: () => {
-          this.onTaskDelete();
-        },
-        reject: () => {
-            // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
+      target: event.target as EventTarget,
+      message: 'Do you want to delete this task?',
+      icon: 'pi pi-info-circle',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger'
+      },
+      accept: () => {
+        this.onTaskDelete();
+      },
+      reject: () => {
+        // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+      }
     });
   }
-
-
-
-
-
-
-
-
-
 
   taskService = inject(TaskService);
 
@@ -147,7 +135,7 @@ export class TaskFormComponent {
       this.task.estimate = 0.25;
     }
 
-     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
+    this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
   }
 
 }
