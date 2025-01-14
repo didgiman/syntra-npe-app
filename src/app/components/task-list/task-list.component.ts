@@ -109,7 +109,8 @@ export class TaskListComponent {
   }
 
   sortTable(field: string, order: number) {
-    this.table.sort({ field, order });
+    this.table.sortField = field;
+    this.table.sortOrder = order;
   }
 
 }
