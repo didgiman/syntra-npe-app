@@ -145,6 +145,7 @@ console.log("POST TASK RESPONSE: ", response);
       created_at: this.mysqlDatetimeToJSDate(task.created_at),
       started_at: this.mysqlDatetimeToJSDate(task.started_at),
       ended_at: this.mysqlDatetimeToJSDate(task.ended_at),
+      status: this.calculateStatus(task),
     }
   }
 
@@ -194,5 +195,17 @@ console.log("POST TASK RESPONSE: ", response);
     const seconds = pad(date.getSeconds());
   
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  calculateStatus(task: Task | RawTask) {
+    if (task.ended_at) {
+      return 'finished';
+    } else if (task.started_at && !task.ended_at) {
+      return 'in progress'
+    } else if (!task.started_at && !task.ended_at) {
+      return 'new'
+    } else {
+      return 'error';
+    }
   }
 }

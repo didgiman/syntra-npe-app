@@ -89,13 +89,13 @@ export class UtilsService {
       }
     }
 
-    formatDateForScreen(date: Date) {
+    formatDateForScreen(date: Date | null) {
       if (!date) {
         return '';
       }
       return date.toLocaleString('nl-BE', {dateStyle: 'medium', timeStyle: 'short'});
     }
-    formatDateForInput(date: Date): string {
+    formatDateForInput(date: Date | null): string {
       if (!date) return '';
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
