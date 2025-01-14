@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,8 @@ export class TaskSuggestionComponent {
 
   utils = inject(UtilsService);
 
-  taskService = inject(TaskService);
+  private taskService = inject(TaskService);
+  tasks = this.taskService.tasks;
 
   estimateDisplay = signal<string>('1 hour');
   formattedDeadline = '';
@@ -33,6 +34,8 @@ export class TaskSuggestionComponent {
     started_at: null,
     ended_at: null
   }
+
+  suggestionTasks = signal<Task[]>([]);
 
   ngOnInit() {
     if (this.task_id() > 0) {
@@ -74,4 +77,22 @@ export class TaskSuggestionComponent {
     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.suggestionRequest.estimate));
   }
 
+  // constructor() { 
+  //   this.taskService.loadTasks();
+  //   effect(() => {
+  //     console.log('Tasks updated effect', this.tasks());
+  //     this.suggestionTasks.set(
+  //       this.tasks()
+  //         .filter(task => task.deadline !== undefined && task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)
+  //         .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime())
+  //     );
+  //     if (this.suggestionTasks()) {
+  //         return this.suggestionTasks()[0]
+  //       }
+  //     else {
+  //       this.suggestionTasks.set([]);
+  //       return null;
+  //     }
+  //   });
+  // }
 }
