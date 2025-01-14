@@ -1,6 +1,10 @@
 @if (showTaskForm) {
   <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
 }
+@if (showTaskView) {
+  <!-- <app-task-view (close)="onViewClose($event)" [task_id]="viewTaskId" /> -->
+  <app-task-view (close)="onViewClose($event)" [task_id]="viewTaskId" />
+}
 
 <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
   <div class="w-10 h-10 absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer hover:text-green-600" (click)="newTask()">
@@ -10,51 +14,88 @@
   </div>
 
   @if (tasks().length === 0) {
-      <p class="text-3xl font-bold mb-2">No tasks found</p>
-    } @else {
-  
-      <div class="flex items-center mb-3">
-        <h1 class="text-3xl font-bold mr-4">{{ tasks().length }} tasks</h1>
-        <input
-            #searchInput
-            type="text"
-            (input)="dt2.filterGlobal(searchInput.value, 'contains')"
-            placeholder="Search tasks"
-            class="p-2 border border-slate-300 rounded sm:w-64 ml-2"
-        />
-      </div>
+  <p class="text-3xl font-bold mb-2">No tasks found</p>
+  } @else {
 
-      <p-table
-        #dt2
-        [value]="tasks()"
-        stripedRows
-        [paginator]="true"
-        [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50, 100]"
-        sortField="id"
-        [sortOrder]="-1"
-        [globalFilterFields]="['title']"
-        [loading]="loading"
-      >
+  <div class="flex items-center mb-3">
+    <h1 class="text-3xl font-bold mr-4">{{ tasks().length }} tasks</h1>
+    <input #searchInput type="text" (input)="tasksTable.filterGlobal(searchInput.value, 'contains')" placeholder="Search tasks" class="p-2 border border-slate-300 rounded sm:w-64 ml-2" />
+  </div>
 
-        <ng-template #header>
-            <tr>
-                <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
-                <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-                <th pSortableColumn="deadline" class="hidden sm:table-cell">Deadline <p-sortIcon field="deadline" /></th>
-                <th pSortableColumn="estimate" class="hidden sm:table-cell">Estimate <p-sortIcon field="estimate" /></th>
-                <th pSortableColumn="feeling">Feeling <p-sortIcon field="feeling" /></th>
-            </tr>
-        </ng-template>
-        <ng-template #body let-task>
-            <tr (click)="onEditTask(task.id)" class="cursor-pointer odd:!bg-slate-100 even:bg-white">
-                <td>{{ task.id }}</td>
-                <td>{{ task.title }}</td>
-                <td class="hidden sm:table-cell">{{ utils.formatDateForScreen(task.deadline) }}</td>
-                <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-                <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
-            </tr>
-        </ng-template>
-      </p-table>
+  <p-table 
+    #tasksTable
+    [value]="tasks()"
+    stripedRows
+    [paginator]="true"
+    [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]"
+    sortField="deadline" [sortOrder]="1" 
+    [globalFilterFields]="['title']"
+    [loading]="loading"
+    [scrollable]="true" scrollHeight="600px"
+    [frozenValue]="inProgressTask()"
+    [customSort]="true"
+    (sortFunction)="customSort($event)"
+  >
+    <!-- sortField="deadline" [sortOrder]="1"  -->
+
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id" /></th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+        <th pSortableColumn="deadline" class="hidden sm:table-cell">Deadline <p-sortIcon field="deadline" /></th>
+        <th pSortableColumn="estimate" class="hidden sm:table-cell">Estimate <p-sortIcon field="estimate" /></th>
+        <th pSortableColumn="feeling">Feeling <p-sortIcon field="feeling" /></th>
+        <th>&nbsp;</th>
+      </tr>
+    </ng-template>
+    @if(inProgressTask().length) {
+      <ng-template #frozenbody let-task let-index="rowIndex">
+        <tr (click)="onEditTask(task.id)" class="cursor-pointer bg-cyan-100 font-bold">
+          <td>{{ task.id }}</td>
+          <td>{{ task.title }}</td>
+          <td class="hidden sm:table-cell">
+            @if (task.deadline) {
+              {{ utils.formatDateForScreen(task.deadline) }}d
+            } @else {
+              (none)
+            }
+          </td>
+          <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+          <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+          <td class="text-2xl text-orange-400">
+            <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" (click)="onViewTask(task.id); $event.stopPropagation();">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 9.563C9 9.252 9.252 9 9.563 9h4.874c.311 0 .563.252.563.563v4.874c0 .311-.252.563-.563.563H9.564A.562.562 0 0 1 9 14.437V9.564Z"></path>
+            </svg>
+          </td>
+        </tr>
+      </ng-template>
+    }
+    <ng-template #body let-task>
+        <tr (click)="onEditTask(task.id)" class="cursor-pointer odd:!bg-slate-100 even:bg-white" [class.line-through]="task.status == 'finished'" [class.!bg-green-100]="task.status == 'finished'" [class.text-gray-400]="task.status == 'finished'">
+          <td>{{ task.id }}</td>
+          <td>{{ task.title }}</td>
+          <td class="hidden sm:table-cell">{{ utils.formatDateForScreen(task.deadline) }}</td>
+          <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+          <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+          @if (inProgressTask().length) {
+            <td class="text-2xl text-gray-300">
+              <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" (click)="$event.stopPropagation();">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"></path>
+              </svg>
+            </td>
+          } @else {
+            <td class="text-2xl text-green-400">
+              <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" (click)="onViewTask(task.id); $event.stopPropagation();">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"></path>
+              </svg>
+            </td>
+          }
+          
+        </tr>
+    </ng-template>
+  </p-table>
   }
 </div>

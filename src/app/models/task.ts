@@ -9,6 +9,7 @@ export interface Task {
   deadline: Date | null;
   started_at: Date | null;
   ended_at: Date | null;
+  status?: string;
 }
 
 export interface RawTask {
@@ -22,4 +23,5 @@ export interface RawTask {
   deadline: string;
   started_at: string;
   ended_at: string;
+  status?: string;
 }
