@@ -12,11 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-task-list',
-<<<<<<< HEAD
-  imports: [TaskFormComponent, TaskSuggestionComponent, TableModule],
-=======
   imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule],
->>>>>>> master
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
