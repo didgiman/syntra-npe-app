@@ -7,9 +7,11 @@ import { Table, TableModule } from 'primeng/table';
 import { TaskViewComponent } from '../task-view/task-view.component';
 import { Task } from '../../models/task';
 
+import { DialogModule } from 'primeng/dialog';
+
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, TableModule, TaskViewComponent],
+  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })

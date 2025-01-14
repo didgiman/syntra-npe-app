@@ -1,10 +1,14 @@
-@if (showTaskForm) {
-  <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
-}
-@if (showTaskView) {
-  <!-- <app-task-view (close)="onViewClose($event)" [task_id]="viewTaskId" /> -->
-  <app-task-view (close)="onViewClose($event)" [task_id]="viewTaskId" />
-}
+<p-dialog header="Task form" [modal]="true" [(visible)]="showTaskForm">
+  <ng-template #headless>
+    <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Task operations" [modal]="true" [(visible)]="showTaskView">
+  <ng-template #headless>
+    <app-task-view (close)="onViewClose($event)" [task_id]="viewTaskId" />
+  </ng-template>
+</p-dialog>
 
 <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
   <div class="w-10 h-10 absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer hover:text-green-600" (click)="newTask()">
