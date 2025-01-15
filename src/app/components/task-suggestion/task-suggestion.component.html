@@ -19,8 +19,7 @@
 
                 <!-- Estimate -->
                 <div class="mt-2 flex items-center">
-                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How long will this task take you to
-                        finish?</div>
+                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How much time do you have?</div>
                     <div class="w-2/3 flex items-center">
                         <input name="estimate" class="flex-grow" type="range" min="0" max="10" [step]="estimateStepSize"
                             [(ngModel)]="suggestionRequest.estimate" (input)="onEstimateChange()">
@@ -30,7 +29,7 @@
 
                 <!-- Feeling -->
                 <div class="mt-2 flex items-center">
-                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How do you feel about doing this task?
+                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How are you feeling today?
                     </div>
                     <div class="w-2/3 flex justify-between text-2xl">
                         <div class="flex items-center">
