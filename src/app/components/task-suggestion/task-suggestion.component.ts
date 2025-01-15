@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal, computed } from '@angular/core';
 import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,6 @@ import { TaskService } from '../../services/task.service';
 })
 export class TaskSuggestionComponent {
   task_id = input<number>(0);
-
   close = output<string>();
 
   utils = inject(UtilsService);
@@ -21,7 +20,6 @@ export class TaskSuggestionComponent {
   tasks = this.taskService.tasks;
 
   estimateDisplay = signal<string>('1 hour');
-  formattedDeadline = '';
 
   suggestionRequest: Task = {
     id: 0,
@@ -43,8 +41,6 @@ export class TaskSuggestionComponent {
       if (foundTask) {
         this.suggestionRequest = { ...foundTask };
         this.onEstimateChange();
-
-        this.formattedDeadline = this.utils.formatDateForInput(this.suggestionRequest.deadline!);
       }
     }
 
@@ -77,22 +73,17 @@ export class TaskSuggestionComponent {
     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.suggestionRequest.estimate));
   }
 
-  // constructor() { 
-  //   this.taskService.loadTasks();
-  //   effect(() => {
-  //     console.log('Tasks updated effect', this.tasks());
-  //     this.suggestionTasks.set(
-  //       this.tasks()
-  //         .filter(task => task.deadline !== undefined && task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)
-  //         .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime())
-  //     );
-  //     if (this.suggestionTasks()) {
-  //         return this.suggestionTasks()[0]
-  //       }
-  //     else {
-  //       this.suggestionTasks.set([]);
-  //       return null;
-  //     }
-  //   });
-  // }
+
+  // Filtered array (reactive)
+  filteredSuggestionTasks = computed(() =>
+    this.suggestionTasks().filter(item =>
+      (item.feeling === this.suggestionRequest.feeling &&
+      (item.estimate === this.suggestionRequest.estimate))
+    )
+  );
+
+  // Event handler (if you need to trigger manual actions)
+  applyFilter(): void {
+    console.log('Filtered items:', this.filteredSuggestionTasks());
+  }
 }

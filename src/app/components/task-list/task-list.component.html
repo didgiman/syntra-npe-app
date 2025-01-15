@@ -10,6 +10,12 @@
   </ng-template>
 </p-dialog>
 
+<p-dialog header="Whats next" [modal]="true" [(visible)]="showTaskSuggestion">
+  <ng-template #headless>
+    <app-task-suggestion (close)="onTaskSuggestionClose($event)" />
+  </ng-template>
+</p-dialog>
+
 <div class="container bg-slate-200 p-4 text-slate-600 mx-auto shadow-lg rounded-lg relative">
   <div
     class="w-10 h-10 absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer hover:text-green-600"
