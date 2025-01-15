@@ -3,6 +3,7 @@ import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
+import { min } from 'rxjs';
 
 @Component({
   selector: 'app-task-suggestion',
@@ -19,7 +20,7 @@ export class TaskSuggestionComponent {
   private taskService = inject(TaskService);
   tasks = this.taskService.tasks;
 
-  estimateDisplay = signal<string>('1 hour');
+  estimateDisplay = signal<string>('15 min');
 
   suggestionRequest: Task = {
     id: 0,
@@ -27,7 +28,7 @@ export class TaskSuggestionComponent {
     user_id: 1,
     title: '',
     feeling: 3,
-    estimate: 1,
+    estimate: 0.25,
     deadline: null,
     started_at: null,
     ended_at: null
@@ -74,31 +75,63 @@ export class TaskSuggestionComponent {
     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.suggestionRequest.estimate));
   }
 
+  minFeeling = 5;
+  maxFeeling = 7;
 
-  // Filtered array (reactive)
+  // Filtered array
   filteredSuggestionTasks() {
     this.suggestionTasks.set(this.tasks().filter(item =>
-      (Number(item.feeling) >= (5 - +this.suggestionRequest.feeling)) &&
-      (Number(item.feeling) <= (7 - +this.suggestionRequest.feeling)) &&
+      (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
+      (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
+      (item.estimate <= +this.suggestionRequest.estimate))
+    );
+  }
+
+  pickRandomTask(): number {
+    for (let i = 0; i < 4; i++) {
+      // Filter tasks based on the current range
+      const RT = (this.tasks().filter(item =>
+        (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
+        (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
         (item.estimate <= +this.suggestionRequest.estimate))
-    ); 
+      );
+
+      if (RT.length > 0) {
+        // If tasks are found, pick one randomly
+        const randomIndex = Math.floor(Math.random() * RT.length);
+        console.log('Random task:', RT[randomIndex]);
+        return RT[randomIndex].id;
+      }
+
+      // Adjust the range and try again
+      console.log('upping the feels')
+      this.minFeeling -= 1;
+      this.maxFeeling += 1;
+    }
+
+    // If no tasks are found after 3 iterations, return a fallback message
+    console.log('No tasks found');
+    return 0;
   }
 
-  pickRandomTask(): void {
-    const RT = this.suggestionTasks();
-    if (RT.length > 0) {
-      const randomIndex = Math.floor(Math.random() * RT.length);
-      this.randomTask.set([RT[randomIndex]]);
-      console.log('Random task:', this.randomTask());
-    } else {
-        console.log('No tasks found');
-    }   
-  }
+  // if (this.suggestionTasks().length > 0) {
 
-  // Event handler (if you need to trigger manual actions)
-  applyFilter(): void {
-    this.filteredSuggestionTasks();
-    console.log('Filtered items:', this.suggestionTasks());
-    this.pickRandomTask();
-  }
+  //   const RT = this.suggestionTasks();
+  //   if (RT.length > 0) {
+  //     const randomIndex = Math.floor(Math.random() * RT.length);
+  //     this.randomTask.set([RT[randomIndex]]);
+  //     console.log('Random task:', this.randomTask());
+  //   } else {
+  //     console.log('No tasks found');
+  //   }
+  // }
+  // }
+
+
+// Event handler (if you need to trigger manual actions)
+applyFilter(): void {
+  this.filteredSuggestionTasks();
+  console.log('Filtered items:', this.suggestionTasks());
+  this.pickRandomTask();
 }
+};
