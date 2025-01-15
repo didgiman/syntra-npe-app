@@ -8,10 +8,11 @@ import { TaskViewComponent } from '../task-view/task-view.component';
 import { Task } from '../../models/task';
 
 import { DialogModule } from 'primeng/dialog';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule],
+  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule, NgClass],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -36,7 +37,7 @@ export class TaskListComponent {
   constructor() {
     this.taskService.loadTasks();
     effect(() => {
-      console.log('Tasks updated effect', this.tasks());
+      // console.log('Tasks updated effect', this.tasks());
       // this.utils.toast("Tasks list updated", "info");
       this.loading = false;
 
@@ -46,7 +47,9 @@ export class TaskListComponent {
       // Remove tasks that are in progress from the regular tasks list => this causes an infinite loop
       //this.tasks.set(this.tasks().filter(itemA => !this.inProgressTask().some(itemB => itemA.id === itemB.id)));
 
-      console.log(this.inProgressTask());
+      console.log("In progress tasks: ", this.inProgressTask());
+
+      console.log('End of effect')
 
     });
   }
