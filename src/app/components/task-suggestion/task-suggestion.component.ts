@@ -34,6 +34,7 @@ export class TaskSuggestionComponent {
   }
 
   suggestionTasks = signal<Task[]>([]);
+  randomTask = signal<Task[]>([]);
 
   ngOnInit() {
     if (this.task_id() > 0) {
@@ -75,15 +76,29 @@ export class TaskSuggestionComponent {
 
 
   // Filtered array (reactive)
-  filteredSuggestionTasks = computed(() =>
-    this.suggestionTasks().filter(item =>
-      (item.feeling === this.suggestionRequest.feeling &&
-      (item.estimate === this.suggestionRequest.estimate))
-    )
-  );
+  filteredSuggestionTasks() {
+    this.suggestionTasks.set(this.tasks().filter(item =>
+      (Number(item.feeling) >= (5 - +this.suggestionRequest.feeling)) &&
+      (Number(item.feeling) <= (7 - +this.suggestionRequest.feeling)) &&
+        (item.estimate <= +this.suggestionRequest.estimate))
+    ); 
+  }
+
+  pickRandomTask(): void {
+    const RT = this.suggestionTasks();
+    if (RT.length > 0) {
+      const randomIndex = Math.floor(Math.random() * RT.length);
+      this.randomTask.set([RT[randomIndex]]);
+      console.log('Random task:', this.randomTask());
+    } else {
+        console.log('No tasks found');
+    }   
+  }
 
   // Event handler (if you need to trigger manual actions)
   applyFilter(): void {
-    console.log('Filtered items:', this.filteredSuggestionTasks());
+    this.filteredSuggestionTasks();
+    console.log('Filtered items:', this.suggestionTasks());
+    this.pickRandomTask();
   }
 }
