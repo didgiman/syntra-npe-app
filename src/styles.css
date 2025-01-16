@@ -1,4 +1,5 @@
-@import 'toastify-js/src/toastify.css';
+@import "toastify-js/src/toastify.css";
+@import "primeicons/primeicons.css";
 
 /* @tailwind base;
 @tailwind components;

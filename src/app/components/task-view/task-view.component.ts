@@ -4,10 +4,11 @@ import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task';
 
 import { TooltipModule } from 'primeng/tooltip';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-task-view',
-  imports: [TooltipModule],
+  imports: [TooltipModule, ButtonModule],
   templateUrl: './task-view.component.html',
   styleUrl: './task-view.component.css',
 })
