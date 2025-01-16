@@ -8,9 +8,14 @@ import { TaskService } from '../../services/task.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
+import { SliderModule } from 'primeng/slider';
+import { RadioButtonModule } from 'primeng/radiobutton';
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule, NgClass],
+  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
@@ -20,13 +25,66 @@ export class TaskFormComponent {
   
   close = output<string>();
 
+  taskService = inject(TaskService);
   utils = inject(UtilsService);
-  
-  
-  
-  
   confirmationService = inject(ConfirmationService);
+  
+  loading = signal<boolean>(false);
 
+  now = new Date();
+
+  estimateDisplay = signal<string>('1:00');
+  formattedDeadline = '';
+
+  task: Task = {
+    id: 0,
+    created_at: null,
+    user_id: 1,
+    title: '',
+    feeling: 3,
+    estimate: 1,
+    deadline: null,
+    started_at: null,
+    ended_at: null
+  }
+
+  ngOnInit() {
+    if (this.task_id() > 0) {
+      // Find the task with the given id
+      const foundTask = this.taskService.tasks().find(t => t.id === +this.task_id()); // For some reason this only works when placing the + in front of this.task_id()
+      if (foundTask) {
+        this.task = { ...foundTask };
+        
+        this.onEstimateChange();
+
+        this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
+      }
+    }
+
+    this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
+  }
+
+  async onTaskSave() {
+    this.loading.set(true);
+
+    console.log('Save task', this.task);
+    const saveResponse = await this.taskService.saveTask(this.task);
+
+    console.log(saveResponse);
+
+    if (saveResponse) {
+      this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
+      if (saveResponse.success) {
+        this.close.emit(this.task_id() === 0 ? 'create' : 'edit');
+      }
+    } else {
+      this.utils.toast("Task could not be saved. Please try again.", "error");
+    }
+
+    this.loading.set(false);
+  }
+  
+  // Show confimation message before actually deleting a task
   confirmDelete(event: Event) {
     this.confirmationService.confirm({
         target: event.target as EventTarget,
@@ -45,71 +103,9 @@ export class TaskFormComponent {
           this.onTaskDelete();
         },
         reject: () => {
-            // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+            // Do nothing
         }
     });
-  }
-
-
-
-
-
-
-
-
-
-
-  taskService = inject(TaskService);
-
-  estimateDisplay = signal<string>('1 hour');
-  formattedDeadline = '';
-
-  task: Task = {
-    id: 0,
-    created_at: null,
-    user_id: 1,
-    title: '',
-    feeling: 3,
-    estimate: 1,
-    deadline: null,
-    started_at: null,
-    ended_at: null
-  }
-
-  ngOnInit() {
-    if (this.task_id() > 0) {
-      const foundTask = this.taskService.tasks().find(t => t.id === +this.task_id()); // For some reason this only works when placing the + in front of this.task_id()
-      if (foundTask) {
-        this.task = { ...foundTask };
-        this.onEstimateChange();
-
-        this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
-      }
-    }
-
-    this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
-  }
-
-  updateTaskDeadline(newValue: string): void {
-    // Update the task.deadline with the new value
-    this.task.deadline = new Date(newValue);
-    this.formattedDeadline = newValue; // Ensure synchronization
-  }
-
-  async onTaskSave() {
-    console.log('Save task', this.task);
-    const saveResponse = await this.taskService.saveTask(this.task);
-
-    console.log(saveResponse);
-
-    if (saveResponse) {
-      this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
-      if (saveResponse.success) {
-        this.close.emit('save');
-      }
-    } else {
-      this.utils.toast("Task could not be saved. Please try again.", "error");
-    }
   }
   async onTaskDelete() {
     console.log('Delete task', this.task.id);
