@@ -28,10 +28,17 @@
     <!-- Task list header -->
     <div class="flex items-center p-3 bg-blue-400 mt-4 rounded-t-xl">
       <h1 class="text-3xl font-bold text-white mr-4 hidden sm:block">{{ tasks().length }} tasks</h1>
-      <input #searchInput type="text" (input)="tasksTable.filterGlobal(searchInput.value, 'contains')" placeholder="Search tasks" class="p-2 border border-slate-300 rounded sm:w-1/3" />
+      <!-- Task search field -->
+      <input #searchInput pInputText [(ngModel)]="searchString" type="text" (input)="tasksTable.filterGlobal(searchInput.value, 'contains')" placeholder="Search tasks" class="sm:w-1/3" />
+      <!-- Clear search -->
+      <div (click)="searchString = ''; tasksTable.filterGlobal('', 'contains')" class="text-blue-400 hover:text-blue-500 cursor-pointer -ml-8">
+        <svg data-slot="icon" fill="none" class="w-6" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+        </svg>
+      </div>
 
       <!-- New task icon -->
-      <div class="w-10 h-10 absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer hover:text-green-600" (click)="newTask()">
+      <div class="w-10 h-10 absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
         <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
         </svg>
@@ -91,7 +98,7 @@
               <!-- Play icon -->
               <svg
                 (click)="!inProgressTask().length && onViewTask(task.id); $event.stopPropagation();"
-                [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-green-300 hover:text-green-500': !inProgressTask().length && task.status != 'finished'}" data-slot="icon" class="w-10" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-blue-300 hover:text-blue-500': !inProgressTask().length && task.status != 'finished'}" data-slot="icon" class="w-10" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"></path>

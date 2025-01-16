@@ -10,9 +10,12 @@ import { Task } from '../../models/task';
 import { DialogModule } from 'primeng/dialog';
 import { NgClass } from '@angular/common';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule, NgClass],
+  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule, NgClass, InputTextModule, FormsModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -23,6 +26,8 @@ export class TaskListComponent {
   utils = inject(UtilsService);
 
   loading: boolean = true;
+
+  searchString = '';
 
   @ViewChild('tasksTable') table!: Table;
 
