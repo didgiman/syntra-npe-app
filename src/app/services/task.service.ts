@@ -10,9 +10,13 @@ export class TaskService {
 
   constructor() { }
 
-  async loadTasks() {
+  async loadTasks(finishedOnly: boolean = false) {
     try {
-      const response = await fetch(this.apiUrl + '/usertasks/1'); // TO DO: This should be replaced by /usertasks/:userId
+      let url = this.apiUrl + '/usertasks/1'; // TO DO: This should be replaced by /usertasks/:userId
+      if (finishedOnly) {
+        url += '?finishedOnly=true';
+      }
+      const response = await fetch(url);
       const data = await response.json();
       // console.log(data);
       if (data) {
