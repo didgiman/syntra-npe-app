@@ -4,19 +4,20 @@ import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { min } from 'rxjs';
+import { TaskListComponent } from '../task-list/task-list.component';
 
 import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-task-suggestion',
-  imports: [FormsModule, SliderModule, RadioButtonModule],
+  imports: [FormsModule, SliderModule, RadioButtonModule, TaskListComponent],
   templateUrl: './task-suggestion.component.html',
   styleUrl: './task-suggestion.component.css'
 })
 export class TaskSuggestionComponent {
   task_id = input<number>(0);
-  close = output<string>();
+  close = output<number>();
 
   utils = inject(UtilsService);
 
@@ -24,6 +25,10 @@ export class TaskSuggestionComponent {
   tasks = this.taskService.tasks;
 
   estimateDisplay = signal<string>('15 min');
+
+  viewTaskId: number = 27;
+  showTaskView:boolean = false;
+  showTaskSuggestion:boolean = false;
 
   suggestionRequest: Task = {
     id: 0,
@@ -53,7 +58,7 @@ export class TaskSuggestionComponent {
   }
 
   onCancel() {
-    this.close.emit('cancel');
+    this.close.emit(0);
   }
 
   // non-linear steps for estimate
@@ -98,6 +103,7 @@ export class TaskSuggestionComponent {
         (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
         (item.estimate <= +this.suggestionRequest.estimate))
       );
+      console.log('Filtered tasks:', RT);
 
       if (RT.length > 0) {
         // If tasks are found, pick one randomly
@@ -112,29 +118,22 @@ export class TaskSuggestionComponent {
       this.maxFeeling += 1;
     }
 
-    // If no tasks are found after 3 iterations, return a fallback message
+    // If no tasks are found after 4 iterations, return a fallback message
     console.log('No tasks found');
     return 0;
   }
 
-  // if (this.suggestionTasks().length > 0) {
+  // Event handler (if you need to trigger manual actions)
+  applyFilter(): void {
+    const suggestedTaskId = this.pickRandomTask();
+    this.close.emit(suggestedTaskId);
+    return;
+  }
 
-  //   const RT = this.suggestionTasks();
-  //   if (RT.length > 0) {
-  //     const randomIndex = Math.floor(Math.random() * RT.length);
-  //     this.randomTask.set([RT[randomIndex]]);
-  //     console.log('Random task:', this.randomTask());
-  //   } else {
-  //     console.log('No tasks found');
-  //   }
-  // }
-  // }
-
-
-// Event handler (if you need to trigger manual actions)
-applyFilter(): void {
-  this.filteredSuggestionTasks();
-  console.log('Filtered items:', this.suggestionTasks());
-  this.pickRandomTask();
-}
+  onViewTask(taskId:number) {
+    console.log('View task', taskId);
+    this.viewTaskId = taskId;
+    this.showTaskView = true;
+    return;
+  }
 };

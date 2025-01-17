@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms';
 export class TaskListComponent {
   private taskService = inject(TaskService);
   tasks = this.taskService.tasks;
-  
+
   utils = inject(UtilsService);
 
   loading: boolean = true;
@@ -32,12 +32,12 @@ export class TaskListComponent {
 
   @ViewChild('tasksTable') table!: Table;
 
-  editTaskId:number = 0;
-  showTaskForm:boolean = false;
-  showTaskSuggestion:boolean = false;
+  editTaskId: number = 0;
+  showTaskForm: boolean = false;
+  showTaskSuggestion: boolean = false;
 
   viewTaskId: number = 27;
-  showTaskView:boolean = false;
+  showTaskView: boolean = false;
 
   inProgressTask = signal<Task[]>([]);
 
@@ -50,7 +50,7 @@ export class TaskListComponent {
           this.utils.toast(res.message, "error");
         }
       });
-    } catch(e: any) {
+    } catch (e: any) {
       this.utils.toast(e.message, "error");
     }
     effect(() => {
@@ -67,7 +67,7 @@ export class TaskListComponent {
     });
   }
 
-  onEditTask(taskId:number) {
+  onEditTask(taskId: number) {
     console.log('Edit task', taskId);
     this.editTaskId = taskId;
     this.showTaskForm = true;
@@ -79,7 +79,7 @@ export class TaskListComponent {
     this.showTaskForm = true;
   }
 
-  onEditClose(action:string) {
+  onEditClose(action: string) {
     console.log('Edit window close', action);
     this.showTaskForm = false;
 
@@ -89,13 +89,13 @@ export class TaskListComponent {
     }
   }
 
-  onViewTask(taskId:number) {
+  onViewTask(taskId: number) {
     console.log('View task', taskId);
     this.viewTaskId = taskId;
     this.showTaskView = true;
     return;
   }
-  onViewClose(action:string) {
+  onViewClose(action: string) {
     console.log('View window close', action);
     this.showTaskView = false;
   }
@@ -103,23 +103,23 @@ export class TaskListComponent {
   customSort(event: any) {
     const order = event.order; // 1 for ascending, -1 for descending
     const field = event.field;
-  
+
     event.data.sort((data1: any, data2: any) => {
       const value1 = data1[field] || null;
       const value2 = data2[field] || null;
-  
+
       // Custom logic for the "deadline" column
       if (field === 'deadline') {
         if (!value1 && value2) return order; // Empty value comes last in ascending, first in descending
         if (value1 && !value2) return -order; // Non-empty comes first in ascending, last in descending
         if (!value1 && !value2) return 0; // Both are empty, no change
       }
-  
+
       // Default behavior for other columns (handle null/undefined safely)
       if (value1 == null && value2 != null) return order;
       if (value1 != null && value2 == null) return -order;
       if (value1 == null && value2 == null) return 0;
-  
+
       const result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
       return order * result;
     });
@@ -135,8 +135,12 @@ export class TaskListComponent {
     this.showTaskSuggestion = true;
   }
 
-  onTaskSuggestionClose(action:string) {
-    console.log('What\'s next close', action);
+  onTaskSuggestionClose(taskId: number) {
+    console.log('What\'s next close', taskId);
     this.showTaskSuggestion = false;
+    if (taskId > 0) {
+      this.viewTaskId = taskId;
+      this.showTaskView = true;
+    }
   }
 }
