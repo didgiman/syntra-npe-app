@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal, ViewChild } from '@angular/core';
+import { Component, effect, inject, numberAttribute, signal, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
@@ -40,6 +40,7 @@ export class TaskListComponent {
   showTaskView: boolean = false;
 
   inProgressTask = signal<Task[]>([]);
+  dueTasks = signal<Task[]>([]);
 
   constructor() {
     try {
@@ -63,7 +64,6 @@ export class TaskListComponent {
 
       // Remove tasks that are in progress from the regular tasks list => this causes an infinite loop
       //this.tasks.set(this.tasks().filter(itemA => !this.inProgressTask().some(itemB => itemA.id === itemB.id)));
-
     });
   }
 
@@ -132,15 +132,27 @@ export class TaskListComponent {
 
   taskSuggestion() {
     console.log('What\'s next?');
-    this.showTaskSuggestion = true;
+    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
+      .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
+    if (this.dueTasks().length > 0) {
+      console.log('Due tasks:', this.dueTasks());
+      const mostDueTaskId = this.dueTasks()[0];
+      console.log('Nearest due task:', mostDueTaskId);
+      this.onViewTask(mostDueTaskId.id);
+    }
+    else {
+      this.showTaskSuggestion = true;
+    }
   }
 
   onTaskSuggestionClose(taskId: number) {
-    console.log('What\'s next close', taskId);
+    console.log('What\'s next close');
     this.showTaskSuggestion = false;
     if (taskId > 0) {
       this.viewTaskId = taskId;
       this.showTaskView = true;
     }
   }
+
+
 }

@@ -124,7 +124,7 @@ export class TaskSuggestionComponent {
   }
 
   // Event handler (if you need to trigger manual actions)
-  applyFilter(): void {
+  showMe(): void {
     const suggestedTaskId = this.pickRandomTask();
     this.close.emit(suggestedTaskId);
     return;
