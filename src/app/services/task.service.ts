@@ -11,22 +11,26 @@ export class TaskService {
   constructor() { }
 
   async loadTasks() {
-    const response = await fetch(this.apiUrl + '/usertasks/1'); // TO DO: This should be replaced by /usertasks/:userId
-    const data = await response.json();
-    // console.log(data);
-    if (data) {
-      // this.tasks.set(data.tasks);
+    try {
+      const response = await fetch(this.apiUrl + '/usertasks/1'); // TO DO: This should be replaced by /usertasks/:userId
+      const data = await response.json();
+      // console.log(data);
+      if (data) {
+        // this.tasks.set(data.tasks);
 
-      // Convert the tasks from the API to a format that is usable in our JS application
-      const JSTasks = data.tasks.map((task: RawTask) => (this.convertAPITaskToJSTask(task)));
-      console.log("tasks with dates", JSTasks);
+        // Convert the tasks from the API to a format that is usable in our JS application
+        const JSTasks = data.tasks.map((task: RawTask) => (this.convertAPITaskToJSTask(task)));
+        // console.log("tasks with dates", JSTasks);
 
-      this.tasks.set(JSTasks);
+        this.tasks.set(JSTasks);
 
-      return {
-        success: data.success,
-        message: data.message,
+        return {
+          success: data.success,
+          message: data.message,
+        }
       }
+    } catch (e) {
+      console.error(e);
     }
     return {
       success: false,
@@ -63,11 +67,9 @@ export class TaskService {
         body: JSON.stringify(task)
       });
 
-console.log("POST TASK RESPONSE: ", response);
-
       const data = await response.json();
 
-      console.log("POST TASK DATA: ", data);
+      // console.log("POST TASK DATA: ", data);
 
       if (data) {
         if (data.success) {
@@ -89,24 +91,28 @@ console.log("POST TASK RESPONSE: ", response);
   }
 
   private async editTask(task: RawTask) {
-    const response = await fetch(this.apiUrl + '/tasks/' + task.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(task)
-    });
-    const data = await response.json();
-    if (data) {
-      if (data.success) {
-        // this.loadTasks(); // Improved by updating the task in the list instead of reloading all tasks
-        // this.tasks.update(tasks => tasks.map(t => t.id === task.id ? task : t));
-        this.tasks.update(tasks => tasks.map(t => t.id === task.id ? this.convertAPITaskToJSTask(data.task) : t));
+    try {
+      const response = await fetch(this.apiUrl + '/tasks/' + task.id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+      });
+      const data = await response.json();
+      if (data) {
+        if (data.success) {
+          // this.loadTasks(); // Improved by updating the task in the list instead of reloading all tasks
+          // this.tasks.update(tasks => tasks.map(t => t.id === task.id ? task : t));
+          this.tasks.update(tasks => tasks.map(t => t.id === task.id ? this.convertAPITaskToJSTask(data.task) : t));
+        }
+        return {
+          success: data.success,
+          message: data.message,
+        }
       }
-      return {
-        success: data.success,
-        message: data.message,
-      }
+    } catch (e) {
+      console.log(e);
     }
     
     return {
@@ -116,19 +122,23 @@ console.log("POST TASK RESPONSE: ", response);
   }
 
   async deleteTask(taskId: number) {
-    const response = await fetch(this.apiUrl + '/tasks/' + taskId, {
-      method: 'DELETE'
-    });
-    const data = await response.json();
-    if (data) {
-      if (data.success) {
-        //this.loadTasks(); // Improved by removing the task from the list instead of reloading all tasks
-        this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
+    try {
+      const response = await fetch(this.apiUrl + '/tasks/' + taskId, {
+        method: 'DELETE'
+      });
+      const data = await response.json();
+      if (data) {
+        if (data.success) {
+          //this.loadTasks(); // Improved by removing the task from the list instead of reloading all tasks
+          this.tasks.update(tasks => tasks.filter(t => t.id !== taskId));
+        }
+        return {
+          success: data.success,
+          message: data.message,
+        }
       }
-      return {
-        success: data.success,
-        message: data.message,
-      }
+    } catch (e) {
+      console.log(e);
     }
     return {
       success: false,

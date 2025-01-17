@@ -1,38 +1,18 @@
-<h1 class="text-3xl font-bold bg-blue-500 p-4 text-white">{{ title }}</h1>
+<div class="h-screen flex flex-col bg-gray-100">
+  <header class="bg-blue-500 p-4">
+    <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
+  </header>
 
-<div class="flex flex-row items-center gap-4 p-4">
-  <button
-    (click)="utils.toast('Basic error message!', 'error')"
-    class="border border-red-500 p-2 rounded"
-  >
-    Show error alert
-  </button>
-  <button
-    (click)="utils.toast('Basic success message!', 'success')"
-    class="border border-green-500 p-2 rounded"
-  >
-    Show success alert
-  </button>
-  <button
-    (click)="utils.toast('Basic info message!', 'info')"
-    class="border border-blue-500 p-2 rounded"
-  >
-    Show info alert
-  </button>
-  <button
-    (click)="utils.toast('Basic warning message!', 'warning')"
-    class="border border-orange-500 p-2 rounded"
-  >
-    Show warning alert
-  </button>
-  <button
-    (click)="utils.toast('Basic message!', 'default')"
-    class="border border-yellow-500 p-2 rounded"
-  >
-    Show default alert
-  </button>
+  <main class="flex flex-grow container mx-auto items-center justify-center">
+    <app-task-list class="h-full w-full" />
+  </main>
+
+  <footer class="bg-blue-500 text-white p-4">
+    <p>&copy; 2025 - Null Pointer Exceptions</p>
+  </footer>
+
 </div>
 
-<app-task-list />
+
 
 <router-outlet />

@@ -8,9 +8,15 @@ import { TaskService } from '../../services/task.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
+import { InputTextModule } from 'primeng/inputtext';
+import { DatePickerModule } from 'primeng/datepicker';
+import { SliderModule } from 'primeng/slider';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule, NgClass],
+  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
@@ -20,36 +26,16 @@ export class TaskFormComponent {
 
   close = output<string>();
 
+  taskService = inject(TaskService);
   utils = inject(UtilsService);
 
   confirmationService = inject(ConfirmationService);
+  
+  loading = signal<boolean>(false);
 
-  confirmDelete(event: Event) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Do you want to delete this task?',
-      icon: 'pi pi-info-circle',
-      rejectButtonProps: {
-        label: 'Cancel',
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptButtonProps: {
-        label: 'Delete',
-        severity: 'danger'
-      },
-      accept: () => {
-        this.onTaskDelete();
-      },
-      reject: () => {
-        // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-      }
-    });
-  }
+  now = new Date();
 
-  taskService = inject(TaskService);
-
-  estimateDisplay = signal<string>('1 hour');
+  estimateDisplay = signal<string>('1:00');
   formattedDeadline = '';
 
   task: Task = {
@@ -66,9 +52,11 @@ export class TaskFormComponent {
 
   ngOnInit() {
     if (this.task_id() > 0) {
+      // Find the task with the given id
       const foundTask = this.taskService.tasks().find(t => t.id === +this.task_id()); // For some reason this only works when placing the + in front of this.task_id()
       if (foundTask) {
         this.task = { ...foundTask };
+        
         this.onEstimateChange();
 
         this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
@@ -78,13 +66,9 @@ export class TaskFormComponent {
     this.task.feeling = this.task.feeling.toString(); // Convert feeling to string for radio button
   }
 
-  updateTaskDeadline(newValue: string): void {
-    // Update the task.deadline with the new value
-    this.task.deadline = new Date(newValue);
-    this.formattedDeadline = newValue; // Ensure synchronization
-  }
-
   async onTaskSave() {
+    this.loading.set(true);
+
     console.log('Save task', this.task);
     const saveResponse = await this.taskService.saveTask(this.task);
 
@@ -93,11 +77,37 @@ export class TaskFormComponent {
     if (saveResponse) {
       this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
       if (saveResponse.success) {
-        this.close.emit('save');
+        this.close.emit(this.task_id() === 0 ? 'create' : 'edit');
       }
     } else {
       this.utils.toast("Task could not be saved. Please try again.", "error");
     }
+
+    this.loading.set(false);
+  }
+  
+  // Show confimation message before actually deleting a task
+  confirmDelete(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: 'Do you want to delete this task?',
+        icon: 'pi pi-info-circle',
+        rejectButtonProps: {
+            label: 'Cancel',
+            severity: 'secondary',
+            outlined: true
+        },
+        acceptButtonProps: {
+            label: 'Delete',
+            severity: 'danger'
+        },
+        accept: () => {
+          this.onTaskDelete();
+        },
+        reject: () => {
+            // Do nothing
+        }
+    });
   }
   async onTaskDelete() {
     console.log('Delete task', this.task.id);
