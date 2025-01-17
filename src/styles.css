@@ -1,4 +1,5 @@
-@import 'toastify-js/src/toastify.css';
+@import "toastify-js/src/toastify.css";
+@import "primeicons/primeicons.css";
 
 /* @tailwind base;
 @tailwind components;
@@ -13,4 +14,26 @@
 @layer tailwind-utilities {
     @tailwind components;
     @tailwind utilities;
+}
+
+.p-button {
+    padding: 0.4rem 1rem;  /* Reduce padding */
+    min-width: 5rem;       /* Set a smaller minimum width */
+    font-size: 0.875rem;   /* Make font slightly smaller */
+}
+
+.p-datatable-sortable-column {
+    /* padding: 0.2rem 1rem; */
+}
+
+.p-select-label, .p-select-option {
+    padding: 0.4rem 0.5rem;  /* Reduce padding */
+}
+
+.p-paginator {
+    @apply rounded-b-xl bg-blue-200 p-2 text-white;
+}
+
+.p-datepicker-input {
+    @apply w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500;
 }

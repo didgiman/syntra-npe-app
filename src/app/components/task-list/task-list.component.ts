@@ -8,10 +8,14 @@ import { TaskViewComponent } from '../task-view/task-view.component';
 import { Task } from '../../models/task';
 
 import { DialogModule } from 'primeng/dialog';
+import { NgClass } from '@angular/common';
+
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule],
+  imports: [TaskFormComponent, TableModule, TaskViewComponent, DialogModule, NgClass, InputTextModule, FormsModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -22,6 +26,8 @@ export class TaskListComponent {
   utils = inject(UtilsService);
 
   loading: boolean = true;
+
+  searchString = '';
 
   @ViewChild('tasksTable') table!: Table;
 
@@ -34,19 +40,27 @@ export class TaskListComponent {
   inProgressTask = signal<Task[]>([]);
 
   constructor() {
-    this.taskService.loadTasks();
+    try {
+      const response = this.taskService.loadTasks().then((res) => {
+        if (res.success) {
+          this.loading = false
+        } else {
+          this.utils.toast(res.message, "error");
+        }
+      });
+    } catch(e: any) {
+      this.utils.toast(e.message, "error");
+    }
     effect(() => {
-      console.log('Tasks updated effect', this.tasks());
+      // console.log('Tasks updated effect', this.tasks());
       // this.utils.toast("Tasks list updated", "info");
-      this.loading = false;
+      // this.loading = false;
 
-      // Search for a task that has the "in progress" status
+      // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
 
       // Remove tasks that are in progress from the regular tasks list => this causes an infinite loop
       //this.tasks.set(this.tasks().filter(itemA => !this.inProgressTask().some(itemB => itemA.id === itemB.id)));
-
-      console.log(this.inProgressTask());
 
     });
   }
@@ -67,7 +81,8 @@ export class TaskListComponent {
     console.log('Edit window close', action);
     this.showTaskForm = false;
 
-    if (action === 'save') {
+    if (action === 'create') {
+      // When a new task is created, sort the table so that the new task is shown at the top
       this.sortTable('id', -1);
     }
   }

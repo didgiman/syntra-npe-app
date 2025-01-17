@@ -12,13 +12,13 @@
         <div class="mt-3 sm:flex-grow sm:ml-4 sm:mt-0 sm:text-left">
           <h3 class="text-base font-semibold text-gray-900" id="modal-title">
             @if (this.task_id() === 0) {
-            @if (task.title.trim() === '') {
-            Create a new task
+              @if (task.title.trim() === '') {
+                Create a new task
+              } @else {
+                {{ task.title }}
+              }
             } @else {
-            {{ task.title }}
-            }
-            } @else {
-            {{ task.title}}
+              {{ task.title}}
             }
           </h3>
 
@@ -26,18 +26,18 @@
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Task title</div>
             <div class="w-2/3">
-              <input [(ngModel)]="task.title" type="text" name="title" id="title" required [ngClass]="{'!border-red-500 bg-red-100': title.touched && title.invalid}" #title="ngModel" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
+              <input [(ngModel)]="task.title" pInputText type="text" name="title" id="title" required [ngClass]="{'!border-red-500 bg-red-100': title.touched && title.invalid}" #title="ngModel" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
               @if (title.invalid && (title.dirty || title.touched)) {
-              <div class="alert text-red-500 text-xs">
-                @if (title.hasError('required')) {
-                Title is required
-                }
-                @if (title.hasError('minlength')) {
-                Title must be at least 4 characters long.
-                }
-              </div>
+                <div class="alert text-red-500 text-xs">
+                  @if (title.hasError('required')) {
+                    Title is required
+                  }
+                  @if (title.hasError('minlength')) { 
+                    <!-- Not implementee -->
+                    Title must be at least 4 characters long.
+                  }
+                </div>
               }
-              <!-- <input type="text" pInputText [(ngModel)]="task.title" class="w-full bg-slate-400" /> -->
             </div>
           </div>
 
@@ -45,48 +45,48 @@
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">When should this task be finished (optional)</div>
             <div class="w-2/3">
-              <!-- <input [(ngModel)]="task.deadline" type="datetime-local" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" /> -->
-              <input name="deadline" [(ngModel)]="formattedDeadline" (ngModelChange)="updateTaskDeadline($event)" type="datetime-local" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
-              <!-- <p-datepicker
-              [(ngModel)]="task.deadline"
-              [showTime]="true"
-              hourFormat="24"
-              dateFormat="d M yy"
-              [showButtonBar]="true"
-              styleClass="w-full"
-              showIcon
-              iconDisplay="input"
-              /> -->
+              <p-datepicker
+                [(ngModel)]="task.deadline"
+                [showTime]="true"
+                name="deadline"
+                hourFormat="24"
+                dateFormat="dd-mm-yy"
+                [showButtonBar]="true"
+                styleClass="w-full"
+                showIcon
+                iconDisplay="input"
+                [minDate]="this.task_id() === 0 ? now : task.deadline || now"
+              />
             </div>
           </div>
 
           <!-- Estimate -->
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How long will this task take you to finish?</div>
-            <div class="w-2/3 flex items-center">
-              <input name="estimate" class="flex-grow" type="range" min="0" max="10" [step]="estimateStepSize" [(ngModel)]="task.estimate" (input)="onEstimateChange()">
-              <div class="ml-1">{{ estimateDisplay() }}</div>
+            <div class="w-2/3 flex items-center pl-1">
+              <p-slider [(ngModel)]="task.estimate" name="estimate" min="0.25" max="10" [step]="estimateStepSize" styleClass="w-32 sm:w-56" (onChange)="onEstimateChange()" />
+              <div class="ml-4">{{ estimateDisplay() }}</div>
             </div>
           </div>
 
           <!-- Feeling -->
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How do you feel about doing this task?</div>
-            <div class="w-2/3 flex justify-between text-2xl">
-              <div class="flex items-center">
-                <label><input name="feeling" [(ngModel)]="task.feeling" type="radio" value="1">{{ this.utils.getFeelingEmoji(1) }}</label>
+            <div class="w-2/3 flex justify-between text-3xl">
+              <div class="text-center sm:text-left">
+                <label><p-radiobutton name="feeling" value="1" [(ngModel)]="task.feeling" inputId="feeling1" />{{ this.utils.getFeelingEmoji(1) }}</label>
               </div>
-              <div>
-                <label><input name="feeling" [(ngModel)]="task.feeling" type="radio" value="2">{{ this.utils.getFeelingEmoji(2) }}</label>
+              <div class="text-center sm:text-left">
+                <label><p-radiobutton name="feeling" value="2" [(ngModel)]="task.feeling" inputId="feeling2" />{{ this.utils.getFeelingEmoji(2) }}</label>
               </div>
-              <div>
-                <label><input name="feeling" [(ngModel)]="task.feeling" type="radio" value="3">{{ this.utils.getFeelingEmoji(3) }}</label>
+              <div class="text-center sm:text-left">
+                <label><p-radiobutton name="feeling" value="3" [(ngModel)]="task.feeling" inputId="feeling3" />{{ this.utils.getFeelingEmoji(3) }}</label>
               </div>
-              <div>
-                <label><input name="feeling" [(ngModel)]="task.feeling" type="radio" value="4">{{ this.utils.getFeelingEmoji(4) }}</label>
+              <div class="text-center sm:text-left">
+                <label><p-radiobutton name="feeling" value="4" [(ngModel)]="task.feeling" inputId="feeling4" />{{ this.utils.getFeelingEmoji(4) }}</label>
               </div>
-              <div>
-                <label><input name="feeling" [(ngModel)]="task.feeling" type="radio" value="5">{{ this.utils.getFeelingEmoji(5) }}</label>
+              <div class="text-center sm:text-left">
+                <label><p-radiobutton name="feeling" value="5" [(ngModel)]="task.feeling" inputId="feeling5" />{{ this.utils.getFeelingEmoji(5) }}</label>
               </div>
             </div>
           </div>
@@ -95,12 +95,18 @@
     </div>
   </div>
   <div class="bg-gray-50 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
-    <button (click)="onCancel()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+    <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel</button>
     @if (this.task_id() != 0) {
-    <!-- <button (click)="onTaskDelete()" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">Delete task</button>   -->
-    <button (click)="confirmDelete($event)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">Delete task</button>
+      <button pButton (click)="confirmDelete($event)" type="button" severity="danger" icon="pi pi-trash">Delete task</button>
     }
-    <button (click)="onTaskSave()" [disabled]="form.invalid" type="submit" class="disabled:bg-gray-300 disabled:color-gray-200 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Save task</button>
+    <button
+      pButton
+      type="submit"
+      icon="pi pi-check"
+      (click)="onTaskSave()"
+      [disabled]="form.invalid || loading()"
+      severity="success"
+    >{{ loading() ? 'Saving...' : 'Save task' }}</button>
   </div>
 </div>
 

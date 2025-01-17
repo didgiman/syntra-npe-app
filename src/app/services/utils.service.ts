@@ -89,7 +89,7 @@ export class UtilsService {
       }
     }
 
-    formatDateForScreen(date: Date | null) {
+    formatDateForScreen(date: Date | null): string {
       if (!date) {
         return '';
       }
@@ -103,5 +103,30 @@ export class UtilsService {
       const hours = String(date.getHours()).padStart(2, '0');
       const minutes = String(date.getMinutes()).padStart(2, '0');
       return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    formatDeadlineForScreen(date: Date | null): string {
+      if (!date) {
+        return `<span></span>`;
+      }
+
+      if (date < new Date()) {
+        return `<span class="text-red-500 font-bold">${ this.formatDateForScreen(date) }</span>`;
+      } else if (this.isLessThan3DaysFromNow(date)) {
+        return `<span class="text-orange-500 font-bold">${ this.formatDateForScreen(date) }</span>`;
+      } else {
+        return `<span>${ this.formatDateForScreen(date) }</span>`;
+      }
+    }
+
+    isLessThan3DaysFromNow(targetDate: Date): boolean {
+      // Get the current date and time
+      const now = new Date();
+    
+      // Calculate the date 3 days from now
+      const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    
+      // Check if the target date is less than 3 days from now
+      return targetDate < threeDaysFromNow && targetDate > now;
     }
 }
