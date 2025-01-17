@@ -36,51 +36,13 @@ export class TaskViewComponent {
     ended_at: null
   }
 
-  motivationMessage = 'Loading...';
-  giveTips:boolean = false;
-  chatGptTips = signal<string>('');
-  onTipsChange() {
-    this.chatGptTips.set('');
-    if (this.giveTips) {
-      this.chatGptTips.set('Loading...');
-      const chatGptMessage = `
-        I need specific tips on how to complete the following task:
-        "${this.task.title}"
-        Give the response in the same language as the task description above, which is either Dutch or English.
-        Limit the response to 100 words.
-      `;
-
-      this.chatGpt.functional(chatGptMessage).then().then((response) => {
-
-        const lines = response.split('\n').filter((line: string) => line.trim() !== ''); // Split and remove empty lines
-        const html = `
-          ${lines.map((line: string) => `<p>${line}</p>`).join('')}
-        `;
-
-        this.chatGptTips.set(html);
-      });
-    }
-  }
-
   ngOnInit() {
     if (this.task_id() > 0) {
       const foundTask = this.taskService.tasks().find(t => t.id === +this.task_id()); // For some reason this only works when placing the + in front of this.task_id()
       if (foundTask) {
         this.task = { ...foundTask };
 
-        this.motivationMessage = 'Loading...';
-        const chatGptMessage = `
-          I need specific motivation for the following task:
-          "${this.task.title}"
-          I rate this task a feeling of ${this.task.feeling} out of 5.
-          ${ this.task.deadline ? 'I need to finish this task by ' + this.utils.formatDateForInput(this.task.deadline) : '' }
-          Give the response in the same language as the task description above. The language is either Dutch or English (default to English if you are not sure if the task is in Dutch)
-          Please give me a short motivational message of 15 words or less for this task.
-        `;
-        
-        this.chatGpt.motivational(chatGptMessage).then().then((response) => {
-          this.motivationMessage = response;
-        });
+        this.setMotivationalMessage();
       }
     }
   }
@@ -118,6 +80,47 @@ export class TaskViewComponent {
   
   onCancel() {
     this.close.emit('cancel');
+  }
+
+  // ChatGPT stuff
+  giveTips:boolean = false;
+  chatGptTips = signal<string>('');
+  onTipsChange() { // Happens when the "give me tips" switch is toggled
+    this.chatGptTips.set('');
+    if (this.giveTips) {
+      this.chatGptTips.set('Loading...');
+      const chatGptMessage = `
+        I need specific tips on how to complete the following task: \n\n<<user_input>>${this.task.title}<</user_input>>
+        \nGive the response in the same language as the task description above, which is either Dutch or English.
+        \nLimit the response to 150 words.
+      `;
+
+      this.chatGpt.functional(chatGptMessage).then().then((response) => {
+
+        const lines = response.split('\n').filter((line: string) => line.trim() !== ''); // Split and remove empty lines
+        const html = `
+          ${lines.map((line: string) => `<p>${line}</p>`).join('')}
+        `;
+
+        this.chatGptTips.set(html);
+      });
+    }
+  }
+
+  motivationMessage = signal<string>('Loading...');
+  setMotivationalMessage() {
+    this.motivationMessage.set('Loading...');
+    const chatGptMessage = `
+      I need specific motivation for the following task: \n\n<<user_input>>${this.task.title}<</user_input>>
+      \nOn a scale of 1 to 5, how motivated am I to complete this task? ${this.task.feeling}
+      \n${ this.task.deadline ? 'I need to finish this task by ' + this.utils.formatDateForInput(this.task.deadline) : '' }
+      \nGive the response in the same language as the task description above, which is either Dutch or English.
+      Please give me a short motivational message of 25 words or less for this task.
+    `;
+    
+    this.chatGpt.motivational(chatGptMessage).then().then((response) => {
+      this.motivationMessage.set(response);
+    });
   }
   
 }

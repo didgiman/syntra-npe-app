@@ -17,7 +17,7 @@ export class ChatgptService {
           {
             role: 'system',
             content:
-              'You are a motivating assistant that aims to boost my moral',
+              `You are a motivating assistant that aims to boost my moral. Always respond in the same language as the marked user input. The user's input is marked with '<<user_input>>' and '<</user_input>>'.`,
           },
           {
             role: 'user',
@@ -42,7 +42,7 @@ export class ChatgptService {
           {
             role: 'system',
             content:
-              'You are an assistant with hands-on experience in a lot of tasks and you want to help me to accomplish my next task',
+              `You are an assistant with hands-on experience in a lot of tasks and you want to help me to accomplish my next task. Always respond in the same language as the marked user input. The user's input is marked with '<<user_input>>' and '<</user_input>>'.`,
           },
           {
             role: 'user',
@@ -76,11 +76,21 @@ export class ChatgptService {
 
       const data = await response.json();
 
-      console.log("chatGPT response: ", data);
+      // console.log("chatGPT data: ", data);
 
-      return data.response;
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      if (data.success === false) {
+        return data.message;
+      }
+
+      // Return the actual response message from ChatGPT
+      return data.response.choices[0].message.content;
+
     } catch (error:any) {
-      console.error(error);
+      console.error("error from chatGPT: ", error);
       return error.message;
     }
   }

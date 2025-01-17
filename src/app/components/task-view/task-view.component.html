@@ -2,14 +2,8 @@
   <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
     <div class="sm:flex sm:items-start">
       <!-- Icon -->
-      <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:size-10 text-green-400">
-        <!-- <svg class="size-6 text-green-600" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"></path>
-        </svg> -->
-        <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"></path>
-        </svg>
+      <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:size-10 text-blue-400">
+        <span class="pi pi-play-circle text-3xl"></span>
       </div>
       <!-- Content -->
       <div class="mt-3 sm:flex-grow sm:ml-4 sm:mt-0 sm:text-left">
@@ -38,7 +32,7 @@
 
         <!-- Motivation message -->
         <div class="text-sm italic text-gray-500 mt-2 bg-gray-100 p-2">
-          {{ motivationMessage }}
+          {{ motivationMessage() }}
         </div>
 
         <!-- Tips -->
