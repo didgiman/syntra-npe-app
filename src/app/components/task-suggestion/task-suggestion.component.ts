@@ -5,9 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { min } from 'rxjs';
 
+import { SliderModule } from 'primeng/slider';
+import { RadioButtonModule } from 'primeng/radiobutton';
+
 @Component({
   selector: 'app-task-suggestion',
-  imports: [FormsModule],
+  imports: [FormsModule, SliderModule, RadioButtonModule],
   templateUrl: './task-suggestion.component.html',
   styleUrl: './task-suggestion.component.css'
 })

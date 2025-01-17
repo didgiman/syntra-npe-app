@@ -20,38 +20,36 @@
                 <!-- Estimate -->
                 <div class="mt-2 flex items-center">
                     <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How much time do you have?</div>
-                    <div class="w-2/3 flex items-center">
+                    <!-- <div class="w-2/3 flex items-center">
                         <input name="estimate" class="flex-grow" type="range" min="0" max="10" [step]="estimateStepSize"
                             [(ngModel)]="suggestionRequest.estimate" (input)="onEstimateChange()">
                         <div class="ml-1">{{ estimateDisplay() }}</div>
+                    </div> -->
+                    <div class="w-2/3 flex items-center pl-1">
+                        <p-slider [(ngModel)]="suggestionRequest.estimate" name="estimate" min="0.25" max="10" [step]="estimateStepSize" styleClass="w-32 sm:w-56" (onChange)="onEstimateChange()" />
+                        <div class="ml-4">{{ estimateDisplay() }}</div>
                     </div>
                 </div>
-
+                
                 <!-- Feeling -->
                 <div class="mt-2 flex items-center">
-                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How are you feeling today?
+                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How are you feeling today?</div>
+                    <div class="w-2/3 flex justify-between text-3xl">
+                    <div class="text-center sm:text-left">
+                        <label><p-radiobutton name="feeling" value="1" [(ngModel)]="suggestionRequest.feeling" inputId="feeling1" />{{ this.utils.getFeelingEmoji(1) }}</label>
                     </div>
-                    <div class="w-2/3 flex justify-between text-2xl">
-                        <div class="flex items-center">
-                            <label><input name="feeling" [(ngModel)]="suggestionRequest.feeling" type="radio" value="1">{{
-                                this.utils.getFeelingEmoji(1) }}</label>
-                        </div>
-                        <div>
-                            <label><input name="feeling" [(ngModel)]="suggestionRequest.feeling" type="radio" value="2">{{
-                                this.utils.getFeelingEmoji(2) }}</label>
-                        </div>
-                        <div>
-                            <label><input name="feeling" [(ngModel)]="suggestionRequest.feeling" type="radio" value="3">{{
-                                this.utils.getFeelingEmoji(3) }}</label>
-                        </div>
-                        <div>
-                            <label><input name="feeling" [(ngModel)]="suggestionRequest.feeling" type="radio" value="4">{{
-                                this.utils.getFeelingEmoji(4) }}</label>
-                        </div>
-                        <div>
-                            <label><input name="feeling" [(ngModel)]="suggestionRequest.feeling" type="radio" value="5">{{
-                                this.utils.getFeelingEmoji(5) }}</label>
-                        </div>
+                    <div class="text-center sm:text-left">
+                        <label><p-radiobutton name="feeling" value="2" [(ngModel)]="suggestionRequest.feeling" inputId="feeling2" />{{ this.utils.getFeelingEmoji(2) }}</label>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <label><p-radiobutton name="feeling" value="3" [(ngModel)]="suggestionRequest.feeling" inputId="feeling3" />{{ this.utils.getFeelingEmoji(3) }}</label>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <label><p-radiobutton name="feeling" value="4" [(ngModel)]="suggestionRequest.feeling" inputId="feeling4" />{{ this.utils.getFeelingEmoji(4) }}</label>
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <label><p-radiobutton name="feeling" value="5" [(ngModel)]="suggestionRequest.feeling" inputId="feeling5" />{{ this.utils.getFeelingEmoji(5) }}</label>
+                    </div>
                     </div>
                 </div>
             </div>
