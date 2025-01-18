@@ -113,8 +113,9 @@ export class TaskViewComponent {
     const chatGptMessage = `
       I need specific motivation for the following task: \n\n<<user_input>>${this.task.title}<</user_input>>
       \nOn a scale of 1 to 5, how motivated am I to complete this task? ${this.task.feeling}
-      \n${ this.task.deadline ? 'I need to finish this task by ' + this.utils.formatDateForInput(this.task.deadline) : '' }
+      ${ this.task.deadline ? '\nI need to finish this task by ' + this.utils.formatDateForScreen(this.task.deadline) : '' }
       \nGive the response in the same language as the task description above, which is either Dutch or English.
+      \n${ this.task.status === 'in progress' ? 'I am currently working on this task.' : 'I have not started working on this task yet and need the final motivation.' }
       Please give me a short motivational message of 25 words or less for this task.
     `;
     
