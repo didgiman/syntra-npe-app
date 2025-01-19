@@ -36,7 +36,7 @@
       </div>
 
       <!-- New task icon -->
-      <div class="w-11 h-11 p-[4px] absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
+      <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
         <!-- <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
         </svg> -->
@@ -92,7 +92,7 @@
         </ng-template>
       }
       <ng-template #body let-task>
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer odd:!bg-slate-100 even:bg-white" [class.line-through]="task.status == 'finished'" [class.!bg-green-100]="task.status == 'finished'" [class.text-gray-400]="task.status == 'finished'">
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer" [class.line-through]="task.status == 'finished'" [class.!bg-green-100]="task.status == 'finished'" [class.text-gray-400]="task.status == 'finished'">
             <td class="text-2xl">
               <!-- Play icon -->
               <div
