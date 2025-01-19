@@ -33,7 +33,7 @@
                     Title is required
                   }
                   @if (title.hasError('minlength')) { 
-                    <!-- Not implementee -->
+                    <!-- Not implemented -->
                     Title must be at least 4 characters long.
                   }
                 </div>
@@ -47,16 +47,35 @@
             <div class="w-2/3">
               <p-datepicker
                 [(ngModel)]="task.deadline"
+                #deadlineControl="ngModel"
                 [showTime]="true"
                 name="deadline"
                 hourFormat="24"
                 dateFormat="dd-mm-yy"
                 [showButtonBar]="true"
                 styleClass="w-full"
+                [inputStyleClass]="deadlineControl.touched && deadlineControl.invalid ? '!border-red-500 bg-red-100': ''"
                 showIcon
                 iconDisplay="input"
-                [minDate]="this.task_id() === 0 ? now : task.deadline || now"
+                [minDate]="this.task_id() === 0 || this.task.deadline === null ? now : utils.minDate(now, this.task.deadline)"
+                [required]="deadlineRequired()"
+                selectOtherMonths="true"
               />
+              @if (deadlineRequired()) {
+                <div class="text-red-500 text-xs">
+                  @if (deadlineControl.hasError('required')) {
+                    Deadline is required for recurring tasks
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Recurring task -->
+          <div class="mt-2 flex items-center">
+            <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Recurring task? <span class="pi pi-sync text-blue-400 ml-2"></span></div>
+            <div class="w-2/3">
+              <p-selectbutton name="recurring" (onChange)="onRecurringChange($event)" [options]="recurringOptions" [(ngModel)]="task.recurring" optionLabel="label" optionValue="value" size="small" />
             </div>
           </div>
 

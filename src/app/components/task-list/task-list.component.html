@@ -78,7 +78,12 @@
 
             </td>
             <td class="hidden">{{ task.id }}</td>
-            <td>{{ task.title }}</td>
+            <td>
+              {{ task.title }}
+              @if (task.recurring != '') {
+                <span class="pi pi-sync text-blue-400 ml-2"></span>
+              }
+            </td>
             <td class="hidden sm:table-cell">
               @if (task.deadline) {
                 <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
@@ -101,7 +106,12 @@
               ><span class="pi pi-play-circle text-3xl"></span></div>
             </td>
             <td class="hidden">{{ task.id }}</td>
-            <td>{{ task.title }}</td>
+            <td>
+              {{ task.title }}
+              @if (task.recurring != '') {
+                <span class="pi pi-sync text-blue-400 ml-2"></span>
+              }
+            </td>
             <td class="hidden sm:table-cell">
               <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
             </td>

@@ -156,6 +156,7 @@ export class TaskService {
       started_at: this.mysqlDatetimeToJSDate(task.started_at),
       ended_at: this.mysqlDatetimeToJSDate(task.ended_at),
       status: this.calculateStatus(task),
+      recurring: task.recurring ? task.recurring : '',
     }
   }
 

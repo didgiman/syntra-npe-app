@@ -129,4 +129,8 @@ export class UtilsService {
       // Check if the target date is less than 3 days from now
       return targetDate < threeDaysFromNow && targetDate > now;
     }
+
+    minDate(date1: Date, date2: Date): Date {
+      return date1 < date2 ? date1 : date2;
+    }
 }
