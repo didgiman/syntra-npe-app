@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, output, signal, computed } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
@@ -88,18 +88,18 @@ export class TaskSuggestionComponent {
   maxFeeling = 7;
 
   // Get due tasks
-  // getDueTasks(): number {
-  //   this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
-  //     .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
-  //   if (this.dueTasks().length > 0) {
-  //     console.log('Due tasks:', this.dueTasks());
-  //     const mostDueTaskId = this.dueTasks()[0];
-  //     console.log('Nearest due task:', mostDueTaskId);
-  //     return mostDueTaskId.id;
-  //   } else {
-  //     return 0;
-  //   }
-  // }
+  getDueTasks(): number {
+    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
+      .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
+    if (this.dueTasks().length > 0) {
+      console.log('Due tasks:', this.dueTasks());
+      const mostDueTaskId = this.dueTasks()[0];
+      console.log('Nearest due task:', mostDueTaskId);
+      return mostDueTaskId.id;
+    } else {
+      return 0;
+    }
+  }
 
   // Filtered array
   filteredSuggestionTasks() {
