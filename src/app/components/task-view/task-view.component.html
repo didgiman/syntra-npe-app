@@ -18,6 +18,13 @@
           </div>
         }
 
+        @if (task.recurring != '') {
+          <div class="mt-2 flex items-center">
+            <div class="text-sm text-gray-500 w-2/3 font-semibold mr-2">Recurring <span class="pi pi-sync text-blue-400 ml-2"></span></div>
+            <div class="w-1/3">{{ task.recurring }}</div>
+          </div>
+        }
+
         <!-- Estimate -->
         <div class="mt-2 flex items-center">
           <div class="text-sm text-gray-500 w-2/3 font-semibold mr-2">How long will this task take you to finish?</div>

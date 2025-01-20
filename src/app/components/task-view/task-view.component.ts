@@ -70,6 +70,40 @@ export class TaskViewComponent {
 
     if (saveResponse) {
       this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
+
+      if (action === 'finish' && this.task.recurring !== '') {
+        // When a recurring task is finished, a new task will be created with the same properties but a new deadline
+
+        const recurringTask = { ...this.task, id: 0, status: 'new', started_at: null, ended_at: null };
+
+        if (recurringTask.deadline === null || recurringTask.deadline.getTime() < new Date().getTime()) {
+          // If deadline is null or in the past, set it to the current date
+          recurringTask.deadline = new Date();
+        }
+        switch (this.task.recurring) {
+          case 'daily':
+            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
+            break;
+          case 'weekly':
+            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 7);
+            break;
+          case '2-weekly':
+            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 14);
+            break;
+          case 'monthly':
+            recurringTask.deadline.setMonth(recurringTask.deadline.getMonth() + 1);
+            break;
+        }
+
+        // Create new task
+        const createResponse = await this.taskService.saveTask(recurringTask);
+        if (saveResponse) {
+          this.utils.toast(saveResponse.success ? 'Recurring task created' : 'Recurring task could not be created', saveResponse.success ? 'success' : 'error');
+        } else {
+          this.utils.toast(action + ": New recurring task could not be created. Please create it manually.", "error");
+        }
+      }
+
       if (saveResponse.success) {
         this.close.emit(action);
       }
