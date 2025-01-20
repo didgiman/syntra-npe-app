@@ -11,7 +11,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-task-suggestion',
-  imports: [FormsModule, SliderModule, RadioButtonModule, TaskListComponent],
+  imports: [FormsModule, SliderModule, RadioButtonModule],
   templateUrl: './task-suggestion.component.html',
   styleUrl: './task-suggestion.component.css'
 })
