@@ -45,6 +45,7 @@ export class TaskSuggestionComponent {
   dueTasks = signal<Task[]>([]);
   suggestionTasks = signal<Task[]>([]);
   randomTask = signal<Task[]>([]);
+  mostDueTaskId = signal<number>(0);
 
   ngOnInit() {
     if (this.task_id() > 0) {
@@ -56,6 +57,7 @@ export class TaskSuggestionComponent {
     }
 
     this.suggestionRequest.feeling = this.suggestionRequest.feeling.toString(); // Convert feeling to string for radio button
+    this.getDueTasks();
   }
 
   onCancel() {
@@ -88,16 +90,21 @@ export class TaskSuggestionComponent {
   maxFeeling = 7;
 
   // Get due tasks
-  getDueTasks(): number {
+  getDueTasks() {
+
     this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
       .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
+
     if (this.dueTasks().length > 0) {
       console.log('Due tasks:', this.dueTasks());
       const mostDueTaskId = this.dueTasks()[0];
       console.log('Nearest due task:', mostDueTaskId);
-      return mostDueTaskId.id;
+      // return mostDueTaskId.id;
+
+      this.mostDueTaskId.set(mostDueTaskId.id);
     } else {
-      return 0;
+      // return 0;
+      this.mostDueTaskId.set(0);
     }
   }
 
