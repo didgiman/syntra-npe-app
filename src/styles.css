@@ -32,7 +32,7 @@
 
 .p-paginator {
     /* @apply rounded-b-xl bg-blue-200 p-2 text-white; */
-    @apply rounded-b-xl p-2;
+    @apply bg-blue-200 dark:bg-blue-900 rounded-b-xl p-2;
 }
 
 .p-datepicker-input {
