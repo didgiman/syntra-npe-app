@@ -31,7 +31,8 @@
 }
 
 .p-paginator {
-    @apply rounded-b-xl bg-blue-200 p-2 text-white;
+    /* @apply rounded-b-xl bg-blue-200 p-2 text-white; */
+    @apply rounded-b-xl p-2;
 }
 
 .p-datepicker-input {
@@ -41,3 +42,4 @@
 .p-togglebutton {
     @apply px-2 py-1;
 }
+
