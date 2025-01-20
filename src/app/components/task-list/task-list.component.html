@@ -35,13 +35,14 @@
         <span class="pi pi-times-circle"></span>
       </div>
 
+      <!-- Finished tasks toggle -->
       <div class="flex flex-col sm:flex-row items-center ml-8 sm:ml-12 pt-2 text-white">
         <p-toggleswitch [(ngModel)]="showFinishedTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
       </div>
 
       <!-- New task icon -->
       @if (!showFinishedTasks) {
-        <div class="w-11 h-11 p-[4px] absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
+        <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
           <span class="pi pi-plus-circle text-4xl"></span>
         </div>
       }
@@ -95,7 +96,7 @@
         </ng-template>
       }
       <ng-template #body let-task>
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer odd:!bg-slate-100 even:bg-white" [class.line-through]="task.status == 'finished'" [class.!bg-green-100]="task.status == 'finished'" [class.text-gray-400]="task.status == 'finished'">
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer" [class.line-through]="task.status == 'finished'" [class.!bg-green-100]="task.status == 'finished'" [class.text-gray-400]="task.status == 'finished'">
             <td class="text-2xl">
               <!-- Play icon -->
               <div
