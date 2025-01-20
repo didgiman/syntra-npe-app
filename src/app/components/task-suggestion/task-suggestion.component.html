@@ -3,8 +3,8 @@
         <div class="sm:flex sm:items-start">
             <!-- Icon -->
             <div
-                class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:size-10">
-                <svg class="size-6 text-green-600" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
+                class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:size-10">
+                <svg class="size-6 text-blue-600" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6H5c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1H3v5c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-5a1 1 0 0 0 1-1v-1.938a1.006 1.006 0 0 0-.072-.455M5 20V8h14l.001 3.996L19 12v2l.001.005l.001 5.995z">
@@ -12,50 +12,56 @@
                 </svg>
             </div>
             <!-- Content -->
-            <!-- title -->
-            <div class="mt-3 sm:flex-grow sm:ml-4 sm:mt-0 sm:text-left">
-                <h3 class="text-base font-semibold text-gray-900" id="modal-title">
-                    Task Suggestion
-                </h3>
+            <form #form="ngForm">
+                <div class="mt-3 sm:flex-grow sm:ml-4 sm:mt-0 sm:text-left">
+                    <h3 class="text-base font-semibold text-gray-900" id="modal-title">
+                        Task Suggestion
+                    </h3>
 
-                <!-- Estimate slider -->
-                <div class="mt-2 flex items-center">
-                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How much time do you have?</div>
-                    </div> -->
-                    <div class="w-2/3 flex items-center pl-1">
-                        <p-slider [(ngModel)]="suggestionRequest.estimate" name="estimate" min="0.25" max="10" [step]="estimateStepSize" styleClass="w-32 sm:w-56" (onChange)="onEstimateChange()" />
-                        <div class="ml-4">{{ estimateDisplay() }}</div>
+                    <!-- Estimate slider -->
+                    <div class="mt-2 flex items-center">
+                        <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How long will this task take you to finish?</div>
+                        <div class="w-2/3 flex items-center pl-1">
+                          <p-slider [(ngModel)]="suggestionRequest.estimate" name="estimate" min="0.25" max="10" [step]="estimateStepSize" styleClass="w-32 sm:w-56" (onChange)="onEstimateChange()" />
+                          <div class="ml-4">{{ estimateDisplay() }}</div>
+                        </div>
+                      </div>
+
+                    <!-- Feeling -->
+                    <div class="mt-2 flex items-center">
+                        <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How are you feeling today?</div>
+                        <div class="w-2/3 flex justify-between text-3xl">
+                            <div class="text-center sm:text-left">
+                                <label><p-radiobutton name="feeling" value="1" [(ngModel)]="suggestionRequest.feeling"
+                                        inputId="feeling1" />{{ this.utils.getFeelingEmoji(1) }}</label>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <label><p-radiobutton name="feeling" value="2" [(ngModel)]="suggestionRequest.feeling"
+                                        inputId="feeling2" />{{ this.utils.getFeelingEmoji(2) }}</label>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <label><p-radiobutton name="feeling" value="3" [(ngModel)]="suggestionRequest.feeling"
+                                        inputId="feeling3" />{{ this.utils.getFeelingEmoji(3) }}</label>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <label><p-radiobutton name="feeling" value="4" [(ngModel)]="suggestionRequest.feeling"
+                                        inputId="feeling4" />{{ this.utils.getFeelingEmoji(4) }}</label>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <label><p-radiobutton name="feeling" value="5" [(ngModel)]="suggestionRequest.feeling"
+                                        inputId="feeling5" />{{ this.utils.getFeelingEmoji(5) }}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Feeling -->
-                <div class="mt-2 flex items-center">
-                    <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">How are you feeling today?</div>
-                    <div class="w-2/3 flex justify-between text-3xl">
-                    <div class="text-center sm:text-left">
-                        <label><p-radiobutton name="feeling" value="1" [(ngModel)]="suggestionRequest.feeling" inputId="feeling1" />{{ this.utils.getFeelingEmoji(1) }}</label>
-                    </div>
-                    <div class="text-center sm:text-left">
-                        <label><p-radiobutton name="feeling" value="2" [(ngModel)]="suggestionRequest.feeling" inputId="feeling2" />{{ this.utils.getFeelingEmoji(2) }}</label>
-                    </div>
-                    <div class="text-center sm:text-left">
-                        <label><p-radiobutton name="feeling" value="3" [(ngModel)]="suggestionRequest.feeling" inputId="feeling3" />{{ this.utils.getFeelingEmoji(3) }}</label>
-                    </div>
-                    <div class="text-center sm:text-left">
-                        <label><p-radiobutton name="feeling" value="4" [(ngModel)]="suggestionRequest.feeling" inputId="feeling4" />{{ this.utils.getFeelingEmoji(4) }}</label>
-                    </div>
-                    <div class="text-center sm:text-left">
-                        <label><p-radiobutton name="feeling" value="5" [(ngModel)]="suggestionRequest.feeling" inputId="feeling5" />{{ this.utils.getFeelingEmoji(5) }}</label>
-                    </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
-    <div class="bg-gray-50 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
-        <button (click)="onCancel()" type="button"
-            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
-        <button (click)="showMe()" type="button"
-            class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Show
-            me</button>
-    </div>
+</div>
+<div class="bg-gray-50 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
+    <button (click)="onCancel()" type="button"
+        class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+    <button (click)="showMe()" type="button"
+        class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Show
+        me</button>
+</div>

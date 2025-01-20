@@ -132,17 +132,7 @@ export class TaskListComponent {
 
   taskSuggestion() {
     console.log('What\'s next?');
-    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
-      .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
-    if (this.dueTasks().length > 0) {
-      console.log('Due tasks:', this.dueTasks());
-      const mostDueTaskId = this.dueTasks()[0];
-      console.log('Nearest due task:', mostDueTaskId);
-      this.onViewTask(mostDueTaskId.id);
-    }
-    else {
-      this.showTaskSuggestion = true;
-    }
+    this.showTaskSuggestion = true;
   }
 
   onTaskSuggestionClose(taskId: number) {

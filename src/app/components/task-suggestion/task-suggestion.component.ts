@@ -27,8 +27,8 @@ export class TaskSuggestionComponent {
   estimateDisplay = signal<string>('15 min');
 
   viewTaskId: number = 27;
-  showTaskView:boolean = false;
-  showTaskSuggestion:boolean = false;
+  showTaskView: boolean = false;
+  showTaskSuggestion: boolean = false;
 
   suggestionRequest: Task = {
     id: 0,
@@ -42,6 +42,7 @@ export class TaskSuggestionComponent {
     ended_at: null
   }
 
+  dueTasks = signal<Task[]>([]);
   suggestionTasks = signal<Task[]>([]);
   randomTask = signal<Task[]>([]);
 
@@ -85,6 +86,20 @@ export class TaskSuggestionComponent {
 
   minFeeling = 5;
   maxFeeling = 7;
+
+  // Get due tasks
+  // getDueTasks(): number {
+  //   this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
+  //     .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
+  //   if (this.dueTasks().length > 0) {
+  //     console.log('Due tasks:', this.dueTasks());
+  //     const mostDueTaskId = this.dueTasks()[0];
+  //     console.log('Nearest due task:', mostDueTaskId);
+  //     return mostDueTaskId.id;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
   // Filtered array
   filteredSuggestionTasks() {
@@ -130,7 +145,7 @@ export class TaskSuggestionComponent {
     return;
   }
 
-  onViewTask(taskId:number) {
+  onViewTask(taskId: number) {
     console.log('View task', taskId);
     this.viewTaskId = taskId;
     this.showTaskView = true;
