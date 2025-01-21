@@ -36,7 +36,7 @@ export class TaskListComponent {
   editTaskId:number = 0;
   showTaskForm:boolean = false;
 
-  viewTaskId: number = 27;
+  viewTaskId: number = 0;
   showTaskView:boolean = false;
 
   inProgressTask = signal<Task[]>([]);

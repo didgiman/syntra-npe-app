@@ -10,6 +10,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
+import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-task-view',
   imports: [TooltipModule, ButtonModule, FormsModule, ToggleSwitchModule],
@@ -23,6 +25,10 @@ export class TaskViewComponent {
   utils = inject(UtilsService);
   taskService = inject(TaskService);
   chatGpt = inject(ChatgptService);
+  userService = inject(UserService);
+  user = this.userService.user;
+  
+  motivationMessage = signal<string>('Loading...');
 
   task: Task = {
     id: 0,
@@ -42,7 +48,9 @@ export class TaskViewComponent {
       if (foundTask) {
         this.task = { ...foundTask };
 
-        this.setMotivationalMessage();
+        if (this.user().settings.chatgpt.motivational) {
+          this.setMotivationalMessage();
+        }
       }
     }
   }
@@ -141,7 +149,6 @@ export class TaskViewComponent {
     }
   }
 
-  motivationMessage = signal<string>('Loading...');
   setMotivationalMessage() {
     this.motivationMessage.set('Loading...');
     const chatGptMessage = `
