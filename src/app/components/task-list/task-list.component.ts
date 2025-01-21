@@ -138,11 +138,5 @@ export class TaskListComponent {
   onTaskSuggestionClose(taskId: number) {
     console.log('What\'s next close');
     this.showTaskSuggestion = false;
-    if (taskId > 0) {
-      this.viewTaskId = taskId;
-      this.showTaskView = true;
-    }
   }
-
-
 }

@@ -48,9 +48,12 @@ export class TaskSelectionComponent {
   }
 
   startTask() {
-    this.showTaskView = true;
-    this.showTaskSelection = false;
-    this.showTaskSuggestion = false;
+    this.onTaskAction()
+      .then(() => {
+        this.showTaskView = true;
+        // this.close.emit(this.selectedTask.id);
+      }
+      )
   }
 
   onViewClose(action: string) {
@@ -62,5 +65,17 @@ export class TaskSelectionComponent {
   onTaskSuggestionClose(action: number) {
     console.log('Selection window close', action);
     this.showTaskSelection = false;
+  }
+
+  async onTaskAction() {
+    this.selectedTask.started_at = new Date();
+
+    const saveResponse = await this.taskService.saveTask(this.selectedTask);
+    console.log('onTaskAction', saveResponse);
+    if (saveResponse) {
+      this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
+    } else {
+      this.utils.toast(": Task could not be updated. Please try again.", "error");
+    }
   }
 }

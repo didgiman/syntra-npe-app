@@ -3,7 +3,6 @@
 
 }
 @else if (suggestedTaskId() > 0) {
-    <p>In suggestion component</p>
     <app-task-selection [taskId]="suggestedTaskId()" (close)="onTaskSuggestionClose($event)"></app-task-selection>
 } @else {
 <div>
