@@ -1,22 +1,20 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { Task } from '../../models/task';
 import { UtilsService } from '../../services/utils.service';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
-import { min } from 'rxjs';
-import { TaskListComponent } from '../task-list/task-list.component';
+import { TaskSelectionComponent } from '../task-selection/task-selection.component';
 
 import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'app-task-suggestion',
-  imports: [FormsModule, SliderModule, RadioButtonModule],
+  imports: [FormsModule, SliderModule, RadioButtonModule, TaskSelectionComponent],
   templateUrl: './task-suggestion.component.html',
   styleUrl: './task-suggestion.component.css'
 })
 export class TaskSuggestionComponent {
-  task_id = input<number>(0);
   close = output<number>();
 
   utils = inject(UtilsService);
@@ -25,10 +23,6 @@ export class TaskSuggestionComponent {
   tasks = this.taskService.tasks;
 
   estimateDisplay = signal<string>('15 min');
-
-  viewTaskId: number = 27;
-  showTaskView: boolean = false;
-  showTaskSuggestion: boolean = false;
 
   suggestionRequest: Task = {
     id: 0,
@@ -44,18 +38,10 @@ export class TaskSuggestionComponent {
 
   dueTasks = signal<Task[]>([]);
   suggestionTasks = signal<Task[]>([]);
-  randomTask = signal<Task[]>([]);
   mostDueTaskId = signal<number>(0);
+  suggestedTaskId = signal<number>(0);
 
   ngOnInit() {
-    if (this.task_id() > 0) {
-      const foundTask = this.taskService.tasks().find(t => t.id === +this.task_id()); // For some reason this only works when placing the + in front of this.task_id()
-      if (foundTask) {
-        this.suggestionRequest = { ...foundTask };
-        this.onEstimateChange();
-      }
-    }
-
     this.suggestionRequest.feeling = this.suggestionRequest.feeling.toString(); // Convert feeling to string for radio button
     this.getDueTasks();
   }
@@ -76,7 +62,6 @@ export class TaskSuggestionComponent {
   }
 
   onEstimateChange() {
-
     // Don't let estimate go below 0.25
     // I did it this way, because when setting the min value of the estimate input to 0.25, the step size gets messed up
     if (this.suggestionRequest.estimate < 0.25) {
@@ -108,16 +93,7 @@ export class TaskSuggestionComponent {
     }
   }
 
-  // Filtered array
-  filteredSuggestionTasks() {
-    this.suggestionTasks.set(this.tasks().filter(item =>
-      (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
-      (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
-      (item.estimate <= +this.suggestionRequest.estimate))
-    );
-  }
-
-  pickRandomTask(): number {
+  pickRandomTask(): void {
     for (let i = 0; i < 4; i++) {
       // Filter tasks based on the current range
       const RT = (this.tasks().filter(item =>
@@ -131,7 +107,9 @@ export class TaskSuggestionComponent {
         // If tasks are found, pick one randomly
         const randomIndex = Math.floor(Math.random() * RT.length);
         console.log('Random task:', RT[randomIndex]);
-        return RT[randomIndex].id;
+        this.suggestedTaskId.set(RT[randomIndex].id);
+        return;
+        // return RT[randomIndex].id;
       }
 
       // Adjust the range and try again
@@ -142,20 +120,18 @@ export class TaskSuggestionComponent {
 
     // If no tasks are found after 4 iterations, return a fallback message
     console.log('No tasks found');
-    return 0;
+    return;
   }
 
   // Event handler (if you need to trigger manual actions)
   showMe(): void {
     const suggestedTaskId = this.pickRandomTask();
-    this.close.emit(suggestedTaskId);
+    // this.close.emit(suggestedTaskId);
     return;
   }
 
-  onViewTask(taskId: number) {
-    console.log('View task', taskId);
-    this.viewTaskId = taskId;
-    this.showTaskView = true;
-    return;
+  onTaskSuggestionClose(action: number) {
+    console.log('Selection window close', action);
+    this.close.emit(action);
   }
 };
