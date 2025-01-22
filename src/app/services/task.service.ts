@@ -13,6 +13,8 @@ export class TaskService {
   user = this.userService.user;
   userId = this.user().id;
 
+  userId = this.user().id;
+
   finishedOnly: boolean = false;
 
   constructor() {
@@ -22,6 +24,7 @@ export class TaskService {
       // Whenever the user changes, reload tasks
       if (this.user().id != this.userId) {
         this.userId = this.user().id;
+
         this.loadTasks();
       }
     });
