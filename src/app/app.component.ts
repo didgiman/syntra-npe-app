@@ -18,6 +18,8 @@ export class AppComponent {
 
   title = `What's Next`;
 
+  darkModeActive = true;
+
   constructor() {
     this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
 
@@ -26,6 +28,17 @@ export class AppComponent {
 
       this.title = `What's Next for ${this.user().first_name} ${this.user().last_name}`;
     });
+  }
+
+  toggleDarkMode() {
+    const htmlElement = document.documentElement;
+    if (htmlElement.classList.contains('dark')) {
+      htmlElement.classList.remove('dark');
+    } else {
+      htmlElement.classList.add('dark');
+    }
+
+    this.darkModeActive = !this.darkModeActive;
   }
   
 }
