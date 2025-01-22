@@ -11,6 +11,7 @@ export class TaskService {
 
   userService = inject(UserService);
   user = this.userService.user;
+  userId = this.user().id;
 
   finishedOnly: boolean = false;
 
@@ -19,7 +20,10 @@ export class TaskService {
       const user = this.user(); // Read the signal value
 
       // Whenever the user changes, reload tasks
-      this.loadTasks();
+      if (this.user().id != this.userId) {
+        this.userId = this.user().id;
+        this.loadTasks();
+      }
     });
   }
 
