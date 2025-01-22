@@ -11,6 +11,7 @@ export class TaskService {
 
   userService = inject(UserService);
   user = this.userService.user;
+  userId = this.user().id;
 
   userId = this.user().id;
 
@@ -22,6 +23,7 @@ export class TaskService {
 
       // Whenever the user changes, reload tasks
       if (this.user().id != this.userId) {
+        this.userId = this.user().id;
         this.loadTasks();
       }
     });
