@@ -17,8 +17,7 @@ export class UserService {
       chatgpt: {
         motivational: false,
         functional: false
-      },
-      darkmode: false
+      }
     }
   });
 
@@ -115,8 +114,7 @@ export class UserService {
         chatgpt: {
           motivational: false,
           functional: false
-        },
-        darkmode: false
+        }
       };
     }
     settings = settings.replace(/\"/g, '"');
