@@ -43,3 +43,7 @@
     @apply px-2 py-1;
 }
 
+.p-toggleswitch-slider {
+    padding: 0px;
+    margin-bottom: 2px;
+}

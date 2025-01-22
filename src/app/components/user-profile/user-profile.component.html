@@ -1,0 +1,93 @@
+<p-tabs value="0">
+    <p-tablist>
+        <p-tab value="0">Profile settings</p-tab>
+        <p-tab value="1">Password</p-tab>
+        <p-tab value="2">Change user</p-tab>
+    </p-tablist>
+    <p-tabpanels class="p-0">
+        <p-tabpanel value="0">
+            <form #form="ngForm">
+                <div class="flex gap-4 flex-col p-4">
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="w-1/3 text-right">
+                            First name
+                        </div>
+                        <div class="w-2/3">
+                            <input [(ngModel)]="user().first_name" pInputText type="text" name="firstName" id="firstName" required #firstName="ngModel" class="w-full" />
+                            @if (firstName.invalid && (firstName.dirty || firstName.touched)) {
+                                <div class="text-sm text-red-500">First name is required</div>
+                            }
+                        </div>
+                    </div>
+                
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="w-1/3 text-right">
+                            Last name
+                        </div>
+                        <div class="w-2/3">
+                            <input [(ngModel)]="user().last_name" pInputText type="text" name="lastName" id="lastName" required #lastName="ngModel" class="w-full" />
+                            @if (lastName.invalid && (lastName.dirty || lastName.touched)) {
+                                <div class="text-sm text-red-500">Last name is required</div>
+                            }
+                        </div>
+                    </div>
+                
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="w-1/3 text-right">
+                            Email
+                        </div>
+                        <div class="w-2/3">
+                            <input [(ngModel)]="user().email" pInputText type="email" name="email" id="email" required #email="ngModel" class="w-full" />
+                            @if (email.invalid && (email.dirty || email.touched)) {
+                                <div class="text-sm text-red-500">Email is required</div>
+                            }
+                        </div>
+                    </div>
+                
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="w-1/3 text-right">
+                            ChatGPT motivation
+                        </div>
+                        <div class="w-2/3">
+                            <p-toggleswitch [(ngModel)]="user().settings.chatgpt.motivational" name="chatgpt-motivational" class="mr-2" />
+                        </div>
+                    </div>
+                
+                    <div class="flex flex-row gap-4 items-center">
+                        <div class="w-1/3 text-right">
+                            ChatGPT tips
+                        </div>
+                        <div class="w-2/3">
+                            <p-toggleswitch [(ngModel)]="user().settings.chatgpt.functional" name="chatgpt-functional" class="mr-2" />
+                        </div>
+                    </div>
+
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
+                    <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel/Close</button>
+                    <button pButton (click)="onSave()" type="button" icon="pi pi-check" severity="success" [disabled]="form.invalid">Save</button>
+                </div>
+            </form>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+            <app-password (close)="onCancel()"></app-password>
+        </p-tabpanel>
+        <p-tabpanel value="2">
+            <!-- Temporary -->
+            <div class="mb-2 p-4">
+                <select (change)="onUserSelect($event);">
+                    @for (user of this.users(); track user.id) {
+                        <option value="{{user.id}}" [selected]="user.id === userService.user().id">{{user.first_name}} {{user.last_name}} ({{user.id}})</option>
+                    }
+                </select>
+            </div>
+            <div class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
+                <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel/Close</button>
+            </div>
+        </p-tabpanel>
+    </p-tabpanels>
+</p-tabs>
+
+
+

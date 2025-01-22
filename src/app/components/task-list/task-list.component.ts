@@ -36,7 +36,7 @@ export class TaskListComponent {
   editTaskId:number = 0;
   showTaskForm:boolean = false;
 
-  viewTaskId: number = 27;
+  viewTaskId: number = 0;
   showTaskView:boolean = false;
 
   inProgressTask = signal<Task[]>([]);
@@ -52,10 +52,6 @@ export class TaskListComponent {
 
       // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
-
-      // Remove tasks that are in progress from the regular tasks list => this causes an infinite loop
-      //this.tasks.set(this.tasks().filter(itemA => !this.inProgressTask().some(itemB => itemA.id === itemB.id)));
-
     });
   }
 

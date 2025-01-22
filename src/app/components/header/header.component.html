@@ -1,0 +1,10 @@
+<header class="bg-blue-500 p-4 flex justify-between items-center">
+    <h1 class="text-3xl font-bold text-white">{{ title() }}</h1>
+    <div class="pi pi-user text-white hover:text-blue-900 cursor-pointer text-2xl" (click)="onShowProfile()"></div>
+</header>
+
+<p-dialog header="User Profile" [modal]="true" [(visible)]="showProfile" [closable]="false" [style]="{ width: '50rem' }">
+    <ng-template #headless>
+        <app-user-profile (close)="onProfileClose($event)"></app-user-profile>
+    </ng-template>
+</p-dialog>
