@@ -1,9 +1,9 @@
-@if ( mostDueTaskId() < 0 ) {
-    <app-task-selection [taskId]="mostDueTaskId()" (close)="onTaskSuggestionClose($event)"></app-task-selection>
+@if ( mostDueTaskId() > 0 ) {
+    <app-task-selection [taskId]="mostDueTaskId()" [scenarioId]="1" (close)="onTaskSuggestionClose($event)"></app-task-selection>
 
 }
 @else if (suggestedTaskId() > 0) {
-    <app-task-selection [taskId]="suggestedTaskId()" (close)="onTaskSuggestionClose($event)"></app-task-selection>
+    <app-task-selection [taskId]="suggestedTaskId()" [scenarioId]="2" (close)="onTaskSuggestionClose($event)"></app-task-selection>
 } @else {
 <div>
     <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">

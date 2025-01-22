@@ -75,20 +75,6 @@ export class TaskListComponent {
     }
   }
 
-  loadTasks(finishedOnly: boolean = false) {
-    try {
-      const response = this.taskService.loadTasks(finishedOnly).then((res) => {
-        if (res.success) {
-          this.loading = false;
-        } else {
-          this.utils.toast(res.message, "error");
-        }
-      });
-    } catch(e: any) {
-      this.utils.toast(e.message, "error");
-    }
-  }
-
   onEditTask(taskId: number) {
     console.log('Edit task', taskId);
     this.editTaskId = taskId;

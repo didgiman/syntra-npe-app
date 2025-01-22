@@ -19,127 +19,130 @@
 </p-dialog>
 
 <div class="h-[72vh] sm:h-[79vh] max-h-dvh w-full items-center justify-center relative">
-  
+
   @if(loading) {
-    <p class="text-3xl font-bold mb-2">Loading...</p>
+  <p class="text-3xl font-bold mb-2">Loading...</p>
   } @else if (tasks().length === 0) {
-    <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
-    <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
-        Why don't you
-        <button (click)="newTask()" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create a new task</button>
-        ?
-    </h2>
+  <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
+  <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
+    Why don't you
+    <button (click)="newTask()"
+      class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create
+      a new task</button>
+    ?
+  </h2>
   } @else {
 
-    <!-- Task list header -->
-    <div class="flex items-center p-3 bg-blue-400 dark:bg-blue-900 sm:mt-4 sm:rounded-t-xl relative">
-      <h1 class="text-3xl font-bold text-white mr-4 hidden sm:block">{{ tasks().length }} tasks</h1>
-      <!-- Task search field -->
-      <input #searchInput pInputText [(ngModel)]="searchString" type="text" (input)="tasksTable.filterGlobal(searchInput.value, 'contains')" placeholder="Search tasks" class="sm:w-1/3" />
-      <!-- Clear search -->
-      <div (click)="searchString = ''; tasksTable.filterGlobal('', 'contains')" class="text-blue-400 hover:text-blue-500 cursor-pointer -ml-8">
-        <span class="pi pi-times-circle"></span>
-      </div>
-
-      <!-- Finished tasks toggle -->
-      <div class="flex flex-col sm:flex-row items-center ml-8 sm:ml-12 pt-2 text-white">
-        <p-toggleswitch [(ngModel)]="showFinishedTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
-      </div>
-
-      <!-- New task icon -->
-      @if (!showFinishedTasks) {
-        <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
-          <span class="pi pi-plus-circle text-4xl"></span>
-        </div>
-      }
+  <!-- Task list header -->
+  <div class="flex items-center p-3 bg-blue-400 dark:bg-blue-900 sm:mt-4 sm:rounded-t-xl relative">
+    <h1 class="text-3xl font-bold text-white mr-4 hidden sm:block">{{ tasks().length }} tasks</h1>
+    <!-- Task search field -->
+    <input #searchInput pInputText [(ngModel)]="searchString" type="text"
+      (input)="tasksTable.filterGlobal(searchInput.value, 'contains')" placeholder="Search tasks" class="sm:w-1/3" />
+    <!-- Clear search -->
+    <div (click)="searchString = ''; tasksTable.filterGlobal('', 'contains')"
+      class="text-blue-400 hover:text-blue-500 cursor-pointer -ml-8">
+      <span class="pi pi-times-circle"></span>
     </div>
 
-      
+    <!-- Finished tasks toggle -->
+    <div class="flex flex-col sm:flex-row items-center ml-8 sm:ml-12 pt-2 text-white">
+      <p-toggleswitch [(ngModel)]="showFinishedTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
+    </div>
+
+    <!-- New task icon -->
+    @if (!showFinishedTasks) {
     <div
-      class="w-10 h-10 absolute top-4 right-5 sm:-top-4 sm:-right-20 bg-slate-200 rounded-full cursor-pointer hover:text-blue-600"
-      (click)="taskSuggestion()">
-      <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6H5c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1H3v5c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-5a1 1 0 0 0 1-1v-1.938a1.006 1.006 0 0 0-.072-.455M5 20V8h14l.001 3.996L19 12v2l.001.005l.001 5.995z"></path>
-      </svg>
+      class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500"
+      (click)="newTask()">
+      <span class="pi pi-plus-circle text-4xl"></span>
     </div>
+    }
+  </div>
 
-    <p-table 
-        #tasksTable
-        [value]="tasks()"
-        stripedRows
-        [globalFilterFields]="['title']"
-        [scrollable]="true" scrollHeight="flex"
-        [frozenValue]="inProgressTask()"
-        sortField="deadline" [sortOrder]="1"
-        [customSort]="true" (sortFunction)="customSort($event)"
-        [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]"
-      >
+  @if (!showFinishedTasks) {
+  <div
+    class="w-10 h-10 absolute top-4 right-5 sm:-top-4 sm:-right-20 bg-green-100 rounded-full cursor-pointer"
+    (click)="taskSuggestion()">
+    <svg data-slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <g fill="#31af0e">
+        <path d="M8.464 7.757L7.05 9.172L9.88 12l-2.83 2.828l1.415 1.415L12.707 12z" />
+        <path d="m11.293 9.172l1.414-1.415L16.95 12l-4.243 4.243l-1.414-1.415L14.12 12z" />
+        <path fill-rule="evenodd"
+          d="M23 5a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h14a4 4 0 0 0 4-4zm-4-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"
+          clip-rule="evenodd" />
+      </g>
+    </svg>
+  </div>}
 
-      <ng-template #header>
-        <tr>
-          <th>&nbsp;</th>
-          <th pSortableColumn="id" class="hidden">ID <p-sortIcon field="id" /></th>
-          <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-          <th pSortableColumn="deadline" class="hidden sm:table-cell">Deadline <p-sortIcon field="deadline" /></th>
-          <th pSortableColumn="estimate" class="hidden sm:table-cell">Estimate <p-sortIcon field="estimate" /></th>
-          <th pSortableColumn="feeling" class="text-center sm:text-left"><span class="hidden sm:inline-block sm:mr-1">Feeling</span> <p-sortIcon field="feeling" /></th>
-        </tr>
-      </ng-template>
-      @if(inProgressTask().length) {
-        <!-- In progress task(s) - if any -->
-        <ng-template #frozenbody let-task let-index="rowIndex">
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer bg-orange-200 dark:bg-orange-900 font-bold">
-            <td>
-              <!-- Stop icon -->
-              <div
-                (click)="onViewTask(task.id); $event.stopPropagation();"
-              ><span class="pi pi-stop-circle text-3xl text-orange-400"></span></div>
+  <p-table #tasksTable [value]="tasks()" stripedRows [globalFilterFields]="['title']" [scrollable]="true"
+    scrollHeight="flex" [frozenValue]="inProgressTask()" sortField="deadline" [sortOrder]="1" [customSort]="true"
+    (sortFunction)="customSort($event)" [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]">
 
-            </td>
-            <td class="hidden">{{ task.id }}</td>
-            <td>
-              {{ task.title }}
-              @if (task.recurring != '') {
-                <span class="pi pi-sync text-blue-400 ml-2"></span>
-              }
-            </td>
-            <td class="hidden sm:table-cell">
-              @if (task.deadline) {
-                <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
-              } @else {
-                (none)
-              }
-            </td>
-            <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-            <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
-          </tr>
-        </ng-template>
-      }
-      <ng-template #body let-task>
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
-            <td class="text-2xl">
-              <!-- Play icon -->
-              <div
-                [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-blue-300 hover:text-blue-500': !inProgressTask().length && task.status != 'finished'}"
-                class="w-10"
-                (click)="!inProgressTask().length && onViewTask(task.id); $event.stopPropagation();"
-              ><span class="pi pi-play-circle text-3xl"></span></div>
-            </td>
-            <td class="hidden">{{ task.id }}</td>
-            <td>
-              {{ task.title }}
-              @if (task.recurring != '') {
-                <span class="pi pi-sync text-blue-400 ml-2"></span>
-              }
-            </td>
-            <td class="hidden sm:table-cell">
-              <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
-            </td>
-            <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-            <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>            
-          </tr>
-      </ng-template>
-    </p-table>
+    <ng-template #header>
+      <tr>
+        <th>&nbsp;</th>
+        <th pSortableColumn="id" class="hidden">ID <p-sortIcon field="id" /></th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+        <th pSortableColumn="deadline" class="hidden sm:table-cell">Deadline <p-sortIcon field="deadline" /></th>
+        <th pSortableColumn="estimate" class="hidden sm:table-cell">Estimate <p-sortIcon field="estimate" /></th>
+        <th pSortableColumn="feeling" class="text-center sm:text-left"><span
+            class="hidden sm:inline-block sm:mr-1">Feeling</span> <p-sortIcon field="feeling" /></th>
+      </tr>
+    </ng-template>
+    @if(inProgressTask().length) {
+    <!-- In progress task(s) - if any -->
+    <ng-template #frozenbody let-task let-index="rowIndex">
+      <tr (click)="onEditTask(task.id)" class="cursor-pointer bg-orange-200 dark:bg-orange-900 font-bold">
+        <td>
+          <!-- Stop icon -->
+          <div (click)="onViewTask(task.id); $event.stopPropagation();"><span
+              class="pi pi-stop-circle text-3xl text-orange-400"></span></div>
+
+        </td>
+        <td class="hidden">{{ task.id }}</td>
+        <td>
+          {{ task.title }}
+          @if (task.recurring != '') {
+          <span class="pi pi-sync text-blue-400 ml-2"></span>
+          }
+        </td>
+        <td class="hidden sm:table-cell">
+          @if (task.deadline) {
+          <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
+          } @else {
+          (none)
+          }
+        </td>
+        <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+        <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+      </tr>
+    </ng-template>
+    }
+    <ng-template #body let-task>
+      <tr (click)="onEditTask(task.id)" class="cursor-pointer"
+        [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
+        <td class="text-2xl">
+          <!-- Play icon -->
+          <div
+            [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-blue-300 hover:text-blue-500': !inProgressTask().length && task.status != 'finished'}"
+            class="w-10" (click)="!inProgressTask().length && onViewTask(task.id); $event.stopPropagation();"><span
+              class="pi pi-play-circle text-3xl"></span></div>
+        </td>
+        <td class="hidden">{{ task.id }}</td>
+        <td>
+          {{ task.title }}
+          @if (task.recurring != '') {
+          <span class="pi pi-sync text-blue-400 ml-2"></span>
+          }
+        </td>
+        <td class="hidden sm:table-cell">
+          <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
+        </td>
+        <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+        <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
   }
 </div>

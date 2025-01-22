@@ -17,6 +17,8 @@ export class TaskSelectionComponent {
   taskId = input<number>(0);
   close = output<number>();
 
+  scenarioId = input<number>(0);
+
   utils = inject(UtilsService);
 
   private taskService = inject(TaskService);
