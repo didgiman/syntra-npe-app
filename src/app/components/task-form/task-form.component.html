@@ -1,8 +1,8 @@
 <div>
-  <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+  <div class="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
     <div class="sm:flex sm:items-start">
       <!-- Icon -->
-      <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:size-10">
+      <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-800 sm:mx-0 sm:size-10">
         <svg class="size-6 text-green-600" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"></path>
         </svg>
@@ -10,7 +10,7 @@
       <!-- Content -->
       <form #form="ngForm">
         <div class="mt-3 sm:flex-grow sm:ml-4 sm:mt-0 sm:text-left">
-          <h3 class="text-base font-semibold text-gray-900" id="modal-title">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-400" id="modal-title">
             @if (this.task_id() === 0) {
               @if (task.title.trim() === '') {
                 Create a new task
@@ -26,14 +26,14 @@
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Task title</div>
             <div class="w-2/3">
-              <input [(ngModel)]="task.title" pInputText type="text" name="title" id="title" required [ngClass]="{'!border-red-500 bg-red-100': title.touched && title.invalid}" #title="ngModel" class="w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-green-500 focus:border-green-500" />
+              <input [(ngModel)]="task.title" pInputText type="text" name="title" id="title" required [ngClass]="{'!border-red-500 bg-red-100 dark:bg-red-900': title.touched && title.invalid}" #title="ngModel" class="w-full bg-gray-100 dark:bg-gray-800" />
               @if (title.invalid && (title.dirty || title.touched)) {
                 <div class="alert text-red-500 text-xs">
                   @if (title.hasError('required')) {
                     Title is required
                   }
                   @if (title.hasError('minlength')) { 
-                    <!-- Not implementee -->
+                    <!-- Not implemented -->
                     Title must be at least 4 characters long.
                   }
                 </div>
@@ -47,16 +47,35 @@
             <div class="w-2/3">
               <p-datepicker
                 [(ngModel)]="task.deadline"
+                #deadlineControl="ngModel"
                 [showTime]="true"
                 name="deadline"
                 hourFormat="24"
                 dateFormat="dd-mm-yy"
                 [showButtonBar]="true"
                 styleClass="w-full"
+                [inputStyleClass]="deadlineControl.touched && deadlineControl.invalid ? '!border-red-500 bg-red-100 dark:bg-red-900 !p-3': 'bg-gray-100 dark:bg-gray-800 !p-3'"
                 showIcon
                 iconDisplay="input"
-                [minDate]="this.task_id() === 0 ? now : task.deadline || now"
+                [minDate]="this.task_id() === 0 || this.task.deadline === null ? now : utils.minDate(now, this.task.deadline)"
+                [required]="deadlineRequired()"
+                selectOtherMonths="true"
               />
+              @if (deadlineRequired()) {
+                <div class="text-red-500 text-xs">
+                  @if (deadlineControl.hasError('required')) {
+                    Deadline is required for recurring tasks
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Recurring task -->
+          <div class="mt-2 flex items-center">
+            <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Recurring task? <span class="pi pi-sync text-blue-400 ml-2"></span></div>
+            <div class="w-2/3">
+              <p-selectbutton name="recurring" (onChange)="onRecurringChange($event)" [options]="recurringOptions" [(ngModel)]="task.recurring" optionLabel="label" optionValue="value" size="small" />
             </div>
           </div>
 
@@ -94,7 +113,7 @@
       </form>
     </div>
   </div>
-  <div class="bg-gray-50 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
+  <div class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
     <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel</button>
     @if (this.task_id() != 0) {
       <button pButton (click)="confirmDelete($event)" type="button" severity="danger" icon="pi pi-trash">Delete task</button>

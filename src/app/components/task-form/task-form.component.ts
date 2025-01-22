@@ -14,9 +14,11 @@ import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 
+import { SelectButtonModule } from 'primeng/selectbutton';
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule],
+  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule, SelectButtonModule],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
@@ -37,6 +39,7 @@ export class TaskFormComponent {
 
   estimateDisplay = signal<string>('1:00');
   formattedDeadline = '';
+  deadlineRequired = signal<boolean>(false);
 
   task: Task = {
     id: 0,
@@ -47,7 +50,8 @@ export class TaskFormComponent {
     estimate: 1,
     deadline: null,
     started_at: null,
-    ended_at: null
+    ended_at: null,
+    recurring: ''
   }
 
   ngOnInit() {
@@ -60,6 +64,10 @@ export class TaskFormComponent {
         this.onEstimateChange();
 
         this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
+        if (!this.task.recurring) {
+          this.task.recurring = ''; // Initialize recurring to an empty string
+        }
+        this.deadlineRequired.set(this.task.recurring !== ''); // For recurring tasks, deadline is required
       }
     }
 
@@ -147,6 +155,24 @@ export class TaskFormComponent {
     }
 
     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
+  }
+
+  // Recurring tasks
+  recurringOptions: any[] = [
+    { label: 'No', value: '' },
+    { label: 'Daily', value: 'daily' },
+    { label: 'Weekly', value: 'weekly' },
+    { label: '2-Weekly', value: '2-weekly' },
+    { label: 'Monthly', value: 'monthly' }
+  ];
+
+  onRecurringChange(event: any) {
+    // this.task.recurring = event.value; 
+    if (event.value === '') {
+      this.deadlineRequired.set(false);
+    } else {
+      this.deadlineRequired.set(true);
+    }
   }
 
 }

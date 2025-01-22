@@ -10,6 +10,7 @@ export interface Task {
   started_at: Date | null;
   ended_at: Date | null;
   status?: string;
+  recurring?: string;
 }
 
 export interface RawTask {
@@ -24,4 +25,5 @@ export interface RawTask {
   started_at: string;
   ended_at: string;
   status?: string;
+  recurring?: string;
 }

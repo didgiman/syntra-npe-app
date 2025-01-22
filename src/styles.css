@@ -31,9 +31,15 @@
 }
 
 .p-paginator {
-    @apply rounded-b-xl bg-blue-200 p-2 text-white;
+    /* @apply rounded-b-xl bg-blue-200 p-2 text-white; */
+    @apply bg-blue-200 dark:bg-blue-900 rounded-b-xl p-2;
 }
 
 .p-datepicker-input {
-    @apply w-full bg-slate-100 border border-slate-300 p-2 rounded-md shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500;
+    @apply w-full p-2;
 }
+
+.p-togglebutton {
+    @apply px-2 py-1;
+}
+
