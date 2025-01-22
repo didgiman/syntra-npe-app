@@ -7,7 +7,6 @@ export interface User {
         chatgpt: {
             motivational: boolean;
             functional: boolean;
-        },
-        darkmode: boolean
+        }
     }
 }

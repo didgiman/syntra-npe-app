@@ -13,8 +13,6 @@ export class TaskService {
   user = this.userService.user;
   userId = this.user().id;
 
-  userId = this.user().id;
-
   finishedOnly: boolean = false;
 
   constructor() {

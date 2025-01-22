@@ -10,25 +10,15 @@ import { UserService } from '../../services/user.service';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-  userService = inject(UserService);
-  user = this.userService.user;
-  userId = this.user().id;
 
   title = input<string>('');
   showProfile: boolean = false;
 
-  darkModeActive = signal(this.user().settings.darkmode || false);
-  constructor () {
-    this.setDarkmode();
-     effect(() => {
-      const user = this.user();
+  // darkModeActive = signal(false);
+  darkModeActive = signal(localStorage.getItem("darkmode") === 'true' || false);
 
-      if (this.user().id != this.userId) {
-        this.userId = this.user().id;
-        this.darkModeActive.set(this.user().settings.darkmode || false);
-        this.setDarkmode();
-      }
-     });
+  ngOnInit() {
+    this.setDarkmode();
   }
 
   onShowProfile() {
@@ -45,6 +35,7 @@ export class HeaderComponent {
     } else {
       htmlElement.classList.remove('dark');
     }
+    localStorage.setItem("darkmode", String(this.darkModeActive()));
   }
 
   toggleDarkMode() {
@@ -52,7 +43,7 @@ export class HeaderComponent {
 
     this.setDarkmode();
 
-    this.user().settings = {...this.user().settings, darkmode: this.darkModeActive()}
-    this.userService.editUser(this.user());
+    // this.user().settings = {...this.user().settings, darkmode: this.darkModeActive()}
+    // this.userService.editUser(this.user());
   }
 }
