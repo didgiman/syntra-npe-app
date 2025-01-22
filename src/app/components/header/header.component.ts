@@ -10,7 +10,7 @@ import { UserProfileComponent } from '../user-profile/user-profile.component';
 })
 export class HeaderComponent {
   title = input<string>('');
-  showProfile: boolean = true; // should be false
+  showProfile: boolean = false;
 
   onShowProfile() {
     this.showProfile = true;

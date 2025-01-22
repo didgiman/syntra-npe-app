@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import type { Task, RawTask } from '../models/task';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +9,25 @@ export class TaskService {
   private apiUrl = 'http://127.0.0.1:8000/api';
   tasks = signal<Task[]>([]);
 
-  constructor() { }
+  userService = inject(UserService);
+  user = this.userService.user;
 
-  async loadTasks(finishedOnly: boolean = false) {
+  finishedOnly: boolean = false;
+
+  constructor() {
+    effect(() => {
+      const user = this.user(); // Read the signal value
+
+      // Whenever the user changes, reload tasks
+      this.loadTasks();
+    });
+  }
+
+  async loadTasks(finishedOnly: boolean = this.finishedOnly) {
     try {
-      let url = this.apiUrl + '/usertasks/1'; // TO DO: This should be replaced by /usertasks/:userId
+      this.finishedOnly = finishedOnly; // Store the value for the next call (only needed when switching user, regular calls to loadTasks always have the finishedOnly parameter set)
+
+      let url = this.apiUrl + '/usertasks/' + this.user().id; // TO DO: This should be replaced by /usertasks/:userId
       if (finishedOnly) {
         url += '?finishedOnly=true';
       }
