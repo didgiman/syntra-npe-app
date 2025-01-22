@@ -1,6 +1,13 @@
 <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
-  <header class="bg-blue-500 p-4">
+  <header class="bg-blue-500 p-4 flex justify-between items-center">
     <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
+    <div (click)="toggleDarkMode()" class="cursor-pointer hover:scale-125 transition-all">
+      @if (darkModeActive) {
+        <div class="pi pi-moon text-2xl"></div>
+      } @else {
+        <div class="pi pi-sun text-2xl"></div>
+      }
+    </div>
   </header>
 
   <main class="flex flex-grow container mx-auto items-center justify-center">
