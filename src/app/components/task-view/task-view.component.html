@@ -38,17 +38,21 @@
         </div>
 
         <!-- Motivation message -->
-        <div class="text-sm italic text-gray-500 mt-2 bg-gray-100 dark:bg-gray-800 p-2">
-          {{ motivationMessage() }}
-        </div>
+        @if (user().settings.chatgpt.motivational) {
+          <div class="text-sm italic text-gray-500 mt-2 bg-gray-100 dark:bg-gray-800 p-2">
+            {{ motivationMessage() }}
+          </div>
+        }
 
         <!-- Tips -->
-        <div class="mt-2">
-          <div class="text-sm text-gray-500 font-semibold mr-2 flex items-center">Give me tips <p-toggleswitch [(ngModel)]="giveTips" (onChange)="onTipsChange()" class="ml-3" /></div>
-          @if (giveTips) {
-            <div class="text-sm italic text-gray-500 mt-2 bg-gray-100 dark:bg-gray-800 p-2" [innerHTML]="chatGptTips()"></div>
-          }
-        </div>
+        @if (user().settings.chatgpt.functional) {
+          <div class="mt-2">
+            <div class="text-sm text-gray-500 font-semibold mr-2 flex items-center">Give me tips <p-toggleswitch [(ngModel)]="giveTips" (onChange)="onTipsChange()" class="ml-3" /></div>
+            @if (giveTips) {
+              <div class="text-sm italic text-gray-500 mt-2 bg-gray-100 dark:bg-gray-800 p-2" [innerHTML]="chatGptTips()"></div>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>

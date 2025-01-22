@@ -43,7 +43,7 @@ export class TaskFormComponent {
   task: Task = {
     id: 0,
     created_at: null,
-    user_id: 1,
+    user_id: Number(localStorage.getItem('userId') || '1'),
     title: '',
     feeling: 3,
     estimate: 1,

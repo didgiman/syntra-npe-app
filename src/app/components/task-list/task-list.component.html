@@ -15,14 +15,18 @@
 <div class="h-[72vh] sm:h-[79vh] max-h-dvh w-full items-center justify-center relative">
   
   @if(loading) {
-    <p class="text-3xl font-bold mb-2">Loading...</p>
+    <div class="w-full h-full flex flex-col items-center justify-center">
+      <p class="text-3xl font-bold mb-2">Loading...</p>
+    </div>
   } @else if (tasks().length === 0) {
-    <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
-    <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
-        Why don't you
-        <button (click)="newTask()" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create a new task</button>
-        ?
-    </h2>
+    <div class="w-full h-full flex flex-col items-center justify-center">
+      <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
+      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
+          Why don't you
+          <button (click)="newTask()" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create a new task</button>
+          ?
+      </h2>
+    </div>
   } @else {
 
     <!-- Task list header -->
@@ -42,24 +46,23 @@
 
       <!-- New task icon -->
       @if (!showFinishedTasks) {
-        <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500" (click)="newTask()">
+        <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500 dark:bg-slate-800 dark:text-gray-200" (click)="newTask()">
           <span class="pi pi-plus-circle text-4xl"></span>
         </div>
       }
     </div>
 
-   <p-table 
-        #tasksTable
-        [value]="tasks()"
-        stripedRows
-        [globalFilterFields]="['title']"
-        [scrollable]="true" scrollHeight="flex"
-        [frozenValue]="inProgressTask()"
-        sortField="deadline" [sortOrder]="1"
-        [customSort]="true" (sortFunction)="customSort($event)"
-        [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]"
-      >
-
+    <p-table 
+      #tasksTable
+      [value]="tasks()"
+      stripedRows
+      [globalFilterFields]="['title']"
+      [scrollable]="true" scrollHeight="flex"
+      [frozenValue]="inProgressTask()"
+      sortField="deadline" [sortOrder]="1"
+      [customSort]="true" (sortFunction)="customSort($event)"
+      [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]"
+    >
       <ng-template #header>
         <tr>
           <th>&nbsp;</th>
@@ -101,7 +104,7 @@
         </ng-template>
       }
       <ng-template #body let-task>
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer hover:font-bold" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
             <td class="text-2xl">
               <!-- Play icon -->
               <div
