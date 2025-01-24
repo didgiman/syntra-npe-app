@@ -7,10 +7,11 @@ import { TaskSelectionComponent } from '../task-selection/task-selection.compone
 
 import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-task-suggestion',
-  imports: [FormsModule, SliderModule, RadioButtonModule, TaskSelectionComponent],
+  imports: [FormsModule, SliderModule, RadioButtonModule, TaskSelectionComponent, ButtonModule],
   templateUrl: './task-suggestion.component.html',
   styleUrl: './task-suggestion.component.css'
 })
@@ -79,7 +80,7 @@ export class TaskSuggestionComponent {
   // Get due tasks
   getDueTasks() {
 
-    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000)// Set tasks that are due in the next 3 days
+    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000 && task.ended_at === null)// Set tasks that are due in the next 3 days
       .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
 
     if (this.dueTasks().length > 0) {
@@ -101,7 +102,7 @@ export class TaskSuggestionComponent {
       const RT = (this.tasks().filter(item =>
         (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
         (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
-        (item.estimate <= +this.suggestionRequest.estimate))
+        (item.estimate <= +this.suggestionRequest.estimate) && item.ended_at === null)
       );
       console.log('Filtered tasks:', RT);
 

@@ -42,8 +42,9 @@
 
                 } @else {
                 <h3 class="text-base font-semibold text-gray-900 dark:text-gray-400" id="modal-title">
-                    There are no tasks within the time you have. Please adjust your criteria.
+                    There are no tasks within the time you have.
                 </h3>
+                <div class="text-sm text-gray-500 font-semibold mr-2">Pick a task from your list or do something fun!</div>
                 }
             </div>
         </div>
@@ -53,14 +54,12 @@
 <!-- Task title -->
 <div
     class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-center gap-2 sm:px-6">
-    <button (click)="startTask()" type="button"
-        class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Start
-        Task</button>
+    <button pButton severity="success" icon="pi pi-play-circle" (click)="startTask()" pTooltip="Find task according to criteria" tooltipPosition="bottom">Start task</button>
 </div>
 } @else {
 <div
     class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
-    <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel</button>
+    <button pButton severity="secondary" icon="pi pi-times" (click)="onCancel()" type="button" pTooltip="Close this window" tooltipPosition="bottom">Close</button>
 </div>
 }
 }
