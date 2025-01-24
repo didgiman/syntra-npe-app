@@ -124,6 +124,7 @@ export class TaskListComponent {
   }
 
   toggleFinishedTasks(event: any) {
+    this.loading = true;
     this.loadTasks(this.showFinishedTasks);
   }
 
