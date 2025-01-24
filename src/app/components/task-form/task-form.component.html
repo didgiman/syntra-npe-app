@@ -61,6 +61,7 @@
                 [required]="deadlineRequired()"
                 selectOtherMonths="true"
                 (onBlur)="onDeadlineBlur()"
+                [firstDayOfWeek]="1"
               />
               @if (deadlineRequired()) {
                 <div class="text-red-500 text-xs">
