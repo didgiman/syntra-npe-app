@@ -26,17 +26,11 @@ export class UserProfileComponent {
   constructor() { }
 
   onCancel() {
-    console.log('Cancel clicked');
     this.close.emit('cancel');
   }
   
   async onSave() {
-    console.log('Save clicked');
-
-    console.log(this.user())
     const saveResponse = await this.userService.editUser({ ...this.user() });
-
-    console.log(saveResponse);
 
     if (saveResponse) {
       this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');

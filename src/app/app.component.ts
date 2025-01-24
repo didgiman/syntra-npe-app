@@ -24,8 +24,6 @@ export class AppComponent {
     this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
 
     effect(() => {
-      console.log('Updated user effect', this.user());
-
       this.title = `What's Next for ${this.user().first_name} ${this.user().last_name}`;
     });
   }

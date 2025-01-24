@@ -46,10 +46,6 @@ export class TaskListComponent {
   constructor() {
     this.loadTasks();
     effect(() => {
-      // console.log('Tasks updated effect', this.tasks());
-      // this.utils.toast("Tasks list updated", "info");
-      // this.loading = false;
-
       // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
     });
@@ -70,19 +66,16 @@ export class TaskListComponent {
   }
 
   onEditTask(taskId:number) {
-    console.log('Edit task', taskId);
     this.editTaskId = taskId;
     this.showTaskForm = true;
   }
 
   newTask() {
-    console.log('New task');
     this.editTaskId = 0;
     this.showTaskForm = true;
   }
 
   onEditClose(action:string) {
-    console.log('Edit window close', action);
     this.showTaskForm = false;
 
     if (action === 'create') {
@@ -92,13 +85,11 @@ export class TaskListComponent {
   }
 
   onViewTask(taskId:number) {
-    console.log('View task', taskId);
     this.viewTaskId = taskId;
     this.showTaskView = true;
     return;
   }
   onViewClose(action:string) {
-    console.log('View window close', action);
     this.showTaskView = false;
   }
 
@@ -133,7 +124,6 @@ export class TaskListComponent {
   }
 
   toggleFinishedTasks(event: any) {
-    // console.log(this.showFinishedTasks);
     this.loadTasks(this.showFinishedTasks);
   }
 
