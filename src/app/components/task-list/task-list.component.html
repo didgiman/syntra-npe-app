@@ -104,7 +104,7 @@
         </ng-template>
       }
       <ng-template #body let-task>
-          <tr (click)="onEditTask(task.id)" class="cursor-pointer hover:font-bold" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
             <td class="text-2xl">
               <!-- Play icon -->
               <div
