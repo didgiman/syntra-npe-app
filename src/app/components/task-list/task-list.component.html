@@ -21,16 +21,18 @@
 <div class="h-[72vh] sm:h-[79vh] max-h-dvh w-full items-center justify-center relative">
 
   @if(loading) {
-  <p class="text-3xl font-bold mb-2">Loading...</p>
+    <div class="w-full h-full flex flex-col items-center justify-center">
+      <p class="text-3xl font-bold mb-2">Loading...</p>
+    </div>
   } @else if (tasks().length === 0) {
-  <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
-  <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
-    Why don't you
-    <button (click)="newTask()"
-      class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create
-      a new task</button>
-    ?
-  </h2>
+    <div class="w-full h-full flex flex-col items-center justify-center">
+      <h1 class="text-3xl font-bold mb-2">No tasks found.</h1>
+      <h2 class="text-2xl font-bold mb-2 flex items-center gap-2">
+          Why don't you
+          <button (click)="newTask()" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Create a new task</button>
+          ?
+      </h2>
+    </div>
   } @else {
 
   <!-- Task list header -->
@@ -50,15 +52,13 @@
       <p-toggleswitch [(ngModel)]="showFinishedTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
     </div>
 
-    <!-- New task icon -->
-    @if (!showFinishedTasks) {
-    <div
-      class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500"
-      (click)="newTask()">
-      <span class="pi pi-plus-circle text-4xl"></span>
+      <!-- New task icon -->
+      @if (!showFinishedTasks) {
+        <div class="w-11 h-11 flex items-center justify-center absolute top-4 right-4 sm:-top-4 sm:-right-4 bg-slate-200 rounded-full cursor-pointer text-blue-400 hover:text-blue-500 dark:bg-slate-800 dark:text-gray-200" (click)="newTask()">
+          <span class="pi pi-plus-circle text-4xl"></span>
+        </div>
+      }
     </div>
-    }
-  </div>
 
   @if (!showFinishedTasks) {
   <div
@@ -99,50 +99,50 @@
           <div (click)="onViewTask(task.id); $event.stopPropagation();"><span
               class="pi pi-stop-circle text-3xl text-orange-400"></span></div>
 
-        </td>
-        <td class="hidden">{{ task.id }}</td>
-        <td>
-          {{ task.title }}
-          @if (task.recurring != '') {
-          <span class="pi pi-sync text-blue-400 ml-2"></span>
-          }
-        </td>
-        <td class="hidden sm:table-cell">
-          @if (task.deadline) {
-          <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
-          } @else {
-          (none)
-          }
-        </td>
-        <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-        <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
-      </tr>
-    </ng-template>
-    }
-    <ng-template #body let-task>
-      <tr (click)="onEditTask(task.id)" class="cursor-pointer"
-        [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 line-through': task.status == 'finished'}">
-        <td class="text-2xl">
-          <!-- Play icon -->
-          <div
-            [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-blue-300 hover:text-blue-500': !inProgressTask().length && task.status != 'finished'}"
-            class="w-10" (click)="!inProgressTask().length && onViewTask(task.id); $event.stopPropagation();"><span
-              class="pi pi-play-circle text-3xl"></span></div>
-        </td>
-        <td class="hidden">{{ task.id }}</td>
-        <td>
-          {{ task.title }}
-          @if (task.recurring != '') {
-          <span class="pi pi-sync text-blue-400 ml-2"></span>
-          }
-        </td>
-        <td class="hidden sm:table-cell">
-          <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
-        </td>
-        <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
-        <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
+            </td>
+            <td class="hidden">{{ task.id }}</td>
+            <td>
+              {{ task.title }}
+              @if (task.recurring != '') {
+                <span class="pi pi-sync text-blue-400 ml-2"></span>
+              }
+            </td>
+            <td class="hidden sm:table-cell">
+              @if (task.deadline) {
+                <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
+              } @else {
+                (none)
+              }
+            </td>
+            <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+            <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>
+          </tr>
+        </ng-template>
+      }
+      <ng-template #body let-task>
+          <tr (click)="onEditTask(task.id)" class="cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-800" [ngClass]="{'bg-green-100 dark:bg-green-900 text-gray-400 dark:text-gray-900 dark:hover:text-gray-400 line-through': task.status == 'finished'}">
+            <td class="text-2xl">
+              <!-- Play icon -->
+              <div
+                [ngClass]="{'text-gray-300': inProgressTask().length, 'text-purple-300 hover:text-purple-500': !inProgressTask().length && task.status === 'finished', 'text-blue-300 hover:text-blue-500': !inProgressTask().length && task.status != 'finished'}"
+                class="w-10"
+                (click)="!inProgressTask().length && onViewTask(task.id); $event.stopPropagation();"
+              ><span class="pi pi-play-circle text-3xl"></span></div>
+            </td>
+            <td class="hidden">{{ task.id }}</td>
+            <td>
+              {{ task.title }}
+              @if (task.recurring != '') {
+                <span class="pi pi-sync text-blue-400 ml-2"></span>
+              }
+            </td>
+            <td class="hidden sm:table-cell">
+              <div [innerHTML]="utils.formatDeadlineForScreen(task.deadline)"></div>
+            </td>
+            <td class="hidden sm:table-cell">{{ utils.formatHoursToReadableTime(task.estimate) }}</td>
+            <td class="text-3xl">{{ utils.getFeelingEmoji(+task.feeling) }}</td>            
+          </tr>
+      </ng-template>
+    </p-table>
   }
 </div>

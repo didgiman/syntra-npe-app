@@ -38,8 +38,8 @@ export class TaskListComponent {
   showTaskForm: boolean = false;
   showTaskSuggestion: boolean = false;
 
-  viewTaskId: number = 27;
-  showTaskView: boolean = false;
+  viewTaskId: number = 0;
+  showTaskView:boolean = false;
 
   inProgressTask = signal<Task[]>([]);
 
@@ -49,15 +49,8 @@ export class TaskListComponent {
   constructor() {
     this.loadTasks();
     effect(() => {
-      // console.log('Tasks updated effect', this.tasks());
-      // this.utils.toast("Tasks list updated", "info");
-      // this.loading = false;
-
       // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
-
-      // Remove tasks that are in progress from the regular tasks list => this causes an infinite loop
-      //this.tasks.set(this.tasks().filter(itemA => !this.inProgressTask().some(itemB => itemA.id === itemB.id)));
     });
   }
 
@@ -75,20 +68,17 @@ export class TaskListComponent {
     }
   }
 
-  onEditTask(taskId: number) {
-    console.log('Edit task', taskId);
+  onEditTask(taskId:number) {
     this.editTaskId = taskId;
     this.showTaskForm = true;
   }
 
   newTask() {
-    console.log('New task');
     this.editTaskId = 0;
     this.showTaskForm = true;
   }
 
-  onEditClose(action: string) {
-    console.log('Edit window close', action);
+  onEditClose(action:string) {
     this.showTaskForm = false;
 
     if (action === 'create') {
@@ -97,14 +87,12 @@ export class TaskListComponent {
     }
   }
 
-  onViewTask(taskId: number) {
-    console.log('View task', taskId);
+  onViewTask(taskId:number) {
     this.viewTaskId = taskId;
     this.showTaskView = true;
     return;
   }
-  onViewClose(action: string) {
-    console.log('View window close', action);
+  onViewClose(action:string) {
     this.showTaskView = false;
   }
 
@@ -139,7 +127,6 @@ export class TaskListComponent {
   }
 
   toggleFinishedTasks(event: any) {
-    // console.log(this.showFinishedTasks);
     this.loadTasks(this.showFinishedTasks);
   }
 

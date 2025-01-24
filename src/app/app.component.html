@@ -1,13 +1,12 @@
 <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
-  <header class="bg-blue-500 p-4">
-    <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
-  </header>
+
+  <app-header title="{{ title }}"></app-header>
 
   <main class="flex flex-grow container mx-auto items-center justify-center">
     <app-task-list class="h-full w-full" />
   </main>
 
-  <footer class="bg-blue-500 text-white p-4">
+  <footer class="bg-blue-500 text-white dark:text-gray-800 p-4">
     <p>&copy; 2025 - Null Pointer Exceptions</p>
   </footer>
 
