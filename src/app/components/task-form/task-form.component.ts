@@ -15,10 +15,11 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule, SelectButtonModule],
+  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule, SelectButtonModule, ToggleSwitchModule],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
@@ -39,6 +40,7 @@ export class TaskFormComponent {
   estimateDisplay = signal<string>('1:00');
   formattedDeadline = '';
   deadlineRequired = signal<boolean>(false);
+  deadlineShowTime = false;
 
   task: Task = {
     id: 0,
@@ -67,6 +69,10 @@ export class TaskFormComponent {
           this.task.recurring = ''; // Initialize recurring to an empty string
         }
         this.deadlineRequired.set(this.task.recurring !== ''); // For recurring tasks, deadline is required
+
+        if (this.task.deadline && !(this.utils.isTimeExactly(this.task.deadline, 23, 59, 59))) {
+          this.deadlineShowTime = true;
+        }
       }
     }
 
@@ -172,6 +178,19 @@ export class TaskFormComponent {
     } else {
       this.deadlineRequired.set(true);
     }
+  }
+
+  onDeadlineBlur() {
+    if (this.task.deadline && !this.deadlineShowTime) {
+      // Set deadline to the end of the selected day
+      this.task.deadline.setHours(23);
+      this.task.deadline.setMinutes(59);
+      this.task.deadline.setSeconds(59);
+    }
+  }
+  onDeadlineToggleTime(event: any) {
+    this.deadlineShowTime = event.checked;
+    this.onDeadlineBlur(); // Recalculate deadline
   }
 
 }
