@@ -80,4 +80,8 @@ export class TaskSelectionComponent {
       this.utils.toast(": Task could not be updated. Please try again.", "error");
     }
   }
+
+  onCancel() {
+    this.close.emit(0);
+  }
 }

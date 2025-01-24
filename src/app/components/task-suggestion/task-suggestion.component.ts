@@ -41,6 +41,8 @@ export class TaskSuggestionComponent {
   mostDueTaskId = signal<number>(0);
   suggestedTaskId = signal<number>(0);
 
+  scenarioId = signal<number>(0);
+
   ngOnInit() {
     this.suggestionRequest.feeling = this.suggestionRequest.feeling.toString(); // Convert feeling to string for radio button
     this.getDueTasks();
@@ -120,6 +122,7 @@ export class TaskSuggestionComponent {
 
     // If no tasks are found after 4 iterations, return a fallback message
     console.log('No tasks found');
+    this.suggestedTaskId.set(-1);
     return;
   }
 

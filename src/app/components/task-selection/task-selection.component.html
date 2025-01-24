@@ -7,12 +7,7 @@
             <!-- Icon -->
             <div
                 class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-800 sm:mx-0 sm:size-10">
-                <!-- <svg class="size-6 text-blue-600" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6H5c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1H3v5c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-5a1 1 0 0 0 1-1v-1.938a1.006 1.006 0 0 0-.072-.455M5 20V8h14l.001 3.996L19 12v2l.001.005l.001 5.995z">
-                    </path>
-                </svg> -->
+
                 <svg class="size-6 text-green-600" data-slot="icon" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24">
                     <g fill="#31af0e">
@@ -31,15 +26,18 @@
                 <h3 class="text-base font-semibold text-gray-900 dark:text-gray-400" id="modal-title">
                     You have an urgent task! Go and do this!
                 </h3>
+                <span class="mt-2 text-base text-gray-500 font-semibold">Your task is: </span>
+                <h3
+                    class="font-bold text-2xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
+                    {{ selectedTask.title}}</h3>
 
                 } @else if (scenarioId() === 2 && selectedTask.id > 0) {
                 <h3 class="text-base font-semibold text-gray-900 dark:text-gray-400" id="modal-title">
                     We have found the task for you!
                 </h3>
-
-                <!-- Task title -->
                 <span class="mt-2 text-base text-gray-500 font-semibold">Your task is: </span>
-                <h3 class="font-bold text-2xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
+                <h3
+                    class="font-bold text-2xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
                     {{ selectedTask.title}}</h3>
 
                 } @else {
@@ -51,11 +49,18 @@
         </div>
     </div>
 </div>
-@if (scenarioId() === 2 && selectedTask.id > 0) {
-<div class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-center gap-2 sm:px-6">
+@if (scenarioId() < 3) {
+<!-- Task title -->
+<div
+    class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-center gap-2 sm:px-6">
     <button (click)="startTask()" type="button"
         class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto">Start
         Task</button>
+</div>
+} @else {
+<div
+    class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
+    <button pButton (click)="onCancel()" type="button" icon="pi pi-times" severity="secondary">Cancel</button>
 </div>
 }
 }
