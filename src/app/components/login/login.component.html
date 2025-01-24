@@ -1,1 +1,30 @@
-<p>login works!</p>
+    <!-- login/register popup -->
+    <div id="popup" class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50 hidden">
+        <div class="bg-[#121212] p-8 rounded-lg w-96 relative">
+            <h2 class="text-2xl text-white mb-4">Login / Register</h2>
+            <!-- close button -->
+            <button id="closePopup" class="absolute top-2 right-2 text-white text-2xl">X</button>
+    
+            <!-- login form -->
+            <div id="loginForm">
+                <h3 class="text-lg text-white mb-2">Login</h3>
+                <form>
+                    <input type="email" placeholder="Email" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                    <input type="password" placeholder="Password" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                    <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login</button>
+                </form>
+                <p class="text-white mt-4 text-center">Don't have an account? <button id="registerLink" class="text-blue-400">Register</button></p>
+            </div>
+    
+            <!-- Register form (initially hidden) -->
+            <div id="registerForm" class="hidden">
+                <h3 class="text-lg text-white mb-2">Register</h3>
+                <form>
+                    <input type="email" placeholder="Email" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                    <input type="password" placeholder="Password" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                    <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Register</button>
+                </form>
+                <p class="text-white mt-4 text-center">Already have an account? <button id="loginLink" class="text-blue-400">Login</button></p>
+            </div>
+        </div>
+    </div>
