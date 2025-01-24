@@ -76,10 +76,7 @@ export class TaskFormComponent {
   async onTaskSave() {
     this.loading.set(true);
 
-    console.log('Save task', this.task);
     const saveResponse = await this.taskService.saveTask(this.task);
-
-    console.log(saveResponse);
 
     if (saveResponse) {
       this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
@@ -117,8 +114,6 @@ export class TaskFormComponent {
     });
   }
   async onTaskDelete() {
-    console.log('Delete task', this.task.id);
-
     const deleteResponse = await this.taskService.deleteTask(this.task.id);
 
     if (deleteResponse) {
