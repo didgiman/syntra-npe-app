@@ -74,7 +74,6 @@ export class UserService {
 
       if (data.success) {
         const updatedUser = { ... data.user, settings: this.formatSettings(data.user.settings)};
-        console.log(updatedUser);
 
         this.user.set(updatedUser);
 

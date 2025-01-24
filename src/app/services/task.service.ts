@@ -37,13 +37,11 @@ export class TaskService {
       }
       const response = await fetch(url);
       const data = await response.json();
-      // console.log(data);
       if (data) {
         // this.tasks.set(data.tasks);
 
         // Convert the tasks from the API to a format that is usable in our JS application
         const JSTasks = data.tasks.map((task: RawTask) => (this.convertAPITaskToJSTask(task)));
-        // console.log("tasks with dates", JSTasks);
 
         this.tasks.set(JSTasks);
 
@@ -91,8 +89,6 @@ export class TaskService {
       });
 
       const data = await response.json();
-
-      // console.log("POST TASK DATA: ", data);
 
       if (data) {
         if (data.success) {
