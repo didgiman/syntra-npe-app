@@ -10,16 +10,31 @@
     <button (click)="closePopup()" class="absolute top-2 right-2 text-white text-2xl">X</button>
 
     <!-- login form -->
-    <div *ngIf="isLoginFormVisible" id="loginForm">
-      <h3 class="text-lg text-white mb-2">Login</h3>
-      <form (submit)="handleLoginSubmit($event)">
-        <input type="email" placeholder="Email" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
-        <input type="password" placeholder="Password" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
-        <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login</button>
-      </form>
-      <p class="text-white mt-4 text-center">Don't have an account? <button (click)="switchToRegisterForm()" class="text-blue-400">Register</button></p>
-      <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()" class="text-blue-400">Reset</button></p>
-    </div>
+      <!-- login form -->
+<div *ngIf="isLoginFormVisible" id="loginForm">
+    <h3 class="text-lg text-white mb-2">Login</h3>
+    <form (submit)="handleLoginSubmit($event)">
+      <input 
+        type="email" 
+        [(ngModel)]="email" 
+        name="email"
+        placeholder="Email" 
+        class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" 
+        required
+      >
+      <input 
+        type="password" 
+        [(ngModel)]="password" 
+        name="password"
+        placeholder="Password" 
+        class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" 
+        required
+      >
+      <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login</button>
+    </form>
+    <p class="text-white mt-4 text-center">Don't have an account? <button (click)="switchToRegisterForm()" class="text-blue-400">Register</button></p>
+    <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()" class="text-blue-400">Reset</button></p>
+  </div>
 
     <!-- Register form -->
     <div *ngIf="isRegisterFormVisible" id="registerForm">
