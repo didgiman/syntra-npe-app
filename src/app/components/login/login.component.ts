@@ -1,7 +1,7 @@
 import { Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import { RegisterService } from '../services/register.service';
 
 @Component({
   selector: 'app-popup',
@@ -26,7 +26,7 @@ export class PopupComponent {
 
   displayUsers = signal<any[]>([]);
 
-  constructor(private authService: AuthService) {}
+  constructor(private registerService: RegisterService) {}
 
 
 
@@ -154,7 +154,7 @@ export class PopupComponent {
 
     console.log('All validations passed');
 
-    let result = this.authService.registerUser(
+    let result = this.registerService.registerUser(
       this.email,
       this.password,
       this.firstName,
