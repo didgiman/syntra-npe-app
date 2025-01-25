@@ -1,21 +1,26 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-popup',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.css']
+  styleUrls: ['./popup.component.css'],
 })
 export class PopupComponent {
   isPopupVisible = false;
-  isLoginFormVisible = true;  // Show the login form initially
-  isRegisterFormVisible = false;  // Register form is hidden initially
-  isPasswordFormVisible = false;  // Forgot password form is hidden initially
+  isLoginFormVisible = true;
+  isRegisterFormVisible = false;
+  isPasswordFormVisible = false;
 
-  email: string = '';  // Bind email input
-  password: string = '';  // Bind password input
+  email: string = '';
+  password: string = '';
+  errorMessage: string | null = null;
+
+  constructor(private authService: AuthService) {}
 
   // Show the login popup
   showLoginPopup() {
@@ -25,9 +30,9 @@ export class PopupComponent {
   // Close the popup
   closePopup() {
     this.isPopupVisible = false;
+    this.errorMessage = null;
   }
 
-  // Close the popup when 'Esc' key is pressed
   @HostListener('document:keydown', ['$event'])
   closeOnEscape(event: KeyboardEvent) {
     if (event.key === 'Escape') {
@@ -35,21 +40,19 @@ export class PopupComponent {
     }
   }
 
-  // Switch to the Register form
+  // Switch between forms
   switchToRegisterForm() {
     this.isLoginFormVisible = false;
     this.isRegisterFormVisible = true;
-    this.isPasswordFormVisible = false;  // Hide forgot password form
+    this.isPasswordFormVisible = false;
   }
 
-  // Switch to the Login form
   switchToLoginForm() {
     this.isLoginFormVisible = true;
     this.isRegisterFormVisible = false;
-    this.isPasswordFormVisible = false;  // Hide forgot password form
+    this.isPasswordFormVisible = false;
   }
 
-  // Switch to the Forgot Password form
   switchToPasswordForm() {
     this.isLoginFormVisible = false;
     this.isRegisterFormVisible = false;
@@ -58,28 +61,23 @@ export class PopupComponent {
 
   // Handle login form submission
   handleLoginSubmit(event: Event) {
-    event.preventDefault(); // Prevent form submission from refreshing the page
+    event.preventDefault();
 
     const payload = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
-    // Call your AuthService to login
-    // For example, this.authService.login(payload);
-    console.log(payload);  // Just for testing purposes
-  }
-
-  // Handle password recovery submission
-  handlePasswordRecoverySubmit(event: Event) {
-    event.preventDefault();
-
-    const recoveryPayload = {
-      email: this.email
-    };
-
-    // Call your AuthService to send recovery email
-    // For example, this.authService.sendRecoveryEmail(recoveryPayload);
-    console.log(recoveryPayload);  // Just for testing purposes
+    this.authService.login(payload).subscribe({
+      next: (response) => {
+        console.log('Login successful:', response);
+        localStorage.setItem('token', response.token);
+        this.closePopup();
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+        this.errorMessage = 'Invalid email or password.';
+      },
+    });
   }
 }
