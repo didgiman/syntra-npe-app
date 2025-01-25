@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { UtilsService } from './services/utils.service';
 import { LoginComponent } from './components/login/login.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TaskListComponent, LoginComponent],
+  imports: [RouterOutlet, TaskListComponent, LoginComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -18,4 +19,60 @@ export class AppComponent {
     this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
   }
   
+  // All methods for the login / register screen
+  isPopupVisible = false;
+  isLoginFormVisible = true;
+
+  // Method to show the popup and the login form
+  showLoginPopup() {
+    this.isPopupVisible = true;
+    this.isLoginFormVisible = true;
+  }
+
+  // Method to close the popup
+  closePopup() {
+    this.isPopupVisible = false;
+  }
+
+  // Method to switch to the Register form
+  switchToRegisterForm() {
+    this.isLoginFormVisible = false;
+  }
+
+  // Method to switch to the Login form
+  switchToLoginForm() {
+    this.isLoginFormVisible = true;
+  }
+
+  // Handle form submission with actual API login logic
+  handleLoginSubmit(event: Event) {
+    event.preventDefault(); // Prevent form from submitting to the server
+
+    const email = (document.querySelector('input[type="email"]') as HTMLInputElement).value;
+    const password = (document.querySelector('input[type="password"]') as HTMLInputElement).value;
+
+    // Prepare the request payload
+    const payload = {
+      email: email,
+      password: password
+    };
+// Make the HTTP request to the login API
+this.http.post('http://127.0.0.1:8000/login', payload)
+.subscribe(
+  (response: any) => {
+    // Handle successful login
+    if (response && response.token) {  // Assuming the response contains a token
+      alert('Login successful!');
+      this.closePopup(); // Close the popup after successful login
+    } else {
+      alert('Invalid email or password. Please try again.');
+    }
+  },
+  (error) => {
+    // Handle error response
+    console.error('Login failed', error);
+    alert('An error occurred. Please try again.');
+  }
+);
+}
 }
