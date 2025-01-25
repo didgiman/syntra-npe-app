@@ -4,38 +4,36 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class LoginService {
+  urlApi = 'http://localhost:8000/api';
 
-urlApi = 'http://localhost:8000/api';
+  async login(email: string, password: string): Promise<any> {
+    if (!email || !password) {
+      throw new Error('Both email and password are required.');
+    }
 
-async getAllUser () {
-  try {
-    const response = await fetch(`${this.urlApi}/users`);
-    return await response.json();
-  } catch (error) {
-    console.error('Error getting all users:', error);
-    throw error;
+    if (password.length < 6) {
+      throw new Error('Password must be at least 6 characters long.');
+    }
+
+    const loginData = { email, password };
+
+    try {
+      const response = await fetch(`${this.urlApi}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.errorMessage || 'Login failed.');
+      }
+
+      return await response.json();
+    } catch (error: any) {
+      throw new Error(error.message || 'An unexpected error occurred. Please try again later.');
+    }
   }
-}
-
-async registerUser(
-  email: string, 
-  password: string,
-  first_name: string,
-  last_name: string,
-) {
-  try {
-    const response = await fetch(`${this.urlApi}/users`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({email,password,first_name,last_name}),
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Error registering user:', error);
-    throw error;
-  }
-}
-
 }
