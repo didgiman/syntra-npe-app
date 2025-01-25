@@ -136,7 +136,7 @@ export class PopupComponent {
 
   // handle password recovery
   handlePasswordRecoverySubmit() {
-    throw new Error('Method not implemented.');
+    
     }
 
   }
