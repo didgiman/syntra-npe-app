@@ -2,13 +2,14 @@ import { Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../services/register.service';
+import { LoginService } from '../services/login.service';
 
 @Component({
-  selector: 'app-popup',
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './popup.component.html',
-  styleUrls: ['./popup.component.css'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
 })
 export class PopupComponent {
   // popup logic for switching views.
@@ -26,7 +27,10 @@ export class PopupComponent {
 
   displayUsers = signal<any[]>([]);
 
-  constructor(private registerService: RegisterService) {}
+  constructor(
+    private registerService: RegisterService,
+    private loginService: LoginService,
+  ) {}
 
 
 
@@ -93,14 +97,9 @@ export class PopupComponent {
     this.errorMessage = null;
 
     try {
-      // send a post request to the login endpoint
-      const response = await fetch('http://127.0.0.1:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify(loginData),
-      });
+          // call the login service
+          const response = await this.loginService.login(this.email, this.password);
+          console.log('Login successful:', response);
 
       // handle non-2xx responses
       if (!response.ok) {
@@ -210,9 +209,9 @@ export class PopupComponent {
     this.resetForm();
   }
 
-   // fetch all users wiht ngonit
+   // fetch all users with ngonit
    ngOnInit() {
-    this.authService.getAllUser().then((users) => {
+    this.registerService.getAllUser().then((users) => {
       console.log(users);
       this.displayUsers.set(users);
     })
