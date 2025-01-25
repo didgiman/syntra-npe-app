@@ -1,6 +1,19 @@
 <!-- Button to show login -->
 <button id="showLogin" (click)="showLoginPopup()">Show Login</button>
 
+
+{{displayUsers() | json}}
+
+@for (user of displayUsers(); track user.id) {
+  <div class="user">
+    <p>{{user.id}}</p>
+    <p>{{user.firstName}}</p>
+    <p>{{user.lastName}}</p>
+    <p>{{user.email}}</p>
+  </div>
+
+}
+
 <!-- login/register popup -->
 <div *ngIf="isPopupVisible" id="popup"
     class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50">

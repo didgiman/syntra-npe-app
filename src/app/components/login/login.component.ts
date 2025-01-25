@@ -1,6 +1,7 @@
-import { Component, HostListener, Signal, signal, effect } from '@angular/core';
+import { Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-popup',
@@ -10,15 +11,24 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./popup.component.css'],
 })
 export class PopupComponent {
-  // logic for switching views.
+  // popup logic for switching views.
   isPopupVisible = false;
   isLoginFormVisible = true;
   isRegisterFormVisible = false;
   isPasswordFormVisible = false;
 
+  firstName: string = '';
+  lastName: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
   errorMessage: string | null = null;
+
+  displayUsers = signal<any[]>([]);
+
+  constructor(private authService: AuthService) {}
+
+
 
   // Show the login popup
   showLoginPopup() {
@@ -57,7 +67,8 @@ export class PopupComponent {
     this.isPasswordFormVisible = true;
   }
 
-  // Handle login form submission
+  
+  // handle login form submission
   async handleLoginSubmit() {
     if (!this.email || !this.password) {
       this.errorMessage = 'Both email and password are required.';
@@ -111,7 +122,6 @@ export class PopupComponent {
 
   // handle register submit
   handleRegisterSubmit() {
-    
     if (
       !this.firstName ||
       !this.lastName ||
@@ -122,6 +132,7 @@ export class PopupComponent {
       console.log('Validation failed: Missing required fields');
       this.errorMessage = 'All fields are required.';
       return;
+    }
 
     if (!this.isValidEmail(this.email)) {
       console.log('Validation failed: Invalid email');
@@ -142,12 +153,27 @@ export class PopupComponent {
     }
 
     console.log('All validations passed');
+
+    let result = this.authService.registerUser(
+      this.email,
+      this.password,
+      this.firstName,
+      this.lastName,
+    );
+
+
+
+    console.log (result);
+
+
     console.log('Registration successful:', {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
       password: this.password,
     });
+
+
 
     alert('Registration successful!');
     this.resetForm();
@@ -183,4 +209,13 @@ export class PopupComponent {
 
     this.resetForm();
   }
-    }
+
+   // fetch all users wiht ngonit
+   ngOnInit() {
+    this.authService.getAllUser().then((users) => {
+      console.log(users);
+      this.displayUsers.set(users);
+    })
+  }
+
+}
