@@ -1,8 +1,8 @@
 import { Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RegisterService } from '../services/register.service';
-import { LoginService } from '../services/login.service';
+import { RegisterService } from '../../services/register.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +11,8 @@ import { LoginService } from '../services/login.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class PopupComponent {
-  // popup logic for switching views.
+export class LoginComponent {
+  // logic for switching views.
   isPopupVisible = false;
   isLoginFormVisible = true;
   isRegisterFormVisible = false;
