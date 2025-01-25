@@ -25,12 +25,14 @@
     <div *ngIf="isRegisterFormVisible" id="registerForm">
       <h3 class="text-lg text-white mb-2">Register</h3>
       <form>
+        <input type="text" placeholder="First name" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+        <input type="text" placeholder="Last name" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
         <input type="email" placeholder="Email" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
         <input type="password" placeholder="Password" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+        <input type="password" placeholder="Re-enter password" class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
         <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Register</button>
       </form>
       <p class="text-white mt-4 text-center">Already have an account? <button (click)="switchToLoginForm()" class="text-blue-400">Login</button></p>
-      <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()" class="text-blue-400">Reset</button></p>
     </div>
 
     <!-- Forgot password form -->
