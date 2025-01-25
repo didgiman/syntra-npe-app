@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Signal, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./popup.component.css'],
 })
 export class PopupComponent {
+  // logic for switching views.
   isPopupVisible = false;
   isLoginFormVisible = true;
   isRegisterFormVisible = false;
@@ -57,7 +58,7 @@ export class PopupComponent {
   }
 
   // Handle login form submission
-  handleLoginSubmit() {
+  async handleLoginSubmit() {
     if (!this.email || !this.password) {
       this.errorMessage = 'Both email and password are required.';
       return;
@@ -68,11 +69,44 @@ export class PopupComponent {
       return;
     }
 
+    // for debugging
     console.log('Email:', this.email);
     console.log('Password:', this.password);
 
+    // pepare the data to be send
+    const loginData = {
+      email: this.email,
+      password: this.password,
+    };
+
     this.errorMessage = null;
-    alert('Login successful!');
+
+    try {
+      // send a post request to the login endpoint
+      const response = await fetch('http://127.0.0.1:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      // handle non-2xx responses
+      if (!response.ok) {
+        const errorData = await response.json();
+        this.errorMessage = errorData.errorMessage || 'Login failed.';
+        return;
+      }
+
+      // parse the successful response
+      const data = await response.json();
+      console.log('login successful:', data);
+
+      alert('Login successful!');
+    } catch (error) {
+      console.error('Login error:', error);
+      this.errorMessage = 'An unexpected error occured. Please try again later.';
+    }
   }
 
   // handle register submit
