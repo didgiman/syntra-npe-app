@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import type { Task, RawTask } from '../models/task';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,19 +9,40 @@ export class TaskService {
   private apiUrl = 'http://127.0.0.1:8000/api';
   tasks = signal<Task[]>([]);
 
-  constructor() { }
+  userService = inject(UserService);
+  user = this.userService.user;
+  userId = this.user().id;
 
-  async loadTasks() {
+  finishedOnly: boolean = false;
+
+  constructor() {
+    effect(() => {
+      const user = this.user(); // Read the signal value
+
+      // Whenever the user changes, reload tasks
+      if (this.user().id != this.userId) {
+        this.userId = this.user().id;
+
+        this.loadTasks();
+      }
+    });
+  }
+
+  async loadTasks(finishedOnly: boolean = this.finishedOnly) {
     try {
-      const response = await fetch(this.apiUrl + '/usertasks/1'); // TO DO: This should be replaced by /usertasks/:userId
+      this.finishedOnly = finishedOnly; // Store the value for the next call (only needed when switching user, regular calls to loadTasks always have the finishedOnly parameter set)
+
+      let url = this.apiUrl + '/usertasks/' + this.user().id; // TO DO: This should be replaced by /usertasks/:userId
+      if (finishedOnly) {
+        url += '?finishedOnly=true';
+      }
+      const response = await fetch(url);
       const data = await response.json();
-      // console.log(data);
       if (data) {
         // this.tasks.set(data.tasks);
 
         // Convert the tasks from the API to a format that is usable in our JS application
         const JSTasks = data.tasks.map((task: RawTask) => (this.convertAPITaskToJSTask(task)));
-        // console.log("tasks with dates", JSTasks);
 
         this.tasks.set(JSTasks);
 
@@ -68,8 +90,6 @@ export class TaskService {
       });
 
       const data = await response.json();
-
-      // console.log("POST TASK DATA: ", data);
 
       if (data) {
         if (data.success) {
@@ -156,6 +176,7 @@ export class TaskService {
       started_at: this.mysqlDatetimeToJSDate(task.started_at),
       ended_at: this.mysqlDatetimeToJSDate(task.ended_at),
       status: this.calculateStatus(task),
+      recurring: task.recurring ? task.recurring : '',
     }
   }
 

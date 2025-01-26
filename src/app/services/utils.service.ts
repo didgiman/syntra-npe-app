@@ -93,6 +93,11 @@ export class UtilsService {
       if (!date) {
         return '';
       }
+      if (this.isTimeExactly(date, 23, 59, 59)) {
+        // Return only the date
+        return date.toLocaleString('nl-BE', {dateStyle: 'medium'});
+      }
+      // return date and time
       return date.toLocaleString('nl-BE', {dateStyle: 'medium', timeStyle: 'short'});
     }
     formatDateForInput(date: Date | null): string {
@@ -128,5 +133,25 @@ export class UtilsService {
     
       // Check if the target date is less than 3 days from now
       return targetDate < threeDaysFromNow && targetDate > now;
+    }
+
+    minDate(date1: Date, date2: Date): Date {
+      return date1 < date2 ? date1 : date2;
+    }
+
+    isTimeExactly(
+      date: Date | null,
+      hours: number,
+      minutes: number,
+      seconds: number
+    ): boolean {
+      if (!date) {
+        return false; // If date is null, return false
+      }
+      return (
+        date.getHours() === hours &&
+        date.getMinutes() === minutes &&
+        date.getSeconds() === seconds
+      );
     }
 }

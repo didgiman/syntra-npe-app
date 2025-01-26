@@ -14,9 +14,12 @@ import { SliderModule } from 'primeng/slider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+
 @Component({
   selector: 'app-task-form',
-  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule],
+  imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule, SelectButtonModule, ToggleSwitchModule],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.css',
   providers: [ConfirmationService]
@@ -36,17 +39,20 @@ export class TaskFormComponent {
 
   estimateDisplay = signal<string>('1:00');
   formattedDeadline = '';
+  deadlineRequired = signal<boolean>(false);
+  deadlineShowTime = false;
 
   task: Task = {
     id: 0,
     created_at: null,
-    user_id: 1,
+    user_id: Number(localStorage.getItem('userId') || '1'),
     title: '',
     feeling: 3,
     estimate: 1,
     deadline: null,
     started_at: null,
-    ended_at: null
+    ended_at: null,
+    recurring: ''
   }
 
   ngOnInit() {
@@ -59,6 +65,14 @@ export class TaskFormComponent {
         this.onEstimateChange();
 
         this.formattedDeadline = this.utils.formatDateForInput(this.task.deadline!);
+        if (!this.task.recurring) {
+          this.task.recurring = ''; // Initialize recurring to an empty string
+        }
+        this.deadlineRequired.set(this.task.recurring !== ''); // For recurring tasks, deadline is required
+
+        if (this.task.deadline && !(this.utils.isTimeExactly(this.task.deadline, 23, 59, 59))) {
+          this.deadlineShowTime = true;
+        }
       }
     }
 
@@ -68,10 +82,7 @@ export class TaskFormComponent {
   async onTaskSave() {
     this.loading.set(true);
 
-    console.log('Save task', this.task);
     const saveResponse = await this.taskService.saveTask(this.task);
-
-    console.log(saveResponse);
 
     if (saveResponse) {
       this.utils.toast(saveResponse.message, saveResponse.success ? 'success' : 'error');
@@ -109,8 +120,6 @@ export class TaskFormComponent {
     });
   }
   async onTaskDelete() {
-    console.log('Delete task', this.task.id);
-
     const deleteResponse = await this.taskService.deleteTask(this.task.id);
 
     if (deleteResponse) {
@@ -146,6 +155,37 @@ export class TaskFormComponent {
     }
 
      this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
+  }
+
+  // Recurring tasks
+  recurringOptions: any[] = [
+    { label: 'No', value: '' },
+    { label: 'Daily', value: 'daily' },
+    { label: 'Weekly', value: 'weekly' },
+    { label: '2-Weekly', value: '2-weekly' },
+    { label: 'Monthly', value: 'monthly' }
+  ];
+
+  onRecurringChange(event: any) {
+    // this.task.recurring = event.value; 
+    if (event.value === '') {
+      this.deadlineRequired.set(false);
+    } else {
+      this.deadlineRequired.set(true);
+    }
+  }
+
+  onDeadlineBlur() {
+    if (this.task.deadline && !this.deadlineShowTime) {
+      // Set deadline to the end of the selected day
+      this.task.deadline.setHours(23);
+      this.task.deadline.setMinutes(59);
+      this.task.deadline.setSeconds(59);
+    }
+  }
+  onDeadlineToggleTime(event: any) {
+    this.deadlineShowTime = event.checked;
+    this.onDeadlineBlur(); // Recalculate deadline
   }
 
 }
