@@ -26,7 +26,7 @@
         <!-- login form -->
         <div *ngIf="isLoginFormVisible" id="loginForm">
             <h3 class="text-lg text-white mb-2">Login</h3>
-            <form (submit)="handleLoginSubmit()">
+            <form (submit)="onLogin()">
                 <input type="email" [(ngModel)]="email" name="email" placeholder="Email"
                     class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
                 <input type="password" [(ngModel)]="password" name="password" placeholder="Password"
