@@ -6,6 +6,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserService } from './services/user.service';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,9 @@ export class AppComponent {
 
   title = `What's Next`;
 
-  constructor() {
+  constructor(
+    public authService: AuthService,
+  ) {
     this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
 
     effect(() => {
