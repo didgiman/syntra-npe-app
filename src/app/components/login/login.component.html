@@ -2,7 +2,7 @@
 <button id="showLogin" (click)="showLoginPopup()">Show Login</button>
 
 
-{{displayUsers() | json}}
+<!-- {{displayUsers() | json}}
 
 @for (user of displayUsers(); track user.id) {
   <div class="user">
@@ -12,13 +12,13 @@
     <p>{{user.email}}</p>
   </div>
 
-}
+} -->
 
 <!-- login/register popup -->
 <div *ngIf="isPopupVisible" id="popup"
     class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50">
     <div class="bg-[#121212] p-8 rounded-lg w-96 relative">
-        <h2 class="text-2xl text-white mb-4">WhatsNext</h2>
+        <h2 class="text-2xl text-white mb-4">What's Next</h2>
 
         <!-- close button -->
         <button (click)="closePopup()" class="absolute top-2 right-2 text-white text-2xl">X</button>
