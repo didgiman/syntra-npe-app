@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../../services/register.service';
 import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -27,11 +28,12 @@ export class LoginComponent {
 
   displayUsers = signal<any[]>([]);
 
+  // constructor for the services
   constructor(
     private registerService: RegisterService,
     private loginService: LoginService,
+    private router: Router,
   ) {}
-
 
 
   // Show the login popup
@@ -71,53 +73,109 @@ export class LoginComponent {
     this.isPasswordFormVisible = true;
   }
 
+  // onLogin() {
+  //   // Call the login service with email and password
+  //   this.loginService.login({ email: this.email, password: this.password }).subscribe({
+  //     next: (response) => {
+  //       const userId = response.userId; // Get the userId from the backend response
+  //       console.log('Login successful:', response);
+
+  //       // Navigate to the task-list page with the userId
+  //       this.router.navigate([`/task-list/${userId}`]);
+  //     },
+  //     error: (err) => {
+  //       console.error('Login failed:', err);
+  //       this.errorMessage = 'Invalid login credentials.';
+  //     },
+  //   });
+  // }
   
-  // handle login form submission
-  async handleLoginSubmit() {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Both email and password are required.';
-      return;
-    }
+  // // handle login form submission
+  // async handleLoginSubmit() {
+  //   if (!this.email || !this.password) {
+  //     this.errorMessage = 'Both email and password are required.';
+  //     return;
+  //   }
 
-    if (this.password.length < 6) {
-      this.errorMessage = 'Password must be at least 6 characters long.';
-      return;
-    }
+  //   if (this.password.length < 6) {
+  //     this.errorMessage = 'Password must be at least 6 characters long.';
+  //     return;
+  //   }
 
-    // for debugging
-    console.log('Email:', this.email);
-    console.log('Password:', this.password);
+  //   // for debugging
+  //   console.log('Email:', this.email);
+  //   console.log('Password:', this.password);
 
-    // pepare the data to be send
-    const loginData = {
-      email: this.email,
-      password: this.password,
-    };
+  //   // pepare the data to be send
+  //   const loginData = {
+  //     email: this.email,
+  //     password: this.password,
+  //   };
 
-    this.errorMessage = null;
+  //   this.errorMessage = null;
 
+  //   try {
+  //         // call the login service
+  //         const response = await this.loginService.login(this.email, this.password);
+  //         console.log('Login successful:', response);
+
+  //     // handle non-2xx responses
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       this.errorMessage = errorData.errorMessage || 'Login failed.';
+  //       return;
+  //     }
+
+  //     // parse the successful response
+  //     const data = await response.json();
+  //     console.log('login successful:', data);
+
+  //     alert('Login successful!');
+  //   } catch (error) {
+  //     console.error('Login error:', error);
+  //     this.errorMessage = 'An unexpected error occured. Please try again later.';
+  //   }
+  // }
+
+  // onLogin() {
+  //   // Validate inputs first
+  //   if (!this.email || !this.password) {
+  //     this.errorMessage = 'Both email and password are required.';
+  //     return;
+  //   }
+  
+  //   if (this.password.length < 6) {
+  //     this.errorMessage = 'Password must be at least 6 characters long.';
+  //     return;
+  //   }
+  
+  //   // Clear any previous error messages
+  //   this.errorMessage = null;
+  
+  //   // Use service to login
+  //   this.loginService.login({ email: this.email, password: this.password })
+  //     .subscribe({
+  //       next: (response) => {
+  //         // Store user data (potentially in a user service/store)
+  //         const userId = response.userId;
+          
+  //         // Navigate to protected route
+  //         this.router.navigate(['/task-list', userId]);
+  //       },
+  //       error: (err) => {
+  //         // Handle login errors
+  //         this.errorMessage = err.message || 'Login failed. Please try again.';
+  //       }
+  //     });
+
+  async onLogin() {
     try {
-          // call the login service
-          const response = await this.loginService.login(this.email, this.password);
-          console.log('Login successful:', response);
-
-      // handle non-2xx responses
-      if (!response.ok) {
-        const errorData = await response.json();
-        this.errorMessage = errorData.errorMessage || 'Login failed.';
-        return;
-      }
-
-      // parse the successful response
-      const data = await response.json();
-      console.log('login successful:', data);
-
-      alert('Login successful!');
-    } catch (error) {
-      console.error('Login error:', error);
-      this.errorMessage = 'An unexpected error occured. Please try again later.';
+      const response = await this.loginService.login(this.email, this.password);
+      this.router.navigate(['/task-list', response.userId]);
+    } catch (error: any) {
+      this.errorMessage = error.message;
     }
-  }
+   }
 
   // handle register submit
   handleRegisterSubmit() {
