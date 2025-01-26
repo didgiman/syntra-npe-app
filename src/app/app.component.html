@@ -1,13 +1,23 @@
-<app-login />
+<app-login *ngIf="!authService.isLoggedIn()"></app-login>
 
-<div *ngIf="isPopupVisible" class="popup">
-  <app-login *ngIf="isLoginFormVisible"></app-login>
+<div *ngIf="authService.isLoggedIn()">
+ <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
+   <app-header title="{{ title }}"></app-header>
+
+   <main class="flex flex-grow container mx-auto items-center justify-center">
+    <router-outlet />
+     <app-task-list class="h-full w-full" />
+   </main>
+
+   <footer class="bg-blue-500 text-white dark:text-gray-800 p-4">
+     <p>&copy; 2025 - Null Pointer Exceptions</p>
+   </footer>
+ </div>
 </div>
-
 <!-- Button to open the login popup (for testing) -->
 <button (click)="showLoginPopup()">Login</button>
 
-<div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
+<!-- <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
 
   <app-header title="{{ title }}"></app-header>
 
@@ -23,4 +33,4 @@
 
 
 
-<router-outlet />
+<router-outlet /> -->
