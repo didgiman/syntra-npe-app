@@ -23,7 +23,7 @@ export class UserService {
 
   users = signal<User[]>([]);
 
-  ngOnInit() {
+  constructor() {
     this.loadAllUsers();
     if (this.userId != 0) {
       this.loadUser(this.userId);
