@@ -55,45 +55,44 @@ export class LoginComponent {
     }
   }
 
-// handle register submit
-async handleRegisterSubmit() {
-  if (
-    !this.firstName ||
-    !this.lastName ||
-    !this.email ||
-    !this.password ||
-    !this.confirmPassword
-  ) {
-    this.errorMessage = 'All fields are required.';
-    return;
+  // handle register submit
+  async handleRegisterSubmit() {
+    if (
+      !this.firstName ||
+      !this.lastName ||
+      !this.email ||
+      !this.password ||
+      !this.confirmPassword
+    ) {
+      this.errorMessage = 'All fields are required.';
+      return;
+    }
+
+    if (!this.isValidEmail(this.email)) {
+      this.errorMessage = 'Please enter a valid email address.';
+      return;
+    }
+
+    if (this.password.length < 6) {
+      this.errorMessage = 'Password must be at least 6 characters long.';
+      return;
+    }
+
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match.';
+      return;
+    }
+
+    await this.authService.registerUser(
+      this.email,
+      this.password,
+      this.firstName,
+      this.lastName
+    );
+
+    this.switchToLoginForm();
+    this.password = '';
   }
-
-  if (!this.isValidEmail(this.email)) {
-    this.errorMessage = 'Please enter a valid email address.';
-    return;
-  }
-
-  if (this.password.length < 6) {
-    this.errorMessage = 'Password must be at least 6 characters long.';
-    return;
-  }
-
-  if (this.password !== this.confirmPassword) {
-    this.errorMessage = 'Passwords do not match.';
-    return;
-  }
-
-  await this.authService.registerUser(
-    this.email,
-    this.password,
-    this.firstName,
-    this.lastName
-  );
-
-  this.switchToLoginForm();
-  this.password = '';
-
-}
   // helper function to validate the email format
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
