@@ -87,31 +87,25 @@ export class TaskViewComponent {
         if (recurringTask.deadline === null) {
           // This should never happen, because in the task form, deadline is required for recurring tasks. But anyway, just in case
           recurringTask.deadline = new Date();
-        } else if (recurringTask.deadline.getTime() < new Date().getTime()) {
-          // If deadline is the past, set it to the current date (but keep the time)
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-
-          recurringTask.deadline.setFullYear(today.getFullYear());
-          recurringTask.deadline.setMonth(today.getMonth());
-          recurringTask.deadline.setDate(today.getDate());
         }
 
         // Now calculate new deadline
-        switch (this.task.recurring) {
-          case 'daily':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
-            break;
-          case 'weekly':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 7);
-            break;
-          case '2-weekly':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 14);
-            break;
-          case 'monthly':
-            recurringTask.deadline.setMonth(recurringTask.deadline.getMonth() + 1);
-            break;
-        }
+        do {
+          switch (this.task.recurring) {
+            case 'daily':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
+              break;
+            case 'weekly':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 7);
+              break;
+            case '2-weekly':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 14);
+              break;
+            case 'monthly':
+              recurringTask.deadline.setMonth(recurringTask.deadline.getMonth() + 1);
+              break;
+          }
+        } while (recurringTask.deadline.getTime() < new Date().getTime()); // Keep increasing the deadline until it is after the current date
 
         // Create new task
         const createResponse = await this.taskService.saveTask(recurringTask);
