@@ -91,6 +91,7 @@ async handleRegisterSubmit() {
   );
 
   this.switchToLoginForm();
+  this.password = '';
 
 }
   // helper function to validate the email format
