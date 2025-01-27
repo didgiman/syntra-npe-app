@@ -57,61 +57,42 @@ export class LoginComponent {
 
 // handle register submit
 async handleRegisterSubmit() {
-  try {
-    if (
-      !this.firstName ||
-      !this.lastName ||
-      !this.email ||
-      !this.password ||
-      !this.confirmPassword
-    ) {
-      console.log('Validation failed: Missing required fields');
-      this.errorMessage = 'All fields are required.';
-      return;
-    }
-
-    if (!this.isValidEmail(this.email)) {
-      console.log('Validation failed: Invalid email');
-      this.errorMessage = 'Please enter a valid email address.';
-      return;
-    }
-
-    if (this.password.length < 6) {
-      console.log('Validation failed: Password too short');
-      this.errorMessage = 'Password must be at least 6 characters long.';
-      return;
-    }
-
-    if (this.password !== this.confirmPassword) {
-      console.log('Validation failed: Passwords do not match');
-      this.errorMessage = 'Passwords do not match.';
-      return;
-    }
-
-    const result = await this.authService.registerUser(
-      this.email,
-      this.password,
-      this.firstName,
-      this.lastName
-    );
-
-    console.log('Registration successful:', {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      password: this.password,
-    });
-
-    alert('Registration successful!');
-    this.resetForm();
-
-    console.log('Form submitted!');
-  } catch (error) {
-    console.error(error);
-    this.errorMessage = 'An error occurred. Please try again.';
+  if (
+    !this.firstName ||
+    !this.lastName ||
+    !this.email ||
+    !this.password ||
+    !this.confirmPassword
+  ) {
+    this.errorMessage = 'All fields are required.';
+    return;
   }
-}
 
+  if (!this.isValidEmail(this.email)) {
+    this.errorMessage = 'Please enter a valid email address.';
+    return;
+  }
+
+  if (this.password.length < 6) {
+    this.errorMessage = 'Password must be at least 6 characters long.';
+    return;
+  }
+
+  if (this.password !== this.confirmPassword) {
+    this.errorMessage = 'Passwords do not match.';
+    return;
+  }
+
+  await this.authService.registerUser(
+    this.email,
+    this.password,
+    this.firstName,
+    this.lastName
+  );
+
+  this.switchToLoginForm();
+
+}
   // helper function to validate the email format
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

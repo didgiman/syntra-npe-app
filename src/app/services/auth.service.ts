@@ -73,8 +73,11 @@ export class AuthService {
       );
       const existingUser = await existingUserResponse.json();
 
-      if (existingUser.length > 0) {
-        throw new Error('Email address is already in use');
+      if (existingUserResponse.ok) {
+        const existingUserWithEmail = existingUser.find((user: { email: string; }) => user.email === email);
+        if (existingUserWithEmail) {
+          throw new Error('Email address is already in use');
+        }
       }
 
       // create new user
