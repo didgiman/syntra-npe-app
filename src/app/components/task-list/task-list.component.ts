@@ -44,7 +44,7 @@ export class TaskListComponent {
   showFinishedTasks: boolean = false;
 
   constructor() {
-    this.loadTasks();
+    setTimeout(() => this.loadTasks(), 200); // A small timeout needed for the userService to load the user
     effect(() => {
       // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
