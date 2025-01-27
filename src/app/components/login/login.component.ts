@@ -2,8 +2,7 @@ import { Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RegisterService } from '../../services/register.service';
-import { LoginService } from '../../services/login.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,12 +27,9 @@ export class LoginComponent {
 
   displayUsers = signal<any[]>([]);
 
-  // constructor for the services
-  constructor(
-    private registerService: RegisterService,
-    private loginService: LoginService,
-    private router: Router,
-  ) {}
+  // Inject the services
+  private authService = inject(AuthService);
+  private registerService = inject(RegisterService);
 
 
   // Show the login popup
@@ -75,8 +71,8 @@ export class LoginComponent {
 
   async onLogin() {
     try {
-      const response = await this.loginService.login(this.email, this.password);
-      this.router.navigate(['/task-list', response.userId]);
+      const response = await this.authService.login(this.email, this.password);
+
     } catch (error: any) {
       this.errorMessage = error.message;
     }
