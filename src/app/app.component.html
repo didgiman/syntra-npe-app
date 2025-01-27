@@ -1,36 +1,16 @@
-<app-login *ngIf="!authService.isLoggedIn()"></app-login>
+@if (!authService.isLoggedIn()) {
+  <app-login />
+} @else {
+  <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
+    <app-header [title]="title" />
 
-<div *ngIf="authService.isLoggedIn()">
- <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
-   <app-header title="{{ title }}"></app-header>
+    <main class="flex flex-grow container mx-auto items-center justify-center">
+      <router-outlet />
+      <app-task-list class="h-full w-full" />
+    </main>
 
-   <main class="flex flex-grow container mx-auto items-center justify-center">
-    <router-outlet />
-     <app-task-list class="h-full w-full" />
-   </main>
-
-   <footer class="bg-blue-500 text-white dark:text-gray-800 p-4">
-     <p>&copy; 2025 - Null Pointer Exceptions</p>
-   </footer>
- </div>
-</div>
-<!-- Button to open the login popup (for testing) -->
-<button (click)="showLoginPopup()">Login</button>
-
-<!-- <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
-
-  <app-header title="{{ title }}"></app-header>
-
-  <main class="flex flex-grow container mx-auto items-center justify-center">
-    <app-task-list class="h-full w-full" />
-  </main>
-
-  <footer class="bg-blue-500 text-white dark:text-gray-800 p-4">
-    <p>&copy; 2025 - Null Pointer Exceptions</p>
-  </footer>
-
-</div>
-
-
-
-<router-outlet /> -->
+    <footer class="bg-blue-500 text-white dark:text-gray-800 p-4">
+      <p>&copy; 2025 - Null Pointer Exceptions</p>
+    </footer>
+  </div>
+}
