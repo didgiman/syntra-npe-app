@@ -51,7 +51,12 @@
 
     <!-- Finished tasks toggle -->
     <div class="flex flex-col sm:flex-row items-center ml-8 sm:ml-12 pt-2 text-white">
-      <p-toggleswitch [(ngModel)]="showFinishedTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
+      <p-toggleswitch [(ngModel)]="showFinishedTasks" [disabled]="showDueTasks" (onChange)="toggleFinishedTasks($event)" class="mr-2" /> Finished
+    </div>  
+
+    <!-- Due tasks toggle -->
+    <div class="flex flex-col sm:flex-row items-center ml-8 sm:ml-12 pt-2 text-white">
+      <p-toggleswitch [(ngModel)]="showDueTasks" [disabled]="showFinishedTasks" (onChange)="toggleDueTasks($event)" class="mr-2" /> Urgent
     </div>
 
     <!-- New task icon -->
@@ -64,7 +69,7 @@
     }
   </div>
 
-  @if (!showFinishedTasks || inProgressTask().length > 0) {
+  @if (!showFinishedTasks && !inProgressTask().length) {
   <div
     class="w-11 h-11 absolute top-4 right-4 sm:-top-4 sm:-right-20 bg-green-100 dark:bg-green-900 rounded-md cursor-pointer"
     (click)="taskSuggestion()">
@@ -79,9 +84,10 @@
     </svg>
   </div>}
 
-  <p-table #tasksTable [value]="tasks()" stripedRows [globalFilterFields]="['title']" [scrollable]="true"
-    scrollHeight="flex" [frozenValue]="inProgressTask()" sortField="deadline" [sortOrder]="1" [customSort]="true"
-    (sortFunction)="customSort($event)" [paginator]="true" [rows]="25" [rowsPerPageOptions]="[10, 25, 50, 100]">
+  <p-table #tasksTable [value]="showDueTasks ? dueTasks() : tasks()" stripedRows [globalFilterFields]="['title']"
+    [scrollable]="true" scrollHeight="flex" [frozenValue]="inProgressTask()" sortField="deadline" [sortOrder]="1"
+    [customSort]="true" (sortFunction)="customSort($event)" [paginator]="true" [rows]="25"
+    [rowsPerPageOptions]="[10, 25, 50, 100]">
 
     <ng-template #header>
       <tr>

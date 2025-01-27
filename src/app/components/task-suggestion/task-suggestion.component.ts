@@ -80,29 +80,29 @@ export class TaskSuggestionComponent {
   // Get due tasks
   getDueTasks() {
 
-    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000 && task.ended_at === null)// Set tasks that are due in the next 3 days
+    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000 && task.status === 'new')// Set tasks that are due in the next 3 days
       .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
 
     if (this.dueTasks().length > 0) {
       console.log('Due tasks:', this.dueTasks());
       const mostDueTaskId = this.dueTasks()[0];
       console.log('Nearest due task:', mostDueTaskId);
-      // return mostDueTaskId.id;
 
       this.mostDueTaskId.set(mostDueTaskId.id);
     } else {
-      // return 0;
       this.mostDueTaskId.set(0);
     }
   }
 
+  // Algorithm to select a task, taking into consideration feeling and time
   pickRandomTask(): void {
     for (let i = 0; i < 4; i++) {
       // Filter tasks based on the current range
       const RT = (this.tasks().filter(item =>
         (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
         (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
-        (item.estimate <= +this.suggestionRequest.estimate) && item.ended_at === null)
+        (item.estimate <= +this.suggestionRequest.estimate) &&
+        item.status === 'new')
       );
       console.log('Filtered tasks:', RT);
 
@@ -112,7 +112,6 @@ export class TaskSuggestionComponent {
         console.log('Random task:', RT[randomIndex]);
         this.suggestedTaskId.set(RT[randomIndex].id);
         return;
-        // return RT[randomIndex].id;
       }
 
       // Adjust the range and try again
@@ -127,10 +126,9 @@ export class TaskSuggestionComponent {
     return;
   }
 
-  // Event handler (if you need to trigger manual actions)
+  // Button to show suggested task
   showMe(): void {
     const suggestedTaskId = this.pickRandomTask();
-    // this.close.emit(suggestedTaskId);
     return;
   }
 

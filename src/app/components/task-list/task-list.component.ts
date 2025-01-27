@@ -39,12 +39,14 @@ export class TaskListComponent {
   showTaskSuggestion: boolean = false;
 
   viewTaskId: number = 0;
-  showTaskView:boolean = false;
+  showTaskView: boolean = false;
 
   inProgressTask = signal<Task[]>([]);
 
   showFinishedTasks: boolean = false;
+  
   dueTasks = signal<Task[]>([]);
+  showDueTasks: boolean = false;
 
   constructor() {
     this.loadTasks();
@@ -63,12 +65,21 @@ export class TaskListComponent {
           this.utils.toast(res.message, "error");
         }
       });
-    } catch(e: any) {
+    } catch (e: any) {
       this.utils.toast(e.message, "error");
     }
   }
 
-  onEditTask(taskId:number) {
+  toggleDueTasks(event: any) {
+    console.log(this.showDueTasks);
+    if (this.showDueTasks) {
+      this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000));
+    } else {
+      this.dueTasks.set(this.tasks());
+    }
+  }
+
+  onEditTask(taskId: number) {
     this.editTaskId = taskId;
     this.showTaskForm = true;
   }
@@ -78,7 +89,7 @@ export class TaskListComponent {
     this.showTaskForm = true;
   }
 
-  onEditClose(action:string) {
+  onEditClose(action: string) {
     this.showTaskForm = false;
 
     if (action === 'create') {
@@ -87,12 +98,12 @@ export class TaskListComponent {
     }
   }
 
-  onViewTask(taskId:number) {
+  onViewTask(taskId: number) {
     this.viewTaskId = taskId;
     this.showTaskView = true;
     return;
   }
-  onViewClose(action:string) {
+  onViewClose(action: string) {
     this.showTaskView = false;
   }
 

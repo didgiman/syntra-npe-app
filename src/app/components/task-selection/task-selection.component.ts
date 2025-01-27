@@ -53,7 +53,6 @@ export class TaskSelectionComponent {
     this.onTaskAction()
       .then(() => {
         this.showTaskView = true;
-        // this.close.emit(this.selectedTask.id);
       }
       )
   }
