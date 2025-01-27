@@ -7,10 +7,10 @@ interface LoginResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  userService = inject(UserService);  
+  userService = inject(UserService);
   urlApi = 'http://localhost:8000/api';
 
   async login(email: string, password: string): Promise<any> {
@@ -42,7 +42,9 @@ export class AuthService {
       this.userService.loadUser(data.user.id);
       return data;
     } catch (error: any) {
-      throw new Error(error.message || 'An unexpected error occurred. Please try again later.');
+      throw new Error(
+        error.message || 'An unexpected error occurred. Please try again later.'
+      );
     }
   }
 
@@ -56,5 +58,37 @@ export class AuthService {
 
   getCurrentUserId(): string | null {
     return localStorage.getItem('userId');
+  }
+  // register a new user
+  async registerUser(
+    email: string,
+    password: string,
+    first_name: string,
+    last_name: string
+  ) {
+    try {
+      // check if an email address is already in use
+      const existingUserResponse = await fetch(
+        `${this.urlApi}/users?email=${email}`
+      );
+      const existingUser = await existingUserResponse.json();
+
+      if (existingUser.length > 0) {
+        throw new Error('Email address is already in use');
+      }
+
+      // create new user
+      const response = await fetch(`${this.urlApi}/users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, first_name, last_name }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error('Error registering user:', error);
+      throw error;
+    }
   }
 }
