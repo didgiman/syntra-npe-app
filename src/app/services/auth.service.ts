@@ -27,19 +27,17 @@ export class AuthService {
     }
 
     const data = await response.json();
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('userId', data.userId);
+    localStorage.setItem('userId', data.user.id);
     return data;
   }
 
   logout() {
-    localStorage.removeItem('token');
     localStorage.removeItem('userId');
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('userId');
   }
 
   getCurrentUserId(): string | null {

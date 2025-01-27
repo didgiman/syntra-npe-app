@@ -30,6 +30,10 @@ export class AppComponent {
       this.title = `What's Next for ${this.user().first_name} ${this.user().last_name}`;
     });
   }
+
+  logout() {
+    this.authService.logout();
+  }
   
   // All methods for the login / register screen
   isPopupVisible = false;

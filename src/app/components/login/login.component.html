@@ -1,87 +1,81 @@
 <!-- Button to show login -->
 <button id="showLogin" (click)="showLoginPopup()">Show Login</button>
 
+@if (isPopupVisible) {
+    <div id="popup"
+        class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50">
+        <div class="bg-[#121212] p-8 rounded-lg w-96 relative">
+            <h2 class="text-2xl text-white mb-4">What's Next</h2>
 
-<!-- {{displayUsers() | json}}
+            <!-- close button -->
+            <button (click)="closePopup()" class="absolute top-2 right-2 text-white text-2xl">X</button>
 
-@for (user of displayUsers(); track user.id) {
-  <div class="user">
-    <p>{{user.id}}</p>
-    <p>{{user.firstName}}</p>
-    <p>{{user.lastName}}</p>
-    <p>{{user.email}}</p>
-  </div>
+            <!-- login form -->
+            @if (isLoginFormVisible) {
+                <div id="loginForm">
+                    <h3 class="text-lg text-white mb-2">Login</h3>
+                    <form (submit)="onLogin()">
+                        <input type="email" [(ngModel)]="email" name="email" placeholder="Email"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                        <input type="password" [(ngModel)]="password" name="password" placeholder="Password"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
+                        <button type="submit"
+                            class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login</button>
+                    </form>
+                    <p class="text-white mt-4 text-center">Don't have an account? <button (click)="switchToRegisterForm()"
+                            class="text-blue-400">Register</button></p>
+                    <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()"
+                            class="text-blue-400">Reset</button></p>
+                </div>
+            }
 
-} -->
+            <!-- Register form -->
+            @if (isRegisterFormVisible) {
+                <div id="registerForm">
+                    <h3 class="text-lg text-white mb-2">Register</h3>
+                    <form (ngSubmit)="handleRegisterSubmit()" #registerForm="ngForm">
+                        <input type="text" placeholder="First name"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="firstName" name="firstName" />
+                        <input type="text" placeholder="Last name"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="lastName" name="lastName" />
+                        <input type="email" placeholder="Email"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="email" name="email" />
+                        <input type="password" placeholder="Password"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="password" name="password" />
+                        <input type="password" placeholder="Re-enter password"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="confirmPassword" name="confirmPassword" />
+                        <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
+                            Register
+                        </button>
+                    </form>
+                    <p class="text-white mt-4 text-center">
+                        Already have an account?
+                        <button (click)="switchToLoginForm()" class="text-blue-400">Login</button>
+                    </p>
+                </div>
+            }
 
-<!-- login/register popup -->
-<div *ngIf="isPopupVisible" id="popup"
-    class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50">
-    <div class="bg-[#121212] p-8 rounded-lg w-96 relative">
-        <h2 class="text-2xl text-white mb-4">What's Next</h2>
-
-        <!-- close button -->
-        <button (click)="closePopup()" class="absolute top-2 right-2 text-white text-2xl">X</button>
-
-        <!-- login form -->
-        <div *ngIf="isLoginFormVisible" id="loginForm">
-            <h3 class="text-lg text-white mb-2">Login</h3>
-            <form (submit)="onLogin()">
-                <input type="email" [(ngModel)]="email" name="email" placeholder="Email"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
-                <input type="password" [(ngModel)]="password" name="password" placeholder="Password"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required>
-                <button type="submit"
-                    class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Login</button>
-            </form>
-            <p class="text-white mt-4 text-center">Don't have an account? <button (click)="switchToRegisterForm()"
-                    class="text-blue-400">Register</button></p>
-            <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()"
-                    class="text-blue-400">Reset</button></p>
-        </div>
-
-        <!-- Register form -->
-        <div *ngIf="isRegisterFormVisible" id="registerForm">
-            <h3 class="text-lg text-white mb-2">Register</h3>
-            <form (ngSubmit)="handleRegisterSubmit()" #registerForm="ngForm">
-                <input type="text" placeholder="First name"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="firstName" name="firstName" />
-                <input type="text" placeholder="Last name"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="lastName" name="lastName" />
-                <input type="email" placeholder="Email"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="email" name="email" />
-                <input type="password" placeholder="Password"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="password" name="password" />
-                <input type="password" placeholder="Re-enter password"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="confirmPassword" name="confirmPassword" />
-                <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">
-                    Register
-                </button>
-            </form>
-            <p class="text-white mt-4 text-center">
-                Already have an account?
-                <button (click)="switchToLoginForm()" class="text-blue-400">Login</button>
-            </p>
-        </div>
-
-        <!-- Forgot password form -->
-        <div *ngIf="isPasswordFormVisible" id="forgotPasswordForm">
-            <h3 class="text-lg text-white mb-2">Forgot Password?</h3>
-            <form (submit)="handlePasswordRecoverySubmit()">
-                <input type="email" placeholder="Email"
-                    class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
-                    [(ngModel)]="email" name="email" />
-                <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Send recovery
-                    email</button>
-            </form>
-            <p class="text-white mt-4 text-center">
-                <button (click)="switchToLoginForm()" class="text-blue-400">Cancel</button>
-            </p>
+            <!-- Forgot password form -->
+            @if (isPasswordFormVisible) {
+                <div id="forgotPasswordForm">
+                    <h3 class="text-lg text-white mb-2">Forgot Password?</h3>
+                    <form (submit)="handlePasswordRecoverySubmit()">
+                        <input type="email" placeholder="Email"
+                            class="w-full p-2 mb-4 bg-gray-800 text-white border border-gray-600 rounded" required
+                            [(ngModel)]="email" name="email" />
+                        <button type="submit" class="w-full py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Send recovery
+                            email</button>
+                    </form>
+                    <p class="text-white mt-4 text-center">
+                        <button (click)="switchToLoginForm()" class="text-blue-400">Cancel</button>
+                    </p>
+                </div>
+            }
         </div>
     </div>
-</div>
+}

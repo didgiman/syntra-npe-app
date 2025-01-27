@@ -5,6 +5,7 @@
     <app-header [title]="title" />
 
     <main class="flex flex-grow container mx-auto items-center justify-center">
+      <button id="showLogout" (click)="logout()">Logout</button>
       <router-outlet />
       <app-task-list class="h-full w-full" />
     </main>
