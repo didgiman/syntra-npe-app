@@ -1,14 +1,6 @@
-<!-- Button to show login -->
-<button id="showLogin" (click)="showLoginPopup()">Show Login</button>
 
-@if (isPopupVisible) {
-    <div id="popup"
-        class="popup fixed inset-0 bg-gray-800 bg-opacity-50 justify-center items-center z-50">
         <div class="bg-[#121212] p-8 rounded-lg w-96 relative">
             <h2 class="text-2xl text-white mb-4">What's Next</h2>
-
-            <!-- close button -->
-            <button (click)="closePopup()" class="absolute top-2 right-2 text-white text-2xl">X</button>
 
             <!-- login form -->
             @if (isLoginFormVisible) {
@@ -77,5 +69,3 @@
                 </div>
             }
         </div>
-    </div>
-}

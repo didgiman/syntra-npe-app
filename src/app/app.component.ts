@@ -10,9 +10,15 @@ import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TaskListComponent, HeaderComponent, CommonModule, LoginComponent],
+  imports: [
+    RouterOutlet,
+    TaskListComponent,
+    HeaderComponent,
+    CommonModule,
+    LoginComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   utils = inject(UtilsService);
@@ -21,42 +27,17 @@ export class AppComponent {
 
   title = `What's Next`;
 
-  constructor(
-    public authService: AuthService,
-  ) {
-    this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
+  constructor(public authService: AuthService) {
+    this.utils.toast("Welcome to Syntra NPE's - What's Next", 'warning');
 
     effect(() => {
-      this.title = `What's Next for ${this.user().first_name} ${this.user().last_name}`;
+      this.title = `What's Next for ${this.user().first_name} ${
+        this.user().last_name
+      }`;
     });
   }
 
   logout() {
     this.authService.logout();
-  }
-  
-  // All methods for the login / register screen
-  isPopupVisible = false;
-  isLoginFormVisible = true;
-
-  // Method to show the popup and the login form
-  showLoginPopup() {
-    this.isPopupVisible = true;
-    this.isLoginFormVisible = true;
-  }
-
-  // Method to close the popup
-  closePopup() {
-    this.isPopupVisible = false;
-  }
-
-  // Method to switch to the Register form
-  switchToRegisterForm() {
-    this.isLoginFormVisible = false;
-  }
-
-  // Method to switch to the Login form
-  switchToLoginForm() {
-    this.isLoginFormVisible = true;
   }
 }

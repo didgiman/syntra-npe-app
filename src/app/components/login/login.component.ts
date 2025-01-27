@@ -13,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   // logic for switching views.
-  isPopupVisible = false;
   isLoginFormVisible = true;
   isRegisterFormVisible = false;
   isPasswordFormVisible = false;
@@ -30,25 +29,6 @@ export class LoginComponent {
   // Inject the services
   private authService = inject(AuthService);
   private registerService = inject(RegisterService);
-
-
-  // Show the login popup
-  showLoginPopup() {
-    this.isPopupVisible = true;
-  }
-
-  // Close the popup
-  closePopup() {
-    this.isPopupVisible = false;
-    this.errorMessage = null;
-  }
-
-  @HostListener('document:keydown', ['$event'])
-  closeOnEscape(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      this.closePopup();
-    }
-  }
 
   // Switch between forms
   switchToRegisterForm() {
@@ -72,11 +52,10 @@ export class LoginComponent {
   async onLogin() {
     try {
       const response = await this.authService.login(this.email, this.password);
-
     } catch (error: any) {
       this.errorMessage = error.message;
     }
-   }
+  }
 
   // handle register submit
   handleRegisterSubmit() {
@@ -116,10 +95,10 @@ export class LoginComponent {
       this.email,
       this.password,
       this.firstName,
-      this.lastName,
+      this.lastName
     );
 
-    console.log (result);
+    console.log(result);
 
     console.log('Registration successful:', {
       firstName: this.firstName,
@@ -157,18 +136,9 @@ export class LoginComponent {
       return;
     }
     console.log('Recovery email send to:', {
-      email: this.email
+      email: this.email,
     });
 
     this.resetForm();
   }
-
-   // fetch all users with ngonit
-   ngOnInit() {
-    this.registerService.getAllUser().then((users) => {
-      console.log(users);
-      this.displayUsers.set(users);
-    })
-  }
-
 }
