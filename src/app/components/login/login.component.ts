@@ -1,7 +1,6 @@
 import { inject, Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RegisterService } from '../../services/register.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -28,7 +27,6 @@ export class LoginComponent {
 
   // Inject the services
   private authService = inject(AuthService);
-  private registerService = inject(RegisterService);
 
   // Switch between forms
   switchToRegisterForm() {
@@ -57,8 +55,9 @@ export class LoginComponent {
     }
   }
 
-  // handle register submit
-  handleRegisterSubmit() {
+// handle register submit
+async handleRegisterSubmit() {
+  try {
     if (
       !this.firstName ||
       !this.lastName ||
@@ -89,16 +88,12 @@ export class LoginComponent {
       return;
     }
 
-    console.log('All validations passed');
-
-    let result = this.registerService.registerUser(
+    const result = await this.authService.registerUser(
       this.email,
       this.password,
       this.firstName,
       this.lastName
     );
-
-    console.log(result);
 
     console.log('Registration successful:', {
       firstName: this.firstName,
@@ -111,7 +106,11 @@ export class LoginComponent {
     this.resetForm();
 
     console.log('Form submitted!');
+  } catch (error) {
+    console.error(error);
+    this.errorMessage = 'An error occurred. Please try again.';
   }
+}
 
   // helper function to validate the email format
   private isValidEmail(email: string): boolean {
