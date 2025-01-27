@@ -39,7 +39,6 @@ export class AuthService {
       }
 
       const data = await response.json();
-      localStorage.setItem('userId', data.user.id);
       this.userService.loadUser(data.user.id);
       return data;
     } catch (error: any) {
