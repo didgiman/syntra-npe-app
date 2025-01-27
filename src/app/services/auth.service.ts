@@ -1,16 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { UserService } from './user.service';
-
-interface LoginResponse {
-  token: string;
-  userId: string;
-}
+import { UtilsService } from '../services/utils.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userService = inject(UserService);
+  utils = inject(UtilsService);
   urlApi = 'http://localhost:8000/api';
 
   async login(email: string, password: string): Promise<any> {
@@ -34,17 +31,22 @@ export class AuthService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.errorMessage || 'Login failed.');
+        const errorResponse = await response.json();
+        this.utils.toast(errorResponse.message, 'Login failed.');
+        throw new Error(errorResponse.message);
       }
 
       const data = await response.json();
-      this.userService.loadUser(data.user.id);
+      await this.userService.loadUser(data.user.id);
+      this.utils.toast('Successfully logged in!');
       return data;
     } catch (error: any) {
-      throw new Error(
-        error.message || 'An unexpected error occurred. Please try again later.'
-      );
+      if (!error.message || error.message.includes('unexpected error')) {
+        this.utils.toast(
+          'An unexpected error occurred. Please try again later.'
+        );
+      }
+      throw error;
     }
   }
 
@@ -59,6 +61,7 @@ export class AuthService {
   getCurrentUserId(): string | null {
     return localStorage.getItem('userId');
   }
+
   // register a new user
   async registerUser(
     email: string,
