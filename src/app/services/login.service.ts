@@ -32,7 +32,9 @@ export class LoginService {
         throw new Error(errorData.errorMessage || 'Login failed.');
       }
 
-      return await response.json();
+      const data = await response.json();
+      localStorage.setItem('userId', data.user.id);
+      return data;
     } catch (error: any) {
       throw new Error(error.message || 'An unexpected error occurred. Please try again later.');
     }
