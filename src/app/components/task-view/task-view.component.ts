@@ -84,10 +84,20 @@ export class TaskViewComponent {
 
         const recurringTask = { ...this.task, id: 0, status: 'new', started_at: null, ended_at: null };
 
-        if (recurringTask.deadline === null || recurringTask.deadline.getTime() < new Date().getTime()) {
-          // If deadline is null or in the past, set it to the current date
+        if (recurringTask.deadline === null) {
+          // This should never happen, because in the task form, deadline is required for recurring tasks. But anyway, just in case
           recurringTask.deadline = new Date();
+        } else if (recurringTask.deadline.getTime() < new Date().getTime()) {
+          // If deadline is the past, set it to the current date (but keep the time)
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          recurringTask.deadline.setFullYear(today.getFullYear());
+          recurringTask.deadline.setMonth(today.getMonth());
+          recurringTask.deadline.setDate(today.getDate());
         }
+
+        // Now calculate new deadline
         switch (this.task.recurring) {
           case 'daily':
             recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
