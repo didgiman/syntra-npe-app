@@ -84,24 +84,28 @@ export class TaskViewComponent {
 
         const recurringTask = { ...this.task, id: 0, status: 'new', started_at: null, ended_at: null };
 
-        if (recurringTask.deadline === null || recurringTask.deadline.getTime() < new Date().getTime()) {
-          // If deadline is null or in the past, set it to the current date
+        if (recurringTask.deadline === null) {
+          // This should never happen, because in the task form, deadline is required for recurring tasks. But anyway, just in case
           recurringTask.deadline = new Date();
         }
-        switch (this.task.recurring) {
-          case 'daily':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
-            break;
-          case 'weekly':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 7);
-            break;
-          case '2-weekly':
-            recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 14);
-            break;
-          case 'monthly':
-            recurringTask.deadline.setMonth(recurringTask.deadline.getMonth() + 1);
-            break;
-        }
+
+        // Now calculate new deadline
+        do {
+          switch (this.task.recurring) {
+            case 'daily':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 1);
+              break;
+            case 'weekly':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 7);
+              break;
+            case '2-weekly':
+              recurringTask.deadline.setDate(recurringTask.deadline.getDate() + 14);
+              break;
+            case 'monthly':
+              recurringTask.deadline.setMonth(recurringTask.deadline.getMonth() + 1);
+              break;
+          }
+        } while (recurringTask.deadline.getTime() < new Date().getTime()); // Keep increasing the deadline until it is after the current date
 
         // Create new task
         const createResponse = await this.taskService.saveTask(recurringTask);
