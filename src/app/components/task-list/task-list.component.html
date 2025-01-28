@@ -1,5 +1,5 @@
 <!-- Task form dialog -->
-<p-dialog header="Task form" [modal]="true" [(visible)]="showTaskForm">
+<p-dialog header="Task form" [modal]="true" [(visible)]="showTaskForm" [style]="{ width: '45rem' }">
   <ng-template #headless>
     <app-task-form (close)="onEditClose($event)" [task_id]="editTaskId" />
   </ng-template>
@@ -12,13 +12,21 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Whats next" [modal]="true" [(visible)]="showTaskSuggestion" [style]="{ width: '35rem' }">
+<!-- What's next dialog -->
+<p-dialog header="Whats next" [modal]="true" [(visible)]="showTaskSuggestion" [style]="{ width: '40rem' }">
   <ng-template #headless>
     <app-task-suggestion (close)="onTaskSuggestionClose($event)" />
   </ng-template>
 </p-dialog>
 
-<div class="h-[72vh] sm:h-[79vh] max-h-dvh w-full items-center justify-center relative">
+<!-- What's next button -->
+@if (tasks().length != 0 && !showFinishedTasks && !inProgressTask().length) {
+  <div id="whats-next" class="vibrate w-32 h-16 rounded-full flex items-center justify-center cursor-pointer absolute -top-14 sm:-top-8 left-1/2 transform -translate-x-1/2 z-50" (click)="taskSuggestion()">
+    <img src="WhatsNext.png" alt="What's next" class="w-full h-full flex-1 object-top object-cover">
+  </div>
+}
+
+<div class="h-[72vh] sm:h-[75vh] max-h-dvh w-full items-center justify-center relative">
 
   @if(loading) {
   <div class="w-full h-full flex flex-col items-center justify-center">
@@ -63,21 +71,6 @@
     </div>
     }
   </div>
-
-  @if (!showFinishedTasks && !inProgressTask().length) {
-  <div
-    class="w-11 h-11 absolute top-4 right-4 sm:-top-4 sm:-right-20 bg-green-100 dark:bg-green-900 rounded-md cursor-pointer"
-    (click)="taskSuggestion()">
-    <svg data-slot="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <g fill="#31af0e">
-        <path d="M8.464 7.757L7.05 9.172L9.88 12l-2.83 2.828l1.415 1.415L12.707 12z" />
-        <path d="m11.293 9.172l1.414-1.415L16.95 12l-4.243 4.243l-1.414-1.415L14.12 12z" />
-        <path fill-rule="evenodd"
-          d="M23 5a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h14a4 4 0 0 0 4-4zm-4-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"
-          clip-rule="evenodd" />
-      </g>
-    </svg>
-  </div>}
 
   <p-table 
       #tasksTable

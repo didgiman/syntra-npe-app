@@ -1,0 +1,37 @@
+.vibrate {
+  @apply bg-gradient-to-br from-purple-500 via-blue-500 to-pink-500;
+  animation: anim-vibrate 2s infinite;
+}
+
+.vibrate img {
+  transform: scale(1);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 1);
+  animation: anim-vibrate-img 2s infinite;
+}
+
+@keyframes anim-vibrate {
+  0% {
+    box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 0.6rem rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+@keyframes anim-vibrate-img {
+  0% {
+    transform: scale(0.95);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.95);
+  }
+}

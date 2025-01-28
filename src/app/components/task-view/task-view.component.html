@@ -57,7 +57,7 @@
     </div>
   </div>
   <div class="bg-gray-50 dark:bg-zinc-700 px-4 pt-3 pb-3 flex flex-col-reverse sm:flex-row sm:flex sm:justify-between gap-2 sm:px-6">
-    <button pButton severity="secondary" icon="pi pi-times" (click)="onCancel()" type="button" pTooltip="Close this window" tooltipPosition="bottom">Cancel</button>
+    <button pButton severity="secondary" icon="pi pi-times" (click)="onCancel()" type="button" pTooltip="Close this window" tooltipPosition="bottom">Close</button>
 
     @if (task.status === "new") {
       <button pButton severity="info" icon="pi pi-play-circle" (click)="onTaskAction('start')" pTooltip="Pick this task to work on. Only 1 task can be active" tooltipPosition="bottom">Start task</button>
