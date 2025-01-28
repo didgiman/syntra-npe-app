@@ -37,18 +37,21 @@ export class LoginComponent {
     this.isLoginFormVisible = false;
     this.isRegisterFormVisible = true;
     this.isPasswordFormVisible = false;
+    this.resetForm();
   }
 
   switchToLoginForm() {
     this.isLoginFormVisible = true;
     this.isRegisterFormVisible = false;
     this.isPasswordFormVisible = false;
+    this.resetForm();
   }
 
   switchToPasswordForm() {
     this.isLoginFormVisible = false;
     this.isRegisterFormVisible = false;
     this.isPasswordFormVisible = true;
+    this.resetForm();
   }
 
   // async onLogin() {
@@ -147,6 +150,8 @@ export class LoginComponent {
 
   // handle register submit
   async handleRegisterSubmit() {
+    console.log(this.firstName);
+    console.log(this.lastName);
     if (
       !this.firstName ||
       !this.lastName ||

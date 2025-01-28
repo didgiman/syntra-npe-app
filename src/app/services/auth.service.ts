@@ -108,18 +108,18 @@ async login(email: string, password: string): Promise<any> {
   }
 
   // register a new user
-  async registerUser(email: string, password: string, confirmPassword: string, firstName: string, lastName: string) {
+  async registerUser(email: string, password: string, confirmPassword: string, first_name: string, last_name: string) { 
+    // API expects the EXACT names for input (firstName != first_name)
     try {
-      // check if an email address is already in use
-     
-
       // create new user
+      console.log(first_name);
+      console.log(last_name);
       const response = await fetch(`${this.urlApi}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, confirmPassword, firstName, lastName }),
+        body: JSON.stringify({ email, password, confirmPassword, first_name, last_name }),
       });
       if (!response.ok) {
         const errorResponse = await response.json();
