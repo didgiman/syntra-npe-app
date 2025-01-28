@@ -15,7 +15,8 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class TaskSelectionComponent {
   taskId = input<number>(0);
-  close = output<number>();
+  close = output<string>();
+
 
   scenarioId = input<number>(0);
 
@@ -60,10 +61,10 @@ export class TaskSelectionComponent {
   onViewClose(action: string) {
     console.log('View window close', action);
     this.showTaskView = false;
-    this.close.emit(this.selectedTask.id);
+    this.close.emit('view');
   }
 
-  onTaskSuggestionClose(action: number) {
+  onTaskSuggestionClose(action: string) {
     console.log('Selection window close', action);
     this.showTaskSelection = false;
   }
@@ -81,6 +82,10 @@ export class TaskSelectionComponent {
   }
 
   onCancel() {
-    this.close.emit(0);
+    this.close.emit('cancel');
+  }
+
+  showUrgentList() {
+    this.close.emit('due')
   }
 }

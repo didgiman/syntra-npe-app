@@ -16,7 +16,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './task-suggestion.component.css'
 })
 export class TaskSuggestionComponent {
-  close = output<number>();
+  close = output<string>();
 
   utils = inject(UtilsService);
 
@@ -39,7 +39,6 @@ export class TaskSuggestionComponent {
 
   dueTasks = signal<Task[]>([]);
   suggestionTasks = signal<Task[]>([]);
-  mostDueTaskId = signal<number>(0);
   suggestedTaskId = signal<number>(0);
 
   scenarioId = signal<number>(0);
@@ -50,7 +49,7 @@ export class TaskSuggestionComponent {
   }
 
   onCancel() {
-    this.close.emit(0);
+    this.close.emit('cancel');
   }
 
   // non-linear steps for estimate
@@ -88,17 +87,7 @@ export class TaskSuggestionComponent {
         this.tasks().filter(
             task => !(task.recurring === 'daily' && task.deadline !== null && task.deadline > tomorrow) && 
                     (task.status === 'new' && task.deadline !== null && task.deadline <= threeDaysFromNow))// Set tasks that are due in the next 3 days
-      .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
-
-    if (this.dueTasks().length > 0) {
-      console.log('Due tasks:', this.dueTasks());
-      const mostDueTaskId = this.dueTasks()[0];
-      console.log('Nearest due task:', mostDueTaskId);
-
-      this.mostDueTaskId.set(mostDueTaskId.id);
-    } else {
-      this.mostDueTaskId.set(0);
-    }
+    );
   }
 
   // Algorithm to select a task, taking into consideration feeling and time
@@ -139,8 +128,8 @@ export class TaskSuggestionComponent {
     return;
   }
 
-  onTaskSuggestionClose(action: number) {
-    console.log('Selection window close', action);
+  onTaskSuggestionClose(action: string) {
+    console.log('Suggestion window close', action);
     this.close.emit(action);
   }
 };

@@ -1,4 +1,4 @@
-import { Component, effect, inject, numberAttribute, signal, ViewChild } from '@angular/core';
+import { Component, effect, inject, signal, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { UtilsService } from '../../services/utils.service';
@@ -46,12 +46,18 @@ export class TaskListComponent {
   showFinishedTasks: boolean = false;
 
   dueTasks = signal<Task[]>([]);
+  showDueTasks: boolean = false;
+
+  now = new Date();
+  threeDaysFromNow = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 4);
 
   constructor() {
     this.loadTasks();
     effect(() => {
       // Search for task(s) that have the "in progress" status
       this.inProgressTask.set(this.tasks().filter(task => task.status == "in progress"));
+
+      this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline <= this.threeDaysFromNow));
     });
   }
 
@@ -137,8 +143,22 @@ export class TaskListComponent {
     this.showTaskSuggestion = true;
   }
 
-  onTaskSuggestionClose(taskId: number) {
+  onTaskSuggestionClose(action: string) {
     console.log('What\'s next close');
     this.showTaskSuggestion = false;
+    if (action === 'due') {
+      // When a new task is created, sort the table so that the new task is shown at the top
+      this.showDueTasks = true;
+      this.toggleDueTasks(true);
+    }
+  }
+
+  toggleDueTasks(event: any) {
+    if (this.showDueTasks) {
+      this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline <= this.threeDaysFromNow));
+      this.sortTable('deadline', 1);
+    } else {
+      this.dueTasks.set(this.tasks());
+    }
   }
 }
