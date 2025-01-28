@@ -108,8 +108,10 @@ async login(email: string, password: string): Promise<any> {
   }
 
   // register a new user
-  async registerUser(
-email: string, password: string, confirmPassword: string, firstName: string, lastName: string  ) {
+  async registerUser(email: string, password: string, confirmPassword: string, firstName: string, lastName: string) {
+    try {
+      // check if an email address is already in use
+     
 
       // create new user
       const response = await fetch(`${this.urlApi}/users`, {
@@ -138,3 +140,4 @@ email: string, password: string, confirmPassword: string, firstName: string, las
       throw error;
     }
   }
+}
