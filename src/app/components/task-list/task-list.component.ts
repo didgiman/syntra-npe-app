@@ -44,9 +44,8 @@ export class TaskListComponent {
   inProgressTask = signal<Task[]>([]);
 
   showFinishedTasks: boolean = false;
-  
+
   dueTasks = signal<Task[]>([]);
-  showDueTasks: boolean = false;
 
   constructor() {
     this.loadTasks();
@@ -67,15 +66,6 @@ export class TaskListComponent {
       });
     } catch (e: any) {
       this.utils.toast(e.message, "error");
-    }
-  }
-
-  toggleDueTasks(event: any) {
-    console.log(this.showDueTasks);
-    if (this.showDueTasks) {
-      this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000));
-    } else {
-      this.dueTasks.set(this.tasks());
     }
   }
 
