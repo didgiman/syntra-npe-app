@@ -21,10 +21,10 @@ export class AppComponent {
   title = `What's Next`;
 
   constructor() {
-    this.utils.toast("Welcome to Syntra NPE's - What's Next", "warning");
+    this.utils.toast("Welcome to What's Next", "warning");
 
     effect(() => {
-      this.title = `What's Next for ${this.user().first_name} ${this.user().last_name}`;
+      this.title = `What's Next, ${this.user().first_name}!`;
     });
   }
 }
