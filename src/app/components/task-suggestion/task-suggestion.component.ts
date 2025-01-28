@@ -80,7 +80,14 @@ export class TaskSuggestionComponent {
   // Get due tasks
   getDueTasks() {
 
-    this.dueTasks.set(this.tasks().filter(task => task.deadline !== null && task.deadline.getTime() <= new Date().getTime() + 3 * 24 * 60 * 60 * 1000 && task.status === 'new')// Set tasks that are due in the next 3 days
+    const now = new Date();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Set the time to 0:00:00 of the next day
+    const threeDaysFromNow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4);
+
+    this.dueTasks.set(
+        this.tasks().filter(
+            task => !(task.recurring === 'daily' && task.deadline !== null && task.deadline > tomorrow) && 
+                    (task.status === 'new' && task.deadline !== null && task.deadline <= threeDaysFromNow))// Set tasks that are due in the next 3 days
       .sort((a, b) => a.deadline!.getTime() - b.deadline!.getTime()));
 
     if (this.dueTasks().length > 0) {
