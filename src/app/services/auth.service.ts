@@ -52,28 +52,47 @@ export class AuthService {
   //   }
   // }
 
-  async login(email: string, password: string): Promise<any> {
+//   async login(email: string, password: string): Promise<any> {
+//   const loginData = { email, password };
+
+//   try {
+//     const response = await fetch(`${this.urlApi}/login`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(loginData),
+//     });
+
+//     if (!response.ok) {
+//       const errorResponse = await response.json();
+//       throw new Error(errorResponse.message);
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error: any) {
+//     throw error;
+//   }
+// }
+
+async login(email: string, password: string): Promise<any> {
   const loginData = { email, password };
 
-  try {
-    const response = await fetch(`${this.urlApi}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(loginData),
-    });
+  const response = await fetch(`${this.urlApi}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(loginData),
+  });
 
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      throw new Error(errorResponse.message);
-    }
+  // if (!response.ok) {
+  //   const errorResponse = await response.json();
+  //   throw new Error(errorResponse.message);
+  // }
 
-    const data = await response.json();
-    return data;
-  } catch (error: any) {
-    throw error;
-  }
+  return await response.json();
 }
 
   logout() {

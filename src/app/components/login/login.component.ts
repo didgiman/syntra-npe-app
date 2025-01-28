@@ -26,7 +26,6 @@ export class LoginComponent {
   errorMessage: string | null = null;
 
   displayUsers = signal<any[]>([]);
-  
 
   // Inject the services
   private authService = inject(AuthService);
@@ -57,21 +56,21 @@ export class LoginComponent {
   //     this.utils.toast('Both email and password are required.', 'Login failed.');
   //     return;
   //   }
-  
+
   //   if (this.password.length < 6) {
   //     this.utils.toast('Password must be at least 6 characters long.', 'Login failed.');
   //     return;
   //   }
-  
+
   //   try {
   //     const response = await this.authService.login(this.email, this.password);
-  
+
   //     if (!response.ok) {
   //       const errorResponse = await response.json();
   //       this.utils.toast(errorResponse.message, 'Login failed.');
   //       throw new Error(errorResponse.message);
   //     }
-  
+
   //     await this.userService.loadUser(response.user.id);
   //     this.utils.toast('Successfully logged in!');
   //   } catch (error: any) {
@@ -82,35 +81,73 @@ export class LoginComponent {
 
   async onLogin() {
     if (!this.email || !this.password) {
-      this.utils.toast('Both email and password are required.', 'Login failed.');
+      this.utils.toast(
+        'Both email and password are required.',
+        'warning'
+      );
       return;
     }
-  
+
     if (this.password.length < 6) {
-      this.utils.toast('Password must be at least 6 characters long.', 'Login failed.');
+      this.utils.toast(
+        'Password must be at least 6 characters long.',
+        'error'
+      );
       return;
     }
-  
+
     try {
       const response = await this.authService.login(this.email, this.password);
-      try {
-        
-        await this.userService.loadUser(response.user.id);
-        this.utils.toast('Successfully logged in!');
-      } catch (error: any) {
-        console.log(error);
-        this.utils.toast('Error loading user data.', 'Login failed.');
-        this.errorMessage = error.message;
+      // console.log(response);
+      if (response.success) {
+        try {
+          await this.userService.loadUser(response.user.id);
+          this.utils.toast('Successfully logged in!');
+        } catch (error: any) {
+          console.error('Error loading user data:', error);
+          this.utils.toast('Error loading user data.', 'error');
+          this.errorMessage = error.message || 'Failed to load user data.';
+        }
+      } else {
+        this.utils.toast(response.message, 'error');
       }
     } catch (error: any) {
-      if (error.message.includes('Both email and password are required')) {
+      console.error('Login error:', error);
+
+      // Handle 401 errors with specific messages
+      if (error.response?.status === 401) {
+        if (error.message === 'User does not exist.') {
+          this.utils.toast(
+            'User does not exist. Please register first.',
+            'Login failed.'
+          );
+        } else if (error.message === 'Invalid password.') {
+          this.utils.toast(
+            'Invalid password. Please try again.',
+            'Login failed.'
+          );
+        } else {
+          this.utils.toast(
+            'Unauthorized access. Please check your credentials.',
+            'Login failed.'
+          );
+        }
+      } else if (
+        error.message.includes('Both email and password are required')
+      ) {
         this.utils.toast(error.message, 'Login failed.');
-      } else if (error.message.includes('Password must be at least 6 characters long')) {
+      } else if (
+        error.message.includes('Password must be at least 6 characters long')
+      ) {
         this.utils.toast(error.message, 'Login failed.');
       } else {
-        this.utils.toast('An unexpected error occurred. Please try again later.', 'Login failed.');
+        this.utils.toast(
+          'An unexpected error occurred. Please try again later.',
+          'Login failed.'
+        );
       }
-      this.errorMessage = error.message;
+
+      this.errorMessage = error.message || 'An unexpected error occurred.';
     }
   }
 
