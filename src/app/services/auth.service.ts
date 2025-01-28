@@ -112,8 +112,6 @@ async login(email: string, password: string): Promise<any> {
     // API expects the EXACT names for input (firstName != first_name)
     try {
       // create new user
-      console.log(first_name);
-      console.log(last_name);
       const response = await fetch(`${this.urlApi}/users`, {
         method: 'POST',
         headers: {

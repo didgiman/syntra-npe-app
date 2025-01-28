@@ -95,7 +95,6 @@ export class LoginComponent {
 
     try {
       const response = await this.authService.login(this.email, this.password);
-      // console.log(response);
       if (response.success) {
         try {
           await this.userService.loadUser(response.user.id);
