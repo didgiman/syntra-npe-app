@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { UtilsService } from '../../services/utils.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +26,12 @@ export class LoginComponent {
   errorMessage: string | null = null;
 
   displayUsers = signal<any[]>([]);
+  
 
   // Inject the services
   private authService = inject(AuthService);
   utils = inject(UtilsService);
+  userService = inject(UserService);
 
   // Switch between forms
   switchToRegisterForm() {
@@ -49,10 +52,64 @@ export class LoginComponent {
     this.isPasswordFormVisible = true;
   }
 
+  // async onLogin() {
+  //   if (!this.email || !this.password) {
+  //     this.utils.toast('Both email and password are required.', 'Login failed.');
+  //     return;
+  //   }
+  
+  //   if (this.password.length < 6) {
+  //     this.utils.toast('Password must be at least 6 characters long.', 'Login failed.');
+  //     return;
+  //   }
+  
+  //   try {
+  //     const response = await this.authService.login(this.email, this.password);
+  
+  //     if (!response.ok) {
+  //       const errorResponse = await response.json();
+  //       this.utils.toast(errorResponse.message, 'Login failed.');
+  //       throw new Error(errorResponse.message);
+  //     }
+  
+  //     await this.userService.loadUser(response.user.id);
+  //     this.utils.toast('Successfully logged in!');
+  //   } catch (error: any) {
+  //     this.utils.toast(error.message, 'Login failed.');
+  //     this.errorMessage = error.message;
+  //   }
+  // }
+
   async onLogin() {
+    if (!this.email || !this.password) {
+      this.utils.toast('Both email and password are required.', 'Login failed.');
+      return;
+    }
+  
+    if (this.password.length < 6) {
+      this.utils.toast('Password must be at least 6 characters long.', 'Login failed.');
+      return;
+    }
+  
     try {
       const response = await this.authService.login(this.email, this.password);
+      try {
+        
+        await this.userService.loadUser(response.user.id);
+        this.utils.toast('Successfully logged in!');
+      } catch (error: any) {
+        console.log(error);
+        this.utils.toast('Error loading user data.', 'Login failed.');
+        this.errorMessage = error.message;
+      }
     } catch (error: any) {
+      if (error.message.includes('Both email and password are required')) {
+        this.utils.toast(error.message, 'Login failed.');
+      } else if (error.message.includes('Password must be at least 6 characters long')) {
+        this.utils.toast(error.message, 'Login failed.');
+      } else {
+        this.utils.toast('An unexpected error occurred. Please try again later.', 'Login failed.');
+      }
       this.errorMessage = error.message;
     }
   }
