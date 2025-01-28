@@ -2,6 +2,7 @@ import { inject, Component, HostListener, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent {
 
   // Inject the services
   private authService = inject(AuthService);
+  utils = inject(UtilsService);
 
   // Switch between forms
   switchToRegisterForm() {
@@ -64,21 +66,24 @@ export class LoginComponent {
       !this.password ||
       !this.confirmPassword
     ) {
-      this.errorMessage = 'All fields are required.';
+      this.utils.toast('All fields are required.');
       return;
     }
 
     if (!this.isValidEmail(this.email)) {
       this.errorMessage = 'Please enter a valid email address.';
+      this.utils.toast('Please enter a valid email address.');
       return;
     }
 
     if (this.password.length < 6) {
+      this.utils.toast('Password must be at least 6 characters long.');
       this.errorMessage = 'Password must be at least 6 characters long.';
       return;
     }
 
     if (this.password !== this.confirmPassword) {
+      this.utils.toast('Passwords do not match');
       this.errorMessage = 'Passwords do not match.';
       return;
     }
@@ -86,6 +91,7 @@ export class LoginComponent {
     await this.authService.registerUser(
       this.email,
       this.password,
+      this.confirmPassword,
       this.firstName,
       this.lastName
     );

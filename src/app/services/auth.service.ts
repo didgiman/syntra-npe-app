@@ -11,17 +11,13 @@ export class AuthService {
   urlApi = 'http://localhost:8000/api';
 
   async login(email: string, password: string): Promise<any> {
-    if (!email && !password) {
-      this.utils.toast('Email and password are required', 'Login failed.');
-      throw new Error('Both email and password are required');
-    } else if (!password) {
-      this.utils.toast('Password is required', 'Login failed.');
-      throw new Error('Password is required');
-    } else if (!email) {
-      this.utils.toast('Email address is required', 'Login failed.');
-      throw new Error('Email address is required');
+    if (!email || !password) {
+      this.utils.toast('Both email and password are required.');
+      throw new Error('Both email and password are required.');
     }
+
     if (password.length < 6) {
+      this.utils.toast('Password must be at least 6 characters long.');
       throw new Error('Password must be at least 6 characters long.');
     }
 
@@ -70,11 +66,7 @@ export class AuthService {
 
   // register a new user
   async registerUser(
-    email: string,
-    password: string,
-    first_name: string,
-    last_name: string
-  ) {
+email: string, password: string, first_name: string, last_name: string, lastName: string  ) {
     try {
       // check if an email address is already in use
       const existingUserResponse = await fetch(
