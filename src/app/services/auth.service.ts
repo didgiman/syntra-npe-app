@@ -11,10 +11,16 @@ export class AuthService {
   urlApi = 'http://localhost:8000/api';
 
   async login(email: string, password: string): Promise<any> {
-    if (!email || !password) {
-      throw new Error('Both email and password are required.');
+    if (!email && !password) {
+      this.utils.toast('Email and password are required', 'Login failed.');
+      throw new Error('Both email and password are required');
+    } else if (!password) {
+      this.utils.toast('Password is required', 'Login failed.');
+      throw new Error('Password is required');
+    } else if (!email) {
+      this.utils.toast('Email address is required', 'Login failed.');
+      throw new Error('Email address is required');
     }
-
     if (password.length < 6) {
       throw new Error('Password must be at least 6 characters long.');
     }
