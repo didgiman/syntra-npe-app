@@ -109,22 +109,7 @@ async login(email: string, password: string): Promise<any> {
 
   // register a new user
   async registerUser(
-email: string, password: string, first_name: string, last_name: string, lastName: string  ) {
-    try {
-      // check if an email address is already in use
-      const existingUserResponse = await fetch(
-        `${this.urlApi}/users?email=${email}`
-      );
-      const existingUser = await existingUserResponse.json();
-
-      if (existingUserResponse.ok) {
-        const existingUserWithEmail = existingUser.find(
-          (user: { email: string }) => user.email === email
-        );
-        if (existingUserWithEmail) {
-          throw new Error('Email address is already in use');
-        }
-      }
+email: string, password: string, confirmPassword: string, firstName: string, lastName: string  ) {
 
       // create new user
       const response = await fetch(`${this.urlApi}/users`, {
@@ -132,7 +117,7 @@ email: string, password: string, first_name: string, last_name: string, lastName
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, first_name, last_name }),
+        body: JSON.stringify({ email, password, confirmPassword, firstName, lastName }),
       });
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -153,4 +138,3 @@ email: string, password: string, first_name: string, last_name: string, lastName
       throw error;
     }
   }
-}

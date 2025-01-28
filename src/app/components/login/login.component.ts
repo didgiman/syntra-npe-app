@@ -81,18 +81,12 @@ export class LoginComponent {
 
   async onLogin() {
     if (!this.email || !this.password) {
-      this.utils.toast(
-        'Both email and password are required.',
-        'warning'
-      );
+      this.utils.toast('Both email and password are required.', 'warning');
       return;
     }
 
     if (this.password.length < 6) {
-      this.utils.toast(
-        'Password must be at least 6 characters long.',
-        'error'
-      );
+      this.utils.toast('Password must be at least 6 characters long.', 'error');
       return;
     }
 
