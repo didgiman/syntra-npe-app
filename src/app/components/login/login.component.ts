@@ -1,4 +1,4 @@
-import { inject, Component, HostListener, signal, effect } from '@angular/core';
+import { inject, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
