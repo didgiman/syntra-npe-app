@@ -93,9 +93,22 @@ export class AuthService {
         },
         body: JSON.stringify({ email, password, first_name, last_name }),
       });
-      return await response.json();
-    } catch (error) {
-      console.error('Error registering user:', error);
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        this.utils.toast(errorResponse.message, 'Registration failed.');
+        throw new Error(errorResponse.message);
+      }
+
+      const data = await response.json();
+      // await this.userService.loadUser(data.user.id); => automatically logs the user in after succesful registration
+      this.utils.toast('User was created succesfully.');
+      return data;
+    } catch (error: any) {
+      if (!error.message || error.message.includes('unexpected error')) {
+        this.utils.toast(
+          'An unexpected error occurred. Please try again later.'
+        );
+      }
       throw error;
     }
   }
