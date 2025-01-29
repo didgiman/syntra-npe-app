@@ -5,12 +5,10 @@
 } @else {
 <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
   <app-header [title]="title" />
-
-  <main class="flex flex-grow container mx-auto items-center justify-center">
-
-    <!-- <button id="showLogout" (click)="logout()">Logout</button> -->
-    <router-outlet />
+  
+  <main class="flex flex-grow container mx-auto items-center justify-center relative">
     <app-task-list class="h-full w-full" />
+    <router-outlet />
   </main>
 
   <app-footer />

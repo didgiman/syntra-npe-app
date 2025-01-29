@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './services/auth.service';
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, TaskListComponent, HeaderComponent, CommonModule, LoginComponent, FooterComponent],
@@ -21,14 +22,12 @@ export class AppComponent {
   user = this.userService.user;
 
   title = `What's Next`;
-
-  constructor(public authService: AuthService) {
-    this.utils.toast("Welcome to Syntra NPE's - What's Next", 'warning');
+  
+  constructor() {
+    this.utils.toast("Welcome to What's Next", "warning");
 
     effect(() => {
-      this.title = `What's Next for ${this.user().first_name} ${
-        this.user().last_name
-      }`;
+      this.title = `What's Next, ${this.user().first_name}!`;
     });
   }
 

@@ -1,6 +1,6 @@
 <header class="bg-blue-500 p-4 flex justify-between items-center">
-    <h1 class="text-3xl font-bold text-white dark:text-gray-800">{{ title() }}</h1>
-    <div class="flex flex-col-reverse sm:flex-row gap-4">
+    <h1 class="text-3xl font-bold text-white dark:text-gray-800"><span class="hidden lg:inline">{{ title() }}</span></h1>
+    <div class="flex flex-row gap-4">
         <div (click)="toggleDarkMode()" class="cursor-pointer hover:scale-125 transition-all text-blue-900 dark:text-white">
             @if (darkModeActive()) {
                 <div class="pi pi-sun text-2xl"></div>

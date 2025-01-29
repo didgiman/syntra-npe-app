@@ -28,11 +28,12 @@ import { UserService } from '../../services/user.service';
 })
 export class TaskFormComponent {
   task_id = input<number>(0);
-  
+
   close = output<string>();
 
   taskService = inject(TaskService);
   utils = inject(UtilsService);
+
   confirmationService = inject(ConfirmationService);
   userService = inject(UserService);
   
@@ -157,7 +158,7 @@ export class TaskFormComponent {
       this.task.estimate = 0.25;
     }
 
-     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
+    this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.task.estimate));
   }
 
   // Recurring tasks
