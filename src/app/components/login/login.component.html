@@ -13,8 +13,8 @@
         </form>
         <p class="text-white mt-4 text-center">Don't have an account? <button (click)="switchToRegisterForm()"
                 class="text-blue-400">Register</button></p>
-        <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()"
-                class="text-blue-400">Reset</button></p>
+        <!-- <p class="text-white mt-4 text-center">Forgot password? <button (click)="switchToPasswordForm()"
+                class="text-blue-400">Reset</button></p> -->
     </div>
     }
 
@@ -50,7 +50,7 @@
     }
 
     <!-- Forgot password form -->
-    @if (isPasswordFormVisible) {
+    <!-- @if (isPasswordFormVisible) {
     <div id="forgotPasswordForm">
         <h3 class="text-lg text-white mb-2">Forgot Password?</h3>
         <form (submit)="handlePasswordRecoverySubmit()">
@@ -64,5 +64,5 @@
             <button (click)="switchToLoginForm()" class="text-blue-400">Cancel</button>
         </p>
     </div>
-    }
+    } -->
 </div>
