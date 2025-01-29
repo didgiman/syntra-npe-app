@@ -29,10 +29,15 @@ export class TaskService {
   }
 
   async loadTasks(finishedOnly: boolean = this.finishedOnly) {
+    do {
+      console.log("Waiting for user to be loaded...");
+      await new Promise(resolve => setTimeout(resolve, 200)); // Wait for 200ms before retrying
+    } while (!this.user().id); // Wait until the user is loaded
+    
     try {
       this.finishedOnly = finishedOnly; // Store the value for the next call (only needed when switching user, regular calls to loadTasks always have the finishedOnly parameter set)
 
-      let url = this.apiUrl + '/usertasks/' + this.user().id; // TO DO: This should be replaced by /usertasks/:userId
+      let url = this.apiUrl + '/usertasks/' + this.userId; // TO DO: This should be replaced by /usertasks/:userId
       if (finishedOnly) {
         url += '?finishedOnly=true';
       }

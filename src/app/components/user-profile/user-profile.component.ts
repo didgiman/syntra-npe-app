@@ -6,6 +6,7 @@ import { UserService } from '../../services/user.service';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { UtilsService } from '../../services/utils.service';
 import { TabsModule } from 'primeng/tabs';
+import { AuthService } from '../../services/auth.service';
 
 import { PasswordComponent } from './password/password.component';
 
@@ -22,6 +23,7 @@ export class UserProfileComponent {
   userService = inject(UserService);
   user = this.userService.user;
   users = this.userService.users;
+  authService = inject(AuthService);
 
   constructor() { }
 
@@ -45,5 +47,9 @@ export class UserProfileComponent {
 
   onUserSelect(event:any) {
     this.userService.loadUser(event.target.value);
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

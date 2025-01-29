@@ -1,15 +1,19 @@
+@if (!authService.isLoggedIn()) {
 <div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
-
-  <app-header title="{{ title }}"></app-header>
+  <main class="flex flex-grow container mx-auto items-center justify-center"><app-login /></main>
+</div>
+} @else {
+<div class="h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
+  <app-header [title]="title" />
 
   <main class="flex flex-grow container mx-auto items-center justify-center">
+
+    <!-- <button id="showLogout" (click)="logout()">Logout</button> -->
+    <router-outlet />
     <app-task-list class="h-full w-full" />
   </main>
 
   <app-footer />
 
 </div>
-
-
-
-<router-outlet />
+}

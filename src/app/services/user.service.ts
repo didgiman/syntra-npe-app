@@ -6,7 +6,7 @@ import { User } from '../models/user';
 })
 export class UserService {
   private apiUrl = 'http://localhost:8000/api/users';
-  private userId = Number(localStorage.getItem('userId') || '1'); // This should be the id of the logged in user
+  private userId = Number(localStorage.getItem('userId')); // This should be the id of the logged in user
 
   user = signal<User>({
     id: this.userId,
@@ -25,7 +25,9 @@ export class UserService {
 
   constructor() {
     this.loadAllUsers();
-    this.loadUser(this.userId);
+    if (this.userId != 0) {
+      this.loadUser(this.userId);
+    }
   }
 
   async loadAllUsers() {
