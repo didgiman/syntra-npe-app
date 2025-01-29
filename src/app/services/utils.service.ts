@@ -127,12 +127,11 @@ export class UtilsService {
     isLessThan3DaysFromNow(targetDate: Date): boolean {
       // Get the current date and time
       const now = new Date();
-    
       // Calculate the date 3 days from now
-      const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+      const threeDaysFromNow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4);
     
       // Check if the target date is less than 3 days from now
-      return targetDate < threeDaysFromNow && targetDate > now;
+      return targetDate.getTime() < threeDaysFromNow.getTime() && targetDate.getTime() > now.getTime();
     }
 
     minDate(date1: Date, date2: Date): Date {
