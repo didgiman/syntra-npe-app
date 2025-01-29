@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { UtilsService } from './services/utils.service';
 import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { UserService } from './services/user.service';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
@@ -10,13 +11,7 @@ import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    TaskListComponent,
-    HeaderComponent,
-    CommonModule,
-    LoginComponent,
-  ],
+  imports: [RouterOutlet, TaskListComponent, HeaderComponent, CommonModule, LoginComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
