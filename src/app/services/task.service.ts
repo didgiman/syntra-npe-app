@@ -30,7 +30,6 @@ export class TaskService {
 
   async loadTasks(finishedOnly: boolean = this.finishedOnly) {
     do {
-      console.log("Waiting for user to be loaded...");
       await new Promise(resolve => setTimeout(resolve, 200)); // Wait for 200ms before retrying
     } while (!this.user().id); // Wait until the user is loaded
     
