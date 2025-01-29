@@ -1,0 +1,54 @@
+<footer class="bg-blue-500 text-white dark:text-gray-800 p-4 flex flex-row justify-between items-center">
+    <div>
+        <p>&copy; 2025 - Null Pointer Exceptions</p>
+    </div>
+    <div>
+        <p class="underline cursor-pointer" (click)="onPrivacyClick()">Privacy statement</p>
+    </div>
+</footer>
+
+<!-- Privacy statement -->
+<p-dialog header="Privacy Statement" [modal]="true" [(visible)]="showPrivacyDialog" [style]="{ width: '50rem' }">
+    <p><strong>Privacyverklaring</strong></p>
+
+    <p><strong>1. Inleiding</strong></p>
+    <p>Wij hechten veel waarde aan de privacy van onze gebruikers. In deze privacyverklaring leggen we uit welke gegevens we verzamelen, hoe we deze gebruiken en hoe we ze beschermen.</p>
+
+    <p><strong>2. Verzamelde Gegevens</strong></p>
+    <p>Onze to-do app verzamelt de volgende gegevens:</p>
+    <ul>
+    <li>Taakgegevens zoals titel, geschatte tijdsduur en gevoelsscore.</li>
+    <li>Gegevens die de gebruiker verstrekt voor taakvoorspellingen.</li>
+    <li>Interactiegegevens met de "What's next"-functie.</li>
+    </ul>
+
+    <p><strong>3. Gebruik van Gegevens</strong></p>
+    <p>De verzamelde gegevens worden gebruikt om:</p>
+    <ul>
+    <li>Taken te organiseren en aanbevelingen te doen op basis van je invoer.</li>
+    <li>Motiverende berichten en tips te genereren via de OpenAI API.</li>
+    <li>De gebruikservaring te verbeteren door gepersonaliseerde suggesties.</li>
+    </ul>
+
+    <p><strong>4. Delen van Gegevens</strong></p>
+    <p>Wij delen geen persoonlijke gegevens met derden, behalve voor de volgende doeleinden:</p>
+    <ul>
+    <li>De OpenAI API ontvangt taakgerelateerde tekst (zonder persoonlijke identificatie) om motiverende berichten te genereren.</li>
+    <li>Technische gegevens kunnen worden gedeeld met onze hostingprovider voor functionele doeleinden.</li>
+    </ul>
+
+    <p><strong>5. Beveiliging</strong></p>
+    <p>Wij nemen passende maatregelen om je gegevens te beschermen tegen ongeautoriseerde toegang, verlies of misbruik. Gegevens worden versleuteld opgeslagen en de communicatie met onze servers is beveiligd.</p>
+
+    <p><strong>6. Gegevensbewaring</strong></p>
+    <p>Je gegevens worden bewaard zolang ze nodig zijn voor het gebruik van de app. Op verzoek kunnen gebruikers hun gegevens laten verwijderen.</p>
+
+    <p><strong>7. Jouw Rechten</strong></p>
+    <p>Je hebt het recht om inzage te vragen in je gegevens, deze te corrigeren of te laten verwijderen. Neem contact met ons op voor dergelijke verzoeken.</p>
+
+    <p><strong>8. Wijzigingen</strong></p>
+    <p>Wij kunnen dit privacybeleid van tijd tot tijd bijwerken. Wijzigingen worden binnen de app gecommuniceerd.</p>
+
+    <p><strong>9. Contact</strong></p>
+    <p>Voor vragen over deze privacyverklaring kun je contact met ons opnemen via info&#64;nullpointerexceptions.be</p>
+</p-dialog>

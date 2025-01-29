@@ -17,6 +17,8 @@ import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
+import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-task-form',
   imports: [FormsModule, ConfirmPopupModule, NgClass, InputTextModule, DatePickerModule, SliderModule, RadioButtonModule, ButtonModule, SelectButtonModule, ToggleSwitchModule],
@@ -33,6 +35,7 @@ export class TaskFormComponent {
   utils = inject(UtilsService);
 
   confirmationService = inject(ConfirmationService);
+  userService = inject(UserService);
   
   loading = signal<boolean>(false);
 
@@ -46,7 +49,7 @@ export class TaskFormComponent {
   task: Task = {
     id: 0,
     created_at: null,
-    user_id: Number(localStorage.getItem('userId') || '1'),
+    user_id: this.userService.user().id,
     title: '',
     feeling: 3,
     estimate: 1,

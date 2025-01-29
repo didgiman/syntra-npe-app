@@ -129,8 +129,10 @@ export class TaskListComponent {
   }
 
   sortTable(field: string, order: number) {
-    this.table.sortField = field;
-    this.table.sortOrder = order;
+    if (this.table) {
+      this.table.sortField = field;
+      this.table.sortOrder = order;
+    }
   }
 
   toggleFinishedTasks(event: any) {
