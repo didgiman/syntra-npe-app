@@ -93,6 +93,12 @@ export class LoginComponent {
       return;
     }
 
+    if (!this.isValidEmail(this.email)) {
+      this.errorMessage = 'Please enter a valid email address.';
+      this.utils.toast('Please enter a valid email address.');
+      return;
+    }
+
     try {
       const response = await this.authService.login(this.email, this.password);
       if (response.success) {
