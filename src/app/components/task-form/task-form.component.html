@@ -71,16 +71,16 @@
                 </div>
               }
             </div>
-            <div class="w-1/3">
+            <div class="w-1/3 ml-2 flex flex-col sm:flex-row">
               <!-- <p-checkbox name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" label="Show time" value="true" class="mx-2"></p-checkbox><label>Show time</label> -->
               <p-toggleswitch class="mx-2" name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" /> <label>Show time</label>
             </div>
           </div>
 
           <!-- Recurring task -->
-          <div class="mt-2 flex items-center">
-            <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">Recurring task? <span class="pi pi-sync text-blue-400 ml-2"></span></div>
-            <div class="w-2/3">
+          <div class="mt-2 flex flex-col items-start sm:flex-row sm:items-center">
+            <div class="text-sm text-gray-500 sm:w-1/3 font-semibold mr-2">Recurring task? <span class="pi pi-sync text-blue-400 ml-2"></span></div>
+            <div class="sm:w-2/3">
               <p-selectbutton name="recurring" (onChange)="onRecurringChange($event)" [options]="recurringOptions" [(ngModel)]="task.recurring" optionLabel="label" optionValue="value" size="small" />
             </div>
           </div>
