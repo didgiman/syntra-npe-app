@@ -43,6 +43,10 @@ export class TaskSuggestionComponent {
 
   scenarioId = signal<number>(0);
 
+  now = new Date();
+  tomorrow = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 1); // Set the time to 0:00:00 of the next day
+  threeDaysFromNow = new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate() + 4);
+
   ngOnInit() {
     this.suggestionRequest.feeling = this.suggestionRequest.feeling.toString(); // Convert feeling to string for radio button
     this.getDueTasks();
@@ -73,32 +77,28 @@ export class TaskSuggestionComponent {
     this.estimateDisplay.set(this.utils.formatHoursToReadableTime(this.suggestionRequest.estimate));
   }
 
-  minFeeling = 5;
-  maxFeeling = 7;
-
   // Get due tasks
   getDueTasks() {
-
-    const now = new Date();
-    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Set the time to 0:00:00 of the next day
-    const threeDaysFromNow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 4);
-
     this.dueTasks.set(
-        this.tasks().filter(
-            task => !(task.recurring === 'daily' && task.deadline !== null && task.deadline.getTime() > tomorrow.getTime()) && 
-                    (task.status === 'new' && task.deadline !== null && task.deadline.getTime() <= threeDaysFromNow.getTime()))// Set tasks that are due in the next 3 days
+      this.tasks().filter(
+        task => !(task.recurring === 'daily' && task.deadline !== null && task.deadline.getTime() > this.tomorrow.getTime()) &&
+          (task.status === 'new' && task.deadline !== null && task.deadline.getTime() <= this.threeDaysFromNow.getTime()))// Set tasks that are due in the next 3 days
     );
   }
 
   // Algorithm to select a task, taking into consideration feeling and time
   pickRandomTask(): void {
+    let minFeeling = 5;
+    let maxFeeling = 7;
+
     for (let i = 0; i < 4; i++) {
       // Filter tasks based on the current range
-      const RT = (this.tasks().filter(item =>
-        (Number(item.feeling) >= (this.minFeeling - +this.suggestionRequest.feeling)) &&
-        (Number(item.feeling) <= (this.maxFeeling - +this.suggestionRequest.feeling)) &&
-        (item.estimate <= +this.suggestionRequest.estimate) &&
-        item.status === 'new')
+      const RT = (this.tasks().filter(task =>
+        !(task.recurring === 'daily' && task.deadline !== null && task.deadline.getTime() > this.tomorrow.getTime()) &&
+        (Number(task.feeling) >= (minFeeling - +this.suggestionRequest.feeling)) &&
+        (Number(task.feeling) <= (maxFeeling - +this.suggestionRequest.feeling)) &&
+        (task.estimate <= +this.suggestionRequest.estimate) &&
+        task.status === 'new')
       );
       console.log('Filtered tasks:', RT);
 
@@ -110,10 +110,10 @@ export class TaskSuggestionComponent {
         return;
       }
 
-      // Adjust the range and try again
+      // Adjust the feelings range and try again
       console.log('upping the feels')
-      this.minFeeling -= 1;
-      this.maxFeeling += 1;
+      minFeeling -= 1;
+      maxFeeling += 1;
     }
 
     // If no tasks are found after 4 iterations, return a fallback message
