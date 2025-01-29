@@ -3,12 +3,13 @@ import { RouterOutlet } from '@angular/router';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { UtilsService } from './services/utils.service';
 import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { UserService } from './services/user.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TaskListComponent, HeaderComponent, CommonModule],
+  imports: [RouterOutlet, TaskListComponent, HeaderComponent, CommonModule , FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
