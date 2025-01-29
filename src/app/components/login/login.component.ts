@@ -47,12 +47,12 @@ export class LoginComponent {
     this.resetForm();
   }
 
-  switchToPasswordForm() {
-    this.isLoginFormVisible = false;
-    this.isRegisterFormVisible = false;
-    this.isPasswordFormVisible = true;
-    this.resetForm();
-  }
+  // switchToPasswordForm() {
+  //   this.isLoginFormVisible = false;
+  //   this.isRegisterFormVisible = false;
+  //   this.isPasswordFormVisible = true;
+  //   this.resetForm();
+  // }
 
   // async onLogin() {
   //   if (!this.email || !this.password) {
@@ -206,17 +206,17 @@ export class LoginComponent {
     this.confirmPassword = '';
   }
 
-  // handle password recovery
-  handlePasswordRecoverySubmit() {
-    if (!this.isValidEmail(this.email)) {
-      console.log('Validation failed: Invalid email');
-      this.errorMessage = 'Please enter a valid email address.';
-      return;
-    }
-    console.log('Recovery email send to:', {
-      email: this.email,
-    });
+  // // handle password recovery
+  // handlePasswordRecoverySubmit() {
+  //   if (!this.isValidEmail(this.email)) {
+  //     console.log('Validation failed: Invalid email');
+  //     this.errorMessage = 'Please enter a valid email address.';
+  //     return;
+  //   }
+  //   console.log('Recovery email send to:', {
+  //     email: this.email,
+  //   });
 
-    this.resetForm();
-  }
+  //   this.resetForm();
+  // }
 }
