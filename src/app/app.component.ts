@@ -20,6 +20,7 @@ export class AppComponent {
   utils = inject(UtilsService);
   userService = inject(UserService);
   user = this.userService.user;
+  authService = inject(AuthService);
 
   title = `What's Next`;
   
