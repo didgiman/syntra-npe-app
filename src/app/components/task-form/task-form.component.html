@@ -44,36 +44,38 @@
           <!-- Deadline datepicker -->
           <div class="mt-2 flex items-center">
             <div class="text-sm text-gray-500 w-1/3 font-semibold mr-2">When should this task be finished (optional)</div>
-            <div class="w-1/3">
-              <p-datepicker
-                [(ngModel)]="task.deadline"
-                #deadlineControl="ngModel"
-                [showTime]="deadlineShowTime"
-                name="deadline"
-                hourFormat="24"
-                dateFormat="dd-mm-yy"
-                [showButtonBar]="true"
-                styleClass="w-full"
-                [inputStyleClass]="deadlineControl.touched && deadlineControl.invalid ? '!border-red-500 bg-red-100 dark:bg-red-900 !p-3': 'bg-gray-100 dark:bg-gray-800 !p-3'"
-                showIcon
-                iconDisplay="input"
-                [minDate]="this.task_id() === 0 || this.task.deadline === null ? now : utils.minDate(now, this.task.deadline)"
-                [required]="deadlineRequired()"
-                selectOtherMonths="true"
-                (onBlur)="onDeadlineBlur()"
-                [firstDayOfWeek]="1"
-              />
-              @if (deadlineRequired()) {
-                <div class="text-red-500 text-xs">
-                  @if (deadlineControl.hasError('required')) {
-                    Deadline is required for recurring tasks
-                  }
-                </div>
-              }
-            </div>
-            <div class="w-1/3 ml-2 flex flex-col sm:flex-row">
-              <!-- <p-checkbox name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" label="Show time" value="true" class="mx-2"></p-checkbox><label>Show time</label> -->
-              <p-toggleswitch class="mx-2" name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" /> <label>Show time</label>
+            <div class="w-2/3 flex items-center">
+              <div class="w-1/2">
+                <p-datepicker
+                  [(ngModel)]="task.deadline"
+                  #deadlineControl="ngModel"
+                  [showTime]="deadlineShowTime"
+                  name="deadline"
+                  hourFormat="24"
+                  dateFormat="dd-mm-yy"
+                  [showButtonBar]="true"
+                  styleClass="w-full"
+                  [inputStyleClass]="deadlineControl.touched && deadlineControl.invalid ? '!border-red-500 bg-red-100 dark:bg-red-900 !p-3': 'bg-gray-100 dark:bg-gray-800 !p-3'"
+                  showIcon
+                  iconDisplay="input"
+                  [minDate]="this.task_id() === 0 || this.task.deadline === null ? now : utils.minDate(now, this.task.deadline)"
+                  [required]="deadlineRequired()"
+                  selectOtherMonths="true"
+                  (onBlur)="onDeadlineBlur()"
+                  [firstDayOfWeek]="1"
+                />
+                @if (deadlineRequired()) {
+                  <div class="text-red-500 text-xs">
+                    @if (deadlineControl.hasError('required')) {
+                      Deadline is required for recurring tasks
+                    }
+                  </div>
+                }
+              </div>
+              <div class="w-1/2 ml-2 flex flex-col sm:flex-row">
+                <!-- <p-checkbox name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" label="Show time" value="true" class="mx-2"></p-checkbox><label>Show time</label> -->
+                <p-toggleswitch class="sm:mx-2" name="deadlineShowTime" [(ngModel)]="deadlineShowTime" (onChange)="onDeadlineToggleTime($event)" /> <label>Show time</label>
+              </div>
             </div>
           </div>
 
